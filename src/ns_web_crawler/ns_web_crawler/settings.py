@@ -14,6 +14,7 @@ BOT_NAME = 'ns_web_crawler'
 SPIDER_MODULES = ['ns_web_crawler.spiders']
 NEWSPIDER_MODULE = 'ns_web_crawler.spiders'
 
+LOG_LEVEL= "INFO"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'ns_web_crawler (+http://www.yourdomain.com)'
@@ -64,9 +65,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'ns_web_crawler.pipelines.NsWebCrawlerPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'ns_web_crawler.pipelines.PostgreSqlPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html

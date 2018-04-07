@@ -50,14 +50,14 @@ class EshopPriceSpider(scrapy.Spider):
     
     def get_country_item(self, th):
         country = {}
-        country["code"] = th.css("th::attr(title)").extract()[0]
-        country["name"] = th.css("::text").extract()[0].strip()
+        country["code"] = th.css("th::attr(title)").extract_first()
+        country["name"] = th.css("::text").extract_first().strip()
 
         return country
     
     def get_game_item(self, tr, countries):
         game = EshopProductItem()
-        game["name"] = tr.css("th > a::text").extract()[0]
+        game["name"] = tr.css("th > a::text").extract_first()
         game["prices"] = []
 
         tds = tr.css("td")
@@ -76,16 +76,16 @@ class EshopPriceSpider(scrapy.Spider):
 
         return game
 
-    def get_game_price_item(self, td, coutry):
+    def get_game_price_item(self, td, country):
         price = EshopPriceCountryItem()
 
-        price_text = re.findall("\d+\.\d+", td.css("::text").extract()[0].strip())
+        price_text = re.findall("\d+\.\d+", td.css("::text").extract_first().strip())
 
         if not price_text:
             return None
 
-        price["country"] = coutry
+        price["country"] = country
         # price["currency"] = ""
-        price["price"] = price_text
+        price["price"] = price_text[0]
         return price
 

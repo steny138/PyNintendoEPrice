@@ -12,6 +12,9 @@ name = "pypi"
 [packages]
 
 scrapy = "*"
+sqlalchemy = "*"
+"psycopg2" = "*"
+uuid = "*"
 
 
 [requires]
