@@ -36,8 +36,43 @@ class CountryCurrnecySpider(scrapy.Spider):
             result["digit"] = tds[5].css('::text').extract_first()
             result["last_updated"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
-            yield result
+            if tds[0].css('a::attr(href)'):
+                yield response.follow(
+                    tds[0].css('a::attr(href)').extract_first().replace('wiki', 'zh-tw'), 
+                    meta={'item': result},
+                    callback=self.parse_country_code)
+
+    def parse_country_code(self, response):
 
         # link to country page to find country code
+        item = response.request.meta['item']
+        # countryTd = response.css("table.infobox tr:has(th>a:contains(\"國家代碼\")) td")
+        # xpath_condition = ''.join(c for c in u"table[contains(@class, 'infobox')]/tr[contains(.//th//a/text(), '國家代碼')]" if self.valid_xml_char_ordinal(c))
+        # countryTd = response.css(css_condition)        
+        # countryTd = response.xpath(xpath_condition)
+        countryTrs = response.css("table.infobox tr")
+        for countryTr in countryTrs:
+            # selector cannot find some element for 國家代碼
+            # so we make it by ourself.
+            if not countryTr.css("th > a::text").extract_first():
+                continue
+            
+            if not countryTr.css("th > a::text").extract_first().strip() == u"國家代碼":
+                continue
+            
+            countryLink = countryTr.css("td::text")
+            if countryLink:
+                item["country"]  = countryLink.extract_first().split('(')[0]
+                if len(item["country"])> 10:
+                    item["country"] = ""
+            yield item
 
-
+    def valid_xml_char_ordinal(self, c):
+        codepoint = ord(c)
+        # conditions ordered by presumed frequency
+        return (
+            0x20 <= codepoint <= 0xD7FF or
+            codepoint in (0x9, 0xA, 0xD) or
+            0xE000 <= codepoint <= 0xFFFD or
+            0x10000 <= codepoint <= 0x10FFFF
+            )
