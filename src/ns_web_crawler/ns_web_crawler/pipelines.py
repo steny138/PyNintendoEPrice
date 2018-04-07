@@ -9,6 +9,8 @@ from uuid import uuid4
 from datetime import datetime
 from ns_web_crawler.connections import postgresql_conn
 from ns_web_crawler.models.game_eprice_model import GameEPriceModel
+from ns_web_crawler.models.country_mapping_currency_model import CountryCurrencyModel
+
 class NsWebCrawlerPipeline(object):
     def process_item(self, item, spider):
         return item
@@ -19,7 +21,7 @@ class NsWebCrawlerPipeline(object):
 # mongodb
 class JsonPipeline(object):
     def open_spider(self, spider):
-        self.file = open('items.jl', 'w')
+        self.file = open('items.json', 'w')
 
     def close_spider(self, spider):
         self.file.close()
@@ -38,19 +40,34 @@ class PostgreSqlPipeline(object):
         self.session.close()
 
     def process_item(self, item, spider):
-        
-        for game in item["games"]:
-            for price in game["prices"]:
-                model = GameEPriceModel(
-                    id = uuid4(),
-                    name = game["name"],
-                    country = price["country"]["name"],
-                    eprice=price["price"],
-                    name_tw=None,
-                    create_time= datetime.now(),
-                    update_time = item["last_updated"]
-                )
-                self.session.add(model)
+        if spider.name == "eshop-price-index":
+
+            for game in item["games"]:
+                for price in game["prices"]:
+                    model = GameEPriceModel(
+                        id = uuid4(),
+                        name = game["name"],
+                        country = price["country"]["name"],
+                        eprice=price["price"],
+                        name_tw=None,
+                        create_time= datetime.now(),
+                        update_time = item["last_updated"]
+                    )
+                    self.session.add(model)
+        elif spider.name == "wiki-country-currency":
+            model = CountryCurrencyModel(
+                id = uuid4(),
+                country = item["country"],
+                currency = item["currency"],
+                country_name=item["country_name"],
+                currency_name=item["currency_name"],
+                symbol=item["symbol"],
+                unit=item["unit"],
+                digit= item["digit"],
+                last_updated = item["last_updated"]
+            )
+
+            self.session.add(model)
 
         self.session.commit()
 
