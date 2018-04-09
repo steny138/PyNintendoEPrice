@@ -55,17 +55,28 @@ class PostgreSqlPipeline(object):
                     )
                     self.session.add(model)
         elif spider.name == "wiki-country-currency":
-            model = CountryCurrencyModel(
-                id = uuid4(),
-                country = item["country"],
-                currency = item["currency"],
-                country_name=item["country_name"],
-                currency_name=item["currency_name"],
-                symbol=item["symbol"],
-                unit=item["unit"],
-                digit= item["digit"],
-                last_updated = item["last_updated"]
-            )
+            model = self.session.query(CountryCurrencyModel).filter_by(country = item["country"]).first()
+            
+            if model:
+                model.currency = item["currency"],
+                model.country_name=item["country_name"],
+                model.currency_name=item["currency_name"],
+                model.symbol=item["symbol"],
+                model.unit=item["unit"],
+                model.digit= item["digit"],
+                model.last_updated = item["last_updated"]
+            else:
+                model = CountryCurrencyModel(
+                    id = uuid4(),
+                    country = item["country"],
+                    currency = item["currency"],
+                    country_name=item["country_name"],
+                    currency_name=item["currency_name"],
+                    symbol=item["symbol"],
+                    unit=item["unit"],
+                    digit= item["digit"],
+                    last_updated = item["last_updated"]
+                )
 
             self.session.add(model)
 

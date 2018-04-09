@@ -28,9 +28,9 @@ class CountryCurrnecySpider(scrapy.Spider):
                 
             result = CountryCurrencyItem()
             result["country"] = ""
-            result["country_name"] = tds[0].css('a::text').extract_first().strip()
+            result["country_name"] = tds[0].css('a::attr(title)').extract_first().strip()
             result["currency"] = tds[3].css('::text').extract_first().strip()
-            result["currency_name"] = tds[1].css('a::text').extract_first().strip()
+            result["currency_name"] = tds[1].css('a::attr(title)').extract_first().strip()
             result["symbol"] = tds[2].css('::text').extract_first()
             result["unit"] = tds[4].css('a::text').extract_first()
             result["digit"] = tds[5].css('::text').extract_first()
@@ -51,6 +51,7 @@ class CountryCurrnecySpider(scrapy.Spider):
         # countryTd = response.css(css_condition)        
         # countryTd = response.xpath(xpath_condition)
         countryTrs = response.css("table.infobox tr")
+        hasCountryCode = False
         for countryTr in countryTrs:
             # selector cannot find some element for 國家代碼
             # so we make it by ourself.
@@ -62,10 +63,36 @@ class CountryCurrnecySpider(scrapy.Spider):
             
             countryLink = countryTr.css("td::text")
             if countryLink:
+                hasCountryCode = True
                 item["country"]  = countryLink.extract_first().split('(')[0]
                 if len(item["country"])> 10:
                     item["country"] = ""
+            
+        if hasCountryCode:
             yield item
+
+        else:
+            yield response.follow(
+                "https://zh.wikipedia.org/zh-tw/ISO_3166-1?" + item["country_name"], 
+                meta={'item': item},
+                callback=self.parse_country_code_ISO31661,
+                errback=self.err)
+
+
+    def parse_country_code_ISO31661(self, response):
+        item = response.request.meta['item']
+        rows = response.css('table.wikitable > tr')
+
+        for row in rows:
+            country_name_column = row.css('td:nth-child(5) a::attr(title)').extract_first()
+            if not country_name_column:
+                continue
+            if country_name_column.strip() == item["country_name"]:
+                item["country"] = row.css('td:nth-child(2)::text').extract_first()
+
+        yield item
+    def err(self, response):
+        print(response.url)
 
     def valid_xml_char_ordinal(self, c):
         codepoint = ord(c)
