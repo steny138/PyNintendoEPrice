@@ -1,0 +1,28 @@
+{% extends "base.html" %} 
+{% block title %} - Country Currency Mapping - {% endblock %} 
+
+{% block page_content %} 
+{% if items %}
+<table class="table">
+    <thead>
+        <th>Country</th>
+        <th>Currency</th>
+        <th>Symbol</th>
+        <th>Last update time</th>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.country_name }}({{ item.country }})</td>
+            <td>{{ item.currency_name }}({{ item.currency }})</td>
+            <td>{{ item.symbol }}</td>
+            <td>{{ item.last_updated }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+<footer>
+    Copyright Yuchen Liu © 2018
+</footer>
+{% endblock %}

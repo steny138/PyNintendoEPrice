@@ -1,0 +1,22 @@
+{% extends "base.html" %} {% block title %} - Nintendo EShop Price. - {% endblock %} {% block page_content %} {% if items %}
+<table class="table">
+    <thead>
+        <th>Game Name</th>
+        <th>Country</th>
+        <th>Price</th>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.country }}</td>
+            <td>{{ item.eprice }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+<footer>
+    Copyright Yuchen Liu © 2018
+</footer>
+{% endblock %}

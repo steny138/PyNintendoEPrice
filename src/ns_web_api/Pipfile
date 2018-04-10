@@ -1,0 +1,27 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[dev-packages]
+
+
+
+[packages]
+
+flask = "*"
+flask-script = "*"
+flask-sqlalchemy = "*"
+flask-sqlacodegen = "*"
+flask-migrate = "*"
+"psycopg2-binary" = "*"
+"jinja2" = "*"
+uuid = "*"
+flask-bootstrap = "*"
+
+
+[requires]
+
+python_version = "2.7"
