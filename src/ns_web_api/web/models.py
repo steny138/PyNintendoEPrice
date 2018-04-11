@@ -2,8 +2,8 @@
 from sqlalchemy import Column, DateTime, Float, String
 from sqlalchemy.dialects.postgresql.base import UUID
 from flask_sqlalchemy import SQLAlchemy
+from settings import db
 
-db = SQLAlchemy()
 
 class CountryCurrency(db.Model):
     __tablename__ = 'country_currency'
@@ -29,3 +29,15 @@ class Eprice(db.Model):
     eprice = db.Column(db.Float(53), nullable=False)
     create_time = db.Column(db.String(500), nullable=False)
     update_time = db.Column(db.DateTime, nullable=False)
+
+
+class Rate(db.Model):
+    __tablename__ = 'rates'
+
+    id = db.Column(UUID(as_uuid=True), primary_key=True)
+    key = db.Column(db.String(10), nullable=False)
+    base_currency = db.Column(db.String(10), nullable=False)
+    target_currency = db.Column(db.String(10), nullable=False)
+    rate = db.Column(db.Float(53), nullable=False)
+    use_date = db.Column(db.String(20), nullable=False)
+    create_time = db.Column(db.DateTime, nullable=False)

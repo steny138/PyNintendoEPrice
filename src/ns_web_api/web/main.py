@@ -1,22 +1,30 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask,render_template
-from flask.ext.bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
 from models import Eprice,CountryCurrency
-app = Flask(__name__, template_folder='templates')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://admin:1qaz2wsx@localhost/'
+from rate import CurrencyRate
+from settings import db,app
 
-db = SQLAlchemy(app)
+@app.route('/', defaults={'game_name': None})
+@app.route('/<game_name>')
+def eprice(game_name):
+    print game_name
+    if not game_name:
+        game_name = 'Splatoon 2'
+    
+    items = Eprice.query.filter(Eprice.name == game_name)
 
-bootstrap = Bootstrap(app)
-
-@app.route("/")
-def eprice():
-    items = Eprice.query.filter(Eprice.name == 'Splatoon 2')
+    currency_rate = CurrencyRate()
+    for item in items:
+        country = CountryCurrency.query.filter(CountryCurrency.country == item.country).first()
+        if country:
+            print item.eprice
+            item.eprice = item.eprice * currency_rate.caculate_rate(country.currency, 'TWD')
+            
     return render_template('eprice.html',
-        items = items
+        items = sorted(items, key=lambda d: d.eprice, reverse=True)
     )
+
 @app.route("/currency")
 def currency():
     items = CountryCurrency.query.all()

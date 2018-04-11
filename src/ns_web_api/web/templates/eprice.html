@@ -10,7 +10,7 @@
         <tr>
             <td>{{ item.name }}</td>
             <td>{{ item.country }}</td>
-            <td>{{ item.eprice }}</td>
+            <td><span data-eprice="{{ item.eprice }}">{{ "%d" % item.eprice }}</span></td>
         </tr>
         {% endfor %}
     </tbody>
