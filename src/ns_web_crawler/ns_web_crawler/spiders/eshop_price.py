@@ -9,7 +9,7 @@ class EshopPriceSpider(scrapy.Spider):
     name = "eshop-price-index"
     def start_requests(self):
         urls = [
-            'https://eshop-prices.com/'
+            'https://eshop-prices.com/?currency=USD'
         ]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
@@ -85,7 +85,7 @@ class EshopPriceSpider(scrapy.Spider):
             return None
 
         price["country"] = country
-        # price["currency"] = ""
+        price["currency"] = "USD" # because querystring is based on USD
         price["price"] = price_text[0]
         return price
 

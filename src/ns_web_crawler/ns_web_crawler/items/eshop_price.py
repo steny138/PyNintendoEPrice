@@ -12,5 +12,5 @@ class EshopProductItem(scrapy.Item):
 
 class EshopPriceCountryItem(scrapy.Item):
     country = scrapy.Field()
-    # currency = scrapy.Field()
+    currency = scrapy.Field()
     price = scrapy.Field()

@@ -27,6 +27,8 @@ class Eprice(db.Model):
     name_tw = db.Column(db.String(100))
     country = db.Column(db.String(10), nullable=False)
     eprice = db.Column(db.Float(53), nullable=False)
+    eprice_specified = db.Column(db.Float(53),nullable=True)
+    currency_specified = db.Column(db.String(10),nullable=True)
     create_time = db.Column(db.String(500), nullable=False)
     update_time = db.Column(db.DateTime, nullable=False)
 

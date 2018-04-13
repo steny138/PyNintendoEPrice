@@ -49,6 +49,8 @@ class PostgreSqlPipeline(object):
                         name = game["name"],
                         country = price["country"]["name"],
                         eprice=price["price"],
+                        eprice_specified=price["price"],
+                        currency_specified=price["currency"],
                         name_tw=None,
                         create_time= datetime.now(),
                         update_time = item["last_updated"]
@@ -56,7 +58,7 @@ class PostgreSqlPipeline(object):
                     self.session.add(model)
         elif spider.name == "wiki-country-currency":
             model = self.session.query(CountryCurrencyModel).filter_by(country = item["country"]).first()
-            
+
             if model:
                 model.currency = item["currency"],
                 model.country_name=item["country_name"],

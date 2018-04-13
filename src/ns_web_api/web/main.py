@@ -16,13 +16,23 @@ def eprice(game_name):
 
     currency_rate = CurrencyRate()
     for item in items:
-        country = CountryCurrency.query.filter(CountryCurrency.country == item.country).first()
-        if country:
-            print item.eprice
-            item.eprice = item.eprice * currency_rate.caculate_rate(country.currency, 'TWD')
+        currency = ""
+
+        if item.currency_specified:
+            currency = item.currency_specified
+        else:
+            country = CountryCurrency.query.filter(CountryCurrency.country == item.country).first()
+            if country:
+                print item.eprice
+                currency = country.currency
+        
+        if currency:
+            item.eprice = item.eprice * currency_rate.caculate_rate(currency, 'TWD')
+
+       
             
     return render_template('eprice.html',
-        items = sorted(items, key=lambda d: d.eprice, reverse=True)
+        items = sorted(items, key=lambda d: d.eprice, reverse=False)
     )
 
 @app.route("/currency")
