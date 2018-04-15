@@ -25,6 +25,8 @@ class Eprice(db.Model):
     id = db.Column(UUID(as_uuid=True), primary_key=True)
     name = db.Column(db.String(100))
     name_tw = db.Column(db.String(100))
+    name_en = db.Column(db.String(100))
+    name_jp = db.Column(db.String(100))
     country = db.Column(db.String(10), nullable=False)
     eprice = db.Column(db.Float(53), nullable=False)
     eprice_specified = db.Column(db.Float(53),nullable=True)

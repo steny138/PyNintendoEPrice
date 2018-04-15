@@ -5,6 +5,7 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
+import logging
 from uuid import uuid4
 from datetime import datetime
 from ns_web_crawler.connections import postgresql_conn
@@ -81,6 +82,19 @@ class PostgreSqlPipeline(object):
                 )
 
             self.session.add(model)
+            
+        elif spider.name == "gamer-ns-games":
+
+            if item["name_english"]:
+                logging.info("update game name: %s", item["name_english"].strip())
+                filter_name = item["name_english"].strip()
+                self.session \
+                    .query(GameEPriceModel) \
+                    .filter_by(name = filter_name) \
+                    .update(dict(name_tw=item["name_chinese"],
+                                name_en=item["name_english"],
+                                name_jp=item["name_japaness"]))
+            
 
         self.session.commit()
 

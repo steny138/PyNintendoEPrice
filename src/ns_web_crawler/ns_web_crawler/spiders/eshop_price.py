@@ -3,6 +3,7 @@
 import re
 import scrapy
 import datetime 
+import logging
 from ns_web_crawler.items.eshop_price import EshopPriceItem, EshopProductItem, EshopPriceCountryItem
 
 class EshopPriceSpider(scrapy.Spider):
@@ -39,11 +40,13 @@ class EshopPriceSpider(scrapy.Spider):
 
         for game_dom in games_dom:
             game = self.get_game_item(game_dom, countries)
-
+            
             if not game:
                 continue
             
             result["games"].append(game)
+
+            logging.info("find the game: %s", game["name"])
 
         yield result
 
@@ -57,7 +60,7 @@ class EshopPriceSpider(scrapy.Spider):
     
     def get_game_item(self, tr, countries):
         game = EshopProductItem()
-        game["name"] = tr.css("th > a::text").extract_first()
+        game["name"] = tr.css("th > a::text").extract_first().strip()
         game["prices"] = []
 
         tds = tr.css("td")

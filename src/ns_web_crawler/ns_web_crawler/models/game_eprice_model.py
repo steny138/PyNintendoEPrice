@@ -13,6 +13,8 @@ class GameEPriceModel(Base):
                                 primary_key=True)
     name                =   Column(String(100),nullable=True)
     name_tw             =   Column(String(100),nullable=True)
+    name_en             =   Column(String(100),nullable=True)
+    name_jp             =   Column(String(100),nullable=True)
     country             =   Column(String(10),nullable=False)
     eprice              =   Column(Float,nullable=False)
     eprice_specified    =   Column(Float,nullable=True)
