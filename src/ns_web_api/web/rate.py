@@ -2,6 +2,7 @@
 
 import requests
 import json
+from cache import cache
 
 # rate_url = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref.zip?date-format"
 rate_url = "http://www.apilayer.net/api/live?access_key=4ed7637038e68219154bd351074ea018&format=1"
@@ -26,13 +27,17 @@ class CurrencyRate(object):
             rate = temp_rate * self.rate_dict[self.origin_currency + target_currency]
         return rate
 
+    @cache.cached(timeout=3600, key_prefix='rate_dict')
+    def __get_rate_dict(self):
+        print('extract get a rate dictoinary from a url')
+        response = requests.get(rate_url)
+        return json.loads(response.text)["quotes"]
+        
     def __init__(self):
         self.origin_currency = "USD"
-
         self.rate_dict = {}
         if not self.rate_dict:
-            response = requests.get(rate_url)
-            self.rate_dict = json.loads(response.text)["quotes"]
+            self.rate_dict = self.__get_rate_dict()
             print('load rate')
 
 if __name__ == "__main__":

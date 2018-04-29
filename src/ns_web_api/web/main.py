@@ -8,7 +8,6 @@ from settings import db,app
 @app.route('/', defaults={'game_name': None})
 @app.route('/<game_name>')
 def eprice(game_name):
-    print game_name
     if not game_name:
         game_name = 'Splatoon 2'
     
@@ -23,17 +22,22 @@ def eprice(game_name):
         else:
             country = CountryCurrency.query.filter(CountryCurrency.country == item.country).first()
             if country:
-                print item.eprice
                 currency = country.currency
         
         if currency:
             item.eprice = item.eprice * currency_rate.caculate_rate(currency, 'TWD')
-
-       
             
     return render_template('eprice.html',
         items = sorted(items, key=lambda d: d.eprice, reverse=False)
     )
+
+@app.route('/games')
+def games():
+    items = Eprice.query.distinct(Eprice.name)
+    return render_template('games.html',
+        items = items
+    )
+
 
 @app.route("/currency")
 def currency():

@@ -21,6 +21,7 @@ flask-migrate = "*"
 uuid = "*"
 flask-bootstrap = "*"
 requests = "*"
+flask-cache = "*"
 
 
 [requires]

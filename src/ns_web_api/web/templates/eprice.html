@@ -1,14 +1,23 @@
 {% extends "base.html" %} {% block title %} - Nintendo EShop Price. - {% endblock %} {% block page_content %} {% if items %}
 <table class="table">
     <thead>
-        <th>Game Name</th>
-        <th>Country</th>
-        <th>Price</th>
+        <tr>
+            <th>Game Name</th>
+            <th>Country</th>
+            <th>Price</th>
+        </tr>
     </thead>
     <tbody>
         {% for item in items %}
         <tr>
-            <td>{{ item.name_tw }} | {{ item.name }} </td>
+            <td>
+                {% if item.name_tw %}
+
+                    {{ item.name_tw }} | 
+                {% endif %}
+                
+                {{ item.name }} 
+            </td>
             <td>{{ item.country }}</td>
             <td><span data-eprice="{{ item.eprice }}">{{ "%d" % item.eprice }}</span></td>
         </tr>
