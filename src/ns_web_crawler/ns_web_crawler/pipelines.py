@@ -45,12 +45,14 @@ class PostgreSqlPipeline(object):
 
             for game in item["games"]:
                 for price in game["prices"]:
+
                     model = GameEPriceModel(
                         id = uuid4(),
                         name = game["name"],
                         country = price["country"]["name"],
                         eprice=price["price"],
                         eprice_specified=price["price"],
+                        onsale= price["onsale"],
                         currency_specified=price["currency"],
                         name_tw=None,
                         create_time= datetime.now(),

@@ -1,5 +1,5 @@
 # coding: utf-8
-from sqlalchemy import Column, DateTime, Float, String
+from sqlalchemy import Column, DateTime, Float, String,Boolean
 from sqlalchemy.dialects.postgresql.base import UUID
 from flask_sqlalchemy import SQLAlchemy
 from settings import db
@@ -28,6 +28,7 @@ class Eprice(db.Model):
     name_en = db.Column(db.String(100))
     name_jp = db.Column(db.String(100))
     country = db.Column(db.String(10), nullable=False)
+    onsale = db.Column(db.Boolean, unique=False, default=False)
     eprice = db.Column(db.Float(53), nullable=False)
     eprice_specified = db.Column(db.Float(53),nullable=True)
     currency_specified = db.Column(db.String(10),nullable=True)

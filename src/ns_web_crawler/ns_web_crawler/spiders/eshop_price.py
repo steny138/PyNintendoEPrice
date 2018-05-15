@@ -90,5 +90,6 @@ class EshopPriceSpider(scrapy.Spider):
         price["country"] = country
         price["currency"] = "USD" # because querystring is based on USD
         price["price"] = price_text[0]
+        price["onsale"] = td.css('.l').extract_first() is not None
         return price
 

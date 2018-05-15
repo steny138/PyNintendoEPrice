@@ -1,6 +1,6 @@
 import sqlalchemy
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy import Column,String,Integer,DateTime,Float
+from sqlalchemy import Column,String,Integer,DateTime,Float,Boolean
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -18,17 +18,19 @@ class GameEPriceModel(Base):
     country             =   Column(String(10),nullable=False)
     eprice              =   Column(Float,nullable=False)
     eprice_specified    =   Column(Float,nullable=True)
+    onsale              =   Column(Boolean,default=False)
     currency_specified  =   Column(String(10),nullable=True)
     create_time         =   Column(String(500), nullable=False)
     update_time         =   Column(DateTime,nullable=False)
 
-    def __init__(self,id,name,country,eprice,eprice_specified=None,currency_specified=None,name_tw=None,create_time=None,update_time=None):
+    def __init__(self,id,name,country,eprice,eprice_specified=None,currency_specified=None,name_tw=None,onsale=None,create_time=None,update_time=None):
         self.id                     =   id
         self.name                   =   name
         self.country                =   country
         self.eprice                 =   eprice
         self.eprice_specified       =   eprice_specified
         self.currency_specified     =   currency_specified
+        self.onsale                 =   onsale
         self.name_tw                =   name_tw
         self.create_time            =   create_time
         self.update_time            =   update_time
