@@ -38,7 +38,6 @@ def games():
         items = items
     )
 
-
 @app.route("/currency")
 def currency():
     items = CountryCurrency.query.all()
