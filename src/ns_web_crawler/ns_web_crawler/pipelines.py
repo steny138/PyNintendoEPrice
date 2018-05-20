@@ -43,22 +43,21 @@ class PostgreSqlPipeline(object):
     def process_item(self, item, spider):
         if spider.name == "eshop-price-index":
 
-            for game in item["games"]:
-                for price in game["prices"]:
+            for price in item["prices"]:
 
-                    model = GameEPriceModel(
-                        id = uuid4(),
-                        name = game["name"],
-                        country = price["country"]["name"],
-                        eprice=price["price"],
-                        eprice_specified=price["price"],
-                        onsale= price["onsale"],
-                        currency_specified=price["currency"],
-                        name_tw=None,
-                        create_time= datetime.now(),
-                        update_time = item["last_updated"]
-                    )
-                    self.session.add(model)
+                model = GameEPriceModel(
+                    id = uuid4(),
+                    name = item["name"],
+                    country = price["country"]["name"],
+                    eprice=price["price"],
+                    eprice_specified=price["price"],
+                    onsale= price["onsale"],
+                    currency_specified=price["currency"],
+                    name_tw=None,
+                    create_time= datetime.now(),
+                    update_time = item["last_updated"]
+                )
+                self.session.add(model)
         elif spider.name == "wiki-country-currency":
             model = self.session.query(CountryCurrencyModel).filter_by(country = item["country"]).first()
 
@@ -83,8 +82,7 @@ class PostgreSqlPipeline(object):
                     last_updated = item["last_updated"]
                 )
 
-            self.session.add(model)
-            
+            self.session.add(model) 
         elif spider.name == "gamer-ns-games":
 
             if item["name_english"]:
@@ -97,7 +95,6 @@ class PostgreSqlPipeline(object):
                                 name_en=item["name_english"],
                                 name_jp=item["name_japaness"]))
             
-
         self.session.commit()
 
         return item

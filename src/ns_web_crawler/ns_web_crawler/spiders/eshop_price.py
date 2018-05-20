@@ -4,7 +4,7 @@ import re
 import scrapy
 import datetime 
 import logging
-from ns_web_crawler.items.eshop_price import EshopPriceItem, EshopProductItem, EshopPriceCountryItem
+from ns_web_crawler.items.eshop_price import EshopProductItem, EshopPriceCountryItem
 
 class EshopPriceSpider(scrapy.Spider):
     name = "eshop-price-index"
@@ -20,10 +20,6 @@ class EshopPriceSpider(scrapy.Spider):
         main = response.css('div.prices > table[data-search-table]')
         countries_dom = main.css('thead > tr > th[title]')
         games_dom = main.css('tbody > tr[data-table-searchable]')
-
-        result = EshopPriceItem()
-        result["games"] = []
-        result["last_updated"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
         countries = []
 
@@ -44,12 +40,9 @@ class EshopPriceSpider(scrapy.Spider):
             if not game:
                 continue
             
-            result["games"].append(game)
+            yield game
 
             logging.info("find the game: %s", game["name"])
-
-        yield result
-
     
     def get_country_item(self, th):
         country = {}
@@ -62,6 +55,7 @@ class EshopPriceSpider(scrapy.Spider):
         game = EshopProductItem()
         game["name"] = tr.css("th > a::text").extract_first().strip()
         game["prices"] = []
+        game["last_updated"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
         tds = tr.css("td")
 

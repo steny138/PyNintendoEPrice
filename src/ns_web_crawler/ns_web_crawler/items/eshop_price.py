@@ -2,13 +2,10 @@
 
 import scrapy
 
-class EshopPriceItem(scrapy.Item):
-    games = scrapy.Field()
-    last_updated = scrapy.Field(serializer=str)
-
 class EshopProductItem(scrapy.Item):
     name = scrapy.Field()
     prices = scrapy.Field()
+    last_updated = scrapy.Field(serializer=str)
 
 class EshopPriceCountryItem(scrapy.Item):
     country = scrapy.Field()
