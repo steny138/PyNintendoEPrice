@@ -25,9 +25,6 @@ def eprice(game_name):
                 currency = country.currency
         
         if currency:
-            print( item.eprice)
-            print( currency)
-            print(item.country)
             item.eprice = item.eprice * currency_rate.caculate_rate(currency, 'TWD')
             
     return render_template('eprice.html',
@@ -47,6 +44,10 @@ def currency():
     return render_template('currency.html',
         items = items
     )
+
+@app.teardown_request
+def shutdown_session(exception=None):
+    db.session.remove()
 
 if __name__ == "__main__":
     app.run()

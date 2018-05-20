@@ -23,6 +23,7 @@ flask-bootstrap = "*"
 requests = "*"
 uwsgi = "*"
 flask-caching = "*"
+gunicorn = "*"
 
 
 [requires]
