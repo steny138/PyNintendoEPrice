@@ -9,6 +9,10 @@ from ns_web_crawler.items.eshop_price import EshopProductItem, EshopPriceCountry
 class EshopPriceSpider(scrapy.Spider):
     name = "eshop-price-index"
     def start_requests(self):
+
+        # 省空間...這些國家先暫時不轉
+        self.exclude_country = {"BGR", "AUT", "HRV", "CYP", "EST","HUN","LVA", "LUX","MLT","SVK","SVN", "SWE"}
+
         urls = [
             'https://eshop-prices.com/?currency=USD'
         ]
@@ -52,6 +56,10 @@ class EshopPriceSpider(scrapy.Spider):
         return country
     
     def get_game_item(self, tr, countries):
+
+        if tr.css("th > a > span.game-serie").extract_first():
+            return
+
         game = EshopProductItem()
         game["name"] = tr.css("th > a::text").extract_first().strip()
         game["prices"] = []
@@ -64,12 +72,18 @@ class EshopPriceSpider(scrapy.Spider):
             if not len(countries) > index:
                 continue
 
+            if countries[index]["name"] in self.exclude_country:
+                continue
+
             game_price = self.get_game_price_item(game_td, countries[index])
 
             if not game_price:
                 continue
 
             game["prices"].append(game_price)
+
+        if len(game["prices"]) < 10:
+            return
 
         return game
 

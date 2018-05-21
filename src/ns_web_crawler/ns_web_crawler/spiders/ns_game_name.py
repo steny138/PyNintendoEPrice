@@ -27,7 +27,11 @@ class EshopPriceSpider(scrapy.Spider):
             
             game = NsGameNameItem()
             cover_dom = game_dom.css("div.ACG-mainbox2 > div.ACG-mainbox2A > div.ACG-mainbox2B > a > img")
-            game_names = cover_dom.css("::attr(title)").extract_first().strip()
+
+            game_names = cover_dom.css("::attr(title)").extract_first()
+            if game_names:
+                game_names = game_names.strip()
+
             nameDict = self.parse_game_names(game_names)
 
             name_type = response.css("div.ACG-mainbox2 ul li::text").extract_first().strip()
