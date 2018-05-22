@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7c582705d6e28050a4019283c0744cf8235d87446096de85953419bf9b788a5b"
+            "sha256": "b321cadbe62e5c7296e67eca11cc244ea3ee4af4f565b0f25105bb7b0e102823"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -103,6 +103,12 @@
             "index": "pypi",
             "version": "==2.3.2"
         },
+        "future": {
+            "hashes": [
+                "sha256:e39ced1ab767b5936646cedba8bcce582398233d6a627067d4c6a454c90cfedb"
+            ],
+            "version": "==0.16.0"
+        },
         "gunicorn": {
             "hashes": [
                 "sha256:7ef2b828b335ed58e3b64ffa84caceb0a7dd7c5ca12f217241350dec36a1d5dc",
@@ -138,6 +144,14 @@
             ],
             "index": "pypi",
             "version": "==2.10"
+        },
+        "line-bot-sdk": {
+            "hashes": [
+                "sha256:4c00380eb9d83a8977229023d23eab7751cad659839da5526a1bc6ae68ac3151",
+                "sha256:dbad8e4d7af80e79303c58ed22111f43bc6e4d89ed4d83d5d827204f21828e5a"
+            ],
+            "index": "pypi",
+            "version": "==1.5.0"
         },
         "mako": {
             "hashes": [
