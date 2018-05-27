@@ -9,7 +9,7 @@ from settings import db,app
 @app.route('/<game_name>')
 def eprice(game_name):
     if not game_name:
-        game_name = 'Splatoon 2'
+        game_name = app.config['DEFAULT_GAME_NAME']
     
     items = Eprice.query.filter(Eprice.name == game_name)
 

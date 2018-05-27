@@ -25,6 +25,8 @@ uwsgi = "*"
 flask-caching = "*"
 gunicorn = "*"
 line-bot-sdk = "*"
+google-api-python-client = "*"
+python-dotenv = "*"
 
 
 [requires]

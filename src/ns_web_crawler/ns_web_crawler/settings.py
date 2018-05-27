@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+# load dotenv in the base root
+import os
+from dotenv import load_dotenv, find_dotenv
+
+APP_ROOT = os.path.dirname(__file__)
+dotenv_path = os.path.join(APP_ROOT, '.env')
+load_dotenv(dotenv_path, override=True)
+
 # Scrapy settings for ns_web_crawler project
 #
 # For simplicity, this file contains only settings considered important or
@@ -89,3 +97,6 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# Database Connection
+DATABASE_URL = os.getenv('DATABASE_URL', '')
