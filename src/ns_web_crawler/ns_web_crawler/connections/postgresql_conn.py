@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 from ns_web_crawler.models.game_eprice_model import GameEPriceModel
 from ns_web_crawler.models.country_mapping_currency_model import CountryCurrencyModel
-from ns_web_crawler.settings
+from ns_web_crawler import settings
 
 # 创建对象的基类:
 Base = declarative_base()

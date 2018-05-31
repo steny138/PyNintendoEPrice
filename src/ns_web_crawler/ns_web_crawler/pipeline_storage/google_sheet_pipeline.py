@@ -4,34 +4,35 @@
 # We Save the All of games which nintendo games and these game tw name.
 
 from __future__ import print_function
+import os
 from apiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 from oauth2client.service_account import ServiceAccountCredentials
-
+from ns_web_crawler import settings
 
 class GoogleSheetApiPipeline(object):
     def open_spider(self, spider):
-        pass
+        # Setup the Sheets API
+        SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
+        APP_ROOT = os.path.join(os.path.dirname(__file__), '..')
+        cred_file_path = os.path.join(APP_ROOT, 'client_secret.json')
+        creds = ServiceAccountCredentials.from_json_keyfile_name(cred_file_path, SCOPES)
+        
+        if not creds or creds.invalid:
+            raise Exception('No Credentials')
+        self.service = build('sheets', 'v4', http=creds.authorize(Http()))
+
 
     def close_spider(self, spider):
         pass
 
     def process_item(self, item, spider):
-        # Setup the Sheets API
-        SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
-        store = file.Storage('../client_secret.json')
-        creds = store.get()
-        # print(creds)
-        if not creds or creds.invalid:
-            flow = client.flow_from_clientsecrets('../client_secret.json', SCOPES)
-            creds = tools.run_flow(flow, store)
-        service = build('sheets', 'v4', http=creds.authorize(Http()))
 
         # Call the Sheets API
-        SPREADSHEET_ID = '1nKH1bfETw7NIUl2EzOu_1L_sgd7hcom3DFMsZ3lb-k0'
-        RANGE_NAME = 'Class Data!A2:E'
-        result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
+        SPREADSHEET_ID = settings.SPREADSHEET
+        RANGE_NAME = 'Games!A2:E'
+        result = self.service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
                                                     range=RANGE_NAME).execute()
 
         values = result.get('values', [])
