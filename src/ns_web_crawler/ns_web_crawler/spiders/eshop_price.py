@@ -11,7 +11,13 @@ class EshopPriceSpider(scrapy.Spider):
     def start_requests(self):
 
         # 省空間...這些國家先暫時不轉
-        self.exclude_country = {"BGR", "AUT", "HRV", "CYP", "EST","HUN","LVA", "LUX","MLT","SVK","SVN", "SWE"}
+        self.exclude_country = {
+            "BEL", "BGR", "AUT", "HRV", "CYP", 
+            "CZE", "FIN", "EST", "GRC", "HUN", 
+            "IRL", "ITA", "LVA", "LTU", "LUX", 
+            "MLT", "NLD", "NOR", "POL", "PRT", 
+            "ROU", "RUS", "SVK", "SVN", "ZAF", 
+            "ESP", "SWE", "CHE", "GBR"}
 
         urls = [
             'https://eshop-prices.com/?currency=USD'
@@ -82,7 +88,7 @@ class EshopPriceSpider(scrapy.Spider):
 
             game["prices"].append(game_price)
 
-        if len(game["prices"]) < 10:
+        if len(game["prices"]) < 5:
             return
 
         return game

@@ -23,7 +23,6 @@ class GoogleSheetApiPipeline(object):
             raise Exception('No Credentials')
         self.service = build('sheets', 'v4', http=creds.authorize(Http()))
 
-
     def close_spider(self, spider):
         pass
 

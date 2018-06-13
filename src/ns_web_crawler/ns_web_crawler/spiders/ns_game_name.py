@@ -85,14 +85,12 @@ class NSGameNameSpider(scrapy.Spider):
             result["name_jp"] = name_list[1].strip()
             result["name_tw"] = name_list[0].strip()
         elif len(name_list) >= 2:
-
             if re.match("u\"[\u3040-\u309f]+", name_list[1].strip()):
                 # 日文
                 result["name_jp"] = name_list[1].strip()
             else:
                 result["name_en"] = name_list[1].strip()
-
-            
+          
             result["name_tw"] = name_list[0].strip()
         else:
             result["name_tw"] = names
