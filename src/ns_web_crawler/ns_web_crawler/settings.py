@@ -75,7 +75,7 @@ ROBOTSTXT_OBEY = True
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'ns_web_crawler.pipelines.PostgreSqlPipeline': 300,
-   'ns_web_crawler.pipeline_storage.google_sheet_pipeline.GoogleSheetApiPipeline': 310
+#    'ns_web_crawler.pipeline_storage.google_sheet_pipeline.GoogleSheetApiPipeline': 310
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

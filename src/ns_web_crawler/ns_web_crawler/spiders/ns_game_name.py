@@ -6,7 +6,7 @@ import datetime
 import logging
 from ns_web_crawler.items.ns_game_name import NsGameNameItem
 
-class EshopPriceSpider(scrapy.Spider):
+class NSGameNameSpider(scrapy.Spider):
     name = "gamer-ns-games"
     def start_requests(self):
         urls = [

@@ -39,10 +39,9 @@ class GoogleSheetApiPipeline(object):
         if not values:
             print('No data found.')
         else:
-            print('Name, Major:')
             for row in values:
+                pass
                 # Print columns A and E, which correspond to indices 0 and 4.
-                print('%s, %s' % (row[0], row[4]))
         return item
 
 if __name__ == "__main__":
