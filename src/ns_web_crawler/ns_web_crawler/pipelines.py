@@ -50,7 +50,6 @@ class PostgreSqlPipeline(object):
                     model.eprice=price["price"]
                     model.eprice_specified=price["price"]
                     model.currency_specified=price["currency"]
-                    model.onsale= price["onsale"]
                     model.update_time = item["last_updated"]
                 else:
                     model = GameEPriceModel(
@@ -102,6 +101,16 @@ class PostgreSqlPipeline(object):
                     .update(dict(name_tw=item["name_chinese"],
                                 name_en=item["name_english"],
                                 name_jp=item["name_japaness"]))
+        elif spider.name == "eshop-price-onsale":
+            model = self.session.query(GameEPriceModel) \
+                                .filter_by(country = item["country"], name = item["name"], currency_specified = item["currency"]) \
+                                .first()
+            if model:
+                model.eprice = item["price"]
+                model.onsale = item["onsale"]
+
+            if item["name"]:
+                logging.info("the game %s is onsale or not: %s", item["name"], item["onsale"])
             
         self.session.commit()
 
