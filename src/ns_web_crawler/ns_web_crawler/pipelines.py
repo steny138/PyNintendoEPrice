@@ -109,7 +109,7 @@ class PostgreSqlPipeline(object):
                 model.eprice = item["price"]
                 model.onsale = item["onsale"]
 
-            if item["name"]:
+            if item["onsale"]:
                 logging.info("the game %s is onsale or not: %s", item["name"], item["onsale"])
             
         self.session.commit()
