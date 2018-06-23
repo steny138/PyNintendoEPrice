@@ -17,6 +17,7 @@ runner = CrawlerRunner(get_project_settings())
 @defer.inlineCallbacks
 def crawl():
     yield runner.crawl("eshop-price-index")
+    yield runner.crawl("eshop-price-onsale")
     # yield runner.crawl("wiki-country-currency")
     yield runner.crawl("gamer-ns-games")
     reactor.stop()

@@ -16,6 +16,7 @@ def crawl_job():
     settings = get_project_settings()
     runner = CrawlerRunner(settings)
     yield runner.crawl("eshop-price-index")
+    yield runner.crawl("eshop-price-onsale")
     # yield runner.crawl("wiki-country-currency")
     yield runner.crawl("gamer-ns-games")
     # reactor.stop()
