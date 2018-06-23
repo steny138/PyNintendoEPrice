@@ -12,7 +12,6 @@ class NSGameNameSpider(scrapy.Spider):
         urls = [
             'https://acg.gamer.com.tw/index.php?page=1&p=NS',
             'https://acg.gamer.com.tw/billboard.php?t=4&p=NS&page=1'
-            
         ]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
