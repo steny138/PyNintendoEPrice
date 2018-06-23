@@ -47,7 +47,8 @@ class EshopPriceOnsaleSpider(scrapy.Spider):
             
             self.countries.append(country)
 
-        logging.info('has game count : %d', len(games_dom))
+        logging.info('eshop has game count : %d', len(games_dom))
+        
         for game_dom in games_dom:
             
             if game_dom.css("th > a > span.game-serie").extract_first():
@@ -74,8 +75,6 @@ class EshopPriceOnsaleSpider(scrapy.Spider):
                 continue
             country_name = price_tr.xpath('td[2]/text()').extract_first().strip()
             
-            logging.info('country name : %s', country_name)
-
             find_country = [x for x in self.countries if x["name"] == country_name]
             country = next(iter(find_country), None) 
             if country is None:
