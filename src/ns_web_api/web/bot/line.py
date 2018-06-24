@@ -23,7 +23,7 @@ from linebot.models import (
     ImageCarouselColumn
 )
 
-from basebot import BaseBot, UserProfile
+from .basebot import BaseBot, UserProfile
 
 class LYCLineBot(BaseBot):
 
