@@ -1,16 +1,11 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [dev-packages]
-jieba = "*"
-
 
 [packages]
-
 flask = "*"
 flask-script = "*"
 flask-sqlalchemy = "*"
@@ -27,8 +22,7 @@ gunicorn = "*"
 line-bot-sdk = "*"
 google-api-python-client = "*"
 python-dotenv = "*"
-
+jieba = "*"
 
 [requires]
-
 python_version = "3.6"
