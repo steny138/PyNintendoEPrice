@@ -83,7 +83,10 @@ class LYCLineBot(BaseBot):
         """
         
         # 解析是不是有符合觸發事件
-        
+        seg_list = ", ".join(jieba.cut(message)).split(', ')
+        match_event_message = analyzer.match(seg_list)
+        if match_event_message:
+            return self.reply_by_text(''.join(filter(lambda x: x is not None, match_event_message)))
 
         # 沒有就去當鸚鵡吧
         allow_message_type = { "text":self.reply_by_text, "sticker": self.reply_by_sticker } 

@@ -52,7 +52,9 @@ def currency():
 def find_game(message):
     
     seg_list = ", ".join(jieba.cut(message)).split(', ')
-    analyzer.match(seg_list)
+    match_event_message = analyzer.match(seg_list)
+    if match_event_message:
+        return ''.join(filter(lambda x: x is not None, match_event_message))
 
     return "hello world"
     
