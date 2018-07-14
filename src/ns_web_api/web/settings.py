@@ -14,6 +14,7 @@ load_dotenv(dotenv_path, override=True)
 # Build Flask app
 app = Flask(__name__, template_folder='templates')
 
+# this may have to change with environment variable
 app.config.from_object(os.getenv('CONFIG_ENVIRONMENT', 'config.DevelopmentConfig'))
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', '') # 'postgresql://admin:1qaz2wsx@localhost/'
