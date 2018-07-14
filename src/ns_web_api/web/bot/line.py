@@ -98,8 +98,6 @@ class LYCLineBot(BaseBot):
         allow_message_type = { "text":self.reply_by_text, "sticker": self.reply_by_sticker } 
 
         func = allow_message_type.get(message.type, self.reply_default)
-        print(func)
-        print(func(message))
         return func(message)
 
     def reply_by_text(self, message):
