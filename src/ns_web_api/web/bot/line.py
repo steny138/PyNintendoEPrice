@@ -25,6 +25,8 @@ from linebot.models import (
 
 from .basebot import BaseBot, UserProfile
 
+from .events.default import DefaultEvent
+
 class LYCLineBot(BaseBot):
 
     def __init__(self, access_token, secret):
@@ -44,7 +46,7 @@ class LYCLineBot(BaseBot):
             for event in events:
                 return_message = self.special_reply(event.message)
 
-                # 沒有特殊處理過的回應,先當鸚鵡吧
+                # 沒有特殊處理過的回應, 解析一下訊息在處理回應
                 if not return_message:
                     return_message = self.analysis_message(event.message)
 
@@ -79,7 +81,11 @@ class LYCLineBot(BaseBot):
         Returns:
             [SendMessage] -- [the message what postback to the user.]
         """
+        
+        # 解析是不是有符合觸發事件
+        
 
+        # 沒有就去當鸚鵡吧
         allow_message_type = { "text":self.reply_by_text, "sticker": self.reply_by_sticker } 
 
         func = allow_message_type.get(message.type, self.reply_default)
@@ -87,9 +93,27 @@ class LYCLineBot(BaseBot):
         return func(message)
 
     def reply_by_text(self, message):
+        """reply a text
+        
+        Arguments:
+            message {string} -- request message
+        
+        Returns:
+            string -- response message
+        """
+
         return  TextSendMessage(text=message.text)
     
     def reply_by_sticker(self, message):
+        """reply by a sticker
+        
+        Arguments:
+            message {string} -- request message
+        
+        Returns:
+            string  -- response sticker.
+        """
+
         if int(message.package_id) > 4:
             return TextSendMessage(text="中文豪難喔，公蝦聽謀捏。")
         
@@ -259,7 +283,6 @@ class LYCLineBot(BaseBot):
             key = "{0}-{1}".format(message.package_id, message.sticker_id)
             func = match_stickers.get(key, lambda s: None)
 
-            print(func(message))
             return func(message)
 
         return None

@@ -4,6 +4,9 @@ from flask import Flask,render_template
 from models import Eprice,CountryCurrency
 from rate import CurrencyRate
 from settings import db,app
+from bot.events.analyzer import analyzer
+
+import jieba
 
 @app.route('/', defaults={'game_name': None})
 @app.route('/<game_name>')
@@ -44,6 +47,15 @@ def currency():
     return render_template('currency.html',
         items = items
     )
+
+@app.route("/find/<message>")
+def find_game(message):
+    
+    seg_list = ", ".join(jieba.cut(message)).split(', ')
+    analyzer.match(seg_list)
+
+    return "hello world"
+    
 
 @app.teardown_request
 def shutdown_session(exception=None):
