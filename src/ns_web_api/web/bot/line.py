@@ -23,9 +23,12 @@ from linebot.models import (
     ImageCarouselColumn
 )
 
+import jieba
+
 from .basebot import BaseBot, UserProfile
 
 from .events.default import DefaultEvent
+from .events.analyzer import analyzer
 
 class LYCLineBot(BaseBot):
 
