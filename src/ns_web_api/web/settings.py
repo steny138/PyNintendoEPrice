@@ -1,6 +1,6 @@
 # coding: utf-8
 import os
-from flask import Flask
+from flask import Flask, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 
@@ -12,7 +12,7 @@ dotenv_path = os.path.join(APP_ROOT, '.env')
 load_dotenv(dotenv_path, override=True)
 
 # Build Flask app
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='templates', static_url_path='/static')
 
 # this may have to change with environment variable
 app.config.from_object(os.getenv('CONFIG_ENVIRONMENT', 'config.DevelopmentConfig'))
