@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import re
 from flask import Flask, render_template, send_from_directory
 from models import Eprice,CountryCurrency
 from rate import CurrencyRate
@@ -36,7 +37,7 @@ def currency():
     )
 
 @app.route("/find/<message>")
-def find_game(message):
+def find_message(message):
     
     seg_list = ", ".join(jieba.cut(message)).split(', ')
     match_event_message = analyzer.match(seg_list)
@@ -51,6 +52,10 @@ def eprice(game_name):
         game_name = app.config['DEFAULT_GAME_NAME']
     
     items = Eprice.query.filter(Eprice.name == game_name)
+    
+    if items.count() == 0:
+        if re.search("([\u4e00-\u9fff]{2,}|[a-zA-Z]{4,})", game_name):
+            items = Eprice.query.filter(Eprice.name_tw.contains(game_name) | Eprice.name.contains(game_name))
 
     currency_rate = CurrencyRate()
     for item in items:
