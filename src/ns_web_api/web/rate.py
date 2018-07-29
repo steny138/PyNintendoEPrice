@@ -38,7 +38,6 @@ class CurrencyRate(object):
         self.rate_dict = {}
         if not self.rate_dict:
             self.rate_dict = self.__get_rate_dict()
-            print('load rate')
 
 if __name__ == "__main__":
     r = CurrencyRate()
