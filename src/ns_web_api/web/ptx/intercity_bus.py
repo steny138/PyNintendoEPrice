@@ -53,7 +53,6 @@ def get_route_stop(route_name):
         return r.json()
 
     return {}
-    pass
 
 def get_operator_info():
     """GET /v2/Bus/Operator/InterCity
@@ -87,9 +86,66 @@ def get_operator():
             'code': x['OperatorCode'], \
             'no': x['OperatorNo'], \
             'provider_id': x['ProviderID'] } for x in operator]
+
+def get_realtime(operator_id, route_id):
+    """GET /v2/Bus/RealTimeByFrequency/InterCity/{RouteName}
+    取得指定[路線名稱]的公路客運動態定時資料(A2)
+    """
+
+    action = "RealTimeByFrequency/InterCity/{}".format(route_id)
+    url = domain + action
+
+    headers = {}
+    headers.update(auth.get_auth_header())
+    filter="OperatorID eq '{}' and RouteID eq '{}'" \
+                .format(operator_id, route_id)
+
+    param = __get_odata_parameter_dict(filter=filter)
+    r = requests.get(url, headers=headers, params=param)
+    if r.status_code == requests.codes.ok:
+        return r.json()
+
+    return {}
+
+def get_schedule(operator_id, route_id):
+    """GET /v2/Bus/Schedule/InterCity/{RouteName}
+    取得指定[路線名稱]的公路客運路線班表資料
+    """
+
+    action = "Schedule/InterCity/{}".format(route_id)
+    url = domain + action
+
+    headers = {}
+    headers.update(auth.get_auth_header())
+    filter="OperatorID eq '{}' and RouteID eq '{}'" \
+                .format(operator_id, route_id)
+
+    param = __get_odata_parameter_dict(filter=filter)
+    r = requests.get(url, headers=headers, params=param)
+    if r.status_code == requests.codes.ok:
+        return r.json()
+
+    return {}
+
+def __get_odata_parameter_dict(top=None, skip=None, format="json", orderby=None, filter=None):
+    """統一整理odata的固定參數指定回傳parameter
     
-def __get_odata_parameter(top =0, skip = 0 , format="", orderby="", filter=""):
-    """統一整理odata的固定參數指定回傳
+    Keyword Arguments:
+        top {int} -- 回傳幾筆 (default: {0})
+        skip {int} -- 跳過前面幾筆 (default: {0})
+        format {str} -- 回傳格式 json or xml (default: {None})
+        orderby {str} -- 排列順序, 傳入response欄位名稱 (default: {None})
+        filter {str} -- 篩選條件 (default: {None})
+    
+    Returns:
+        [type] -- odata parameter的querystring
+    """
+    param = {'$top': top, '$skip': skip, '$orderby': orderby, '$format': format, '$filter': filter}
+
+    return param
+
+def __get_odata_parameter(top=0, skip=0, format="", orderby="", filter=""):
+    """統一整理odata的固定參數指定回傳querystring
     
     Keyword Arguments:
         top {int} -- 回傳幾筆 (default: {0})
@@ -123,4 +179,7 @@ if __name__ == '__main__':
     # for o in operator:
     #     print(o['OperatorName']['Zh_tw'])
     # print(get_operator())
-    print(get_route_stop('9102'))
+    # print(get_route_stop('9102'))
+
+    # print(get_realtime('45','1829'))
+    print(get_schedule('45','1829'))

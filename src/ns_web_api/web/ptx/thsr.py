@@ -174,3 +174,4 @@ if __name__ == '__main__':
     # print(get_fare('1070','1000'))
     # print(get_timetable())
     # print(get_timetable('0681'))
+    pass
