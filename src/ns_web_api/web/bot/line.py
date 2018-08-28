@@ -27,8 +27,8 @@ import jieba
 
 from .basebot import BaseBot, UserProfile
 
-from .events.default import DefaultEvent
-from .events.analyzer import analyzer
+from events.default import DefaultEvent
+from events.analyzer import analyzer
 
 class LYCLineBot(BaseBot):
 
