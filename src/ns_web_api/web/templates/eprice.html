@@ -1,4 +1,9 @@
-{% extends "base.html" %} {% block title %} - {{ game_name }} - Nintendo EShop Price. - {% endblock %} {% block page_content %} {% if items %}
+{% extends "base.html" %} {% block title %} - {{ game_name }} - Nintendo EShop Price. - {% endblock %} 
+{% block page_content %} 
+{% if game_name | length < 4 %}
+    <p>Search Game by a part of game name should be more than four words in English.</p>
+{% endif %} 
+{% if items %}
 <table class="table table-hover">
     <caption>
         <p> The Game eprice show by Taiwan Dollars(TWD).</p>
@@ -34,6 +39,7 @@
     </tbody>
 </table>
 {% endif %}
+
 <footer>
     Copyright Yuchen Liu © 2018
 </footer>

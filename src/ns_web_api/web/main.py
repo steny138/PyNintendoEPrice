@@ -5,7 +5,7 @@ from flask import Flask, render_template, send_from_directory
 from models import Eprice,CountryCurrency
 from rate import CurrencyRate
 from settings import db,app
-from bot.events.analyzer import analyzer
+from events.analyzer import analyzer
 
 import jieba
 
@@ -55,7 +55,7 @@ def eprice(game_name):
     
     if items.count() == 0:
         if re.search("([\u4e00-\u9fff]{2,}|[a-zA-Z]{4,})", game_name):
-            items = Eprice.query.filter(Eprice.name_tw.contains(game_name) | Eprice.name.contains(game_name))
+            items = Eprice.query.filter(Eprice.name_tw.ilike(f'%{game_name}%') | Eprice.name.ilike(f'%{game_name}%'))
 
     currency_rate = CurrencyRate()
     for item in items:

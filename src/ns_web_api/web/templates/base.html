@@ -29,7 +29,7 @@
         </ul>
         <form class="navbar-form navbar-left">
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search" id="navbar-find-game-text">
+            <input type="text" class="form-control" placeholder="Search" id="navbar-find-game-text" onkeypress="if (event.keyCode == 13) {return false;}">
           </div>
           <button type="button" class="btn btn-default" id="navbar-find-game-button">Find Game</button>
           <script type="text/javascript">
@@ -39,6 +39,16 @@
                 var element = document.getElementById('navbar-find-game-text');
                 if(element.value > ""){
                     location.href = "/" + element.value;
+                }
+            });
+            var node = document.getElementById("navbar-find-game-text");
+            node.addEventListener("keyup", function(event) {
+                debugger;
+                event.preventDefault();
+                if (event.key === "Enter") {
+                  if(this.value > ""){
+                    location.href = "/" + this.value;
+                  }
                 }
             });
           </script>
