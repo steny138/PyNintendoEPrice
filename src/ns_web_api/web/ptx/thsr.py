@@ -1,8 +1,11 @@
 import requests
-from auth import Auth
+import logging
+from .auth import Auth
 
 domain = "https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/"
 default_limit_count = 20
+
+logger = logging.getLogger('flask.app')
 
 auth = Auth()
 
@@ -25,6 +28,28 @@ def get_station():
         return r.json()
 
     return {}
+
+def get_station_id(station_names):
+    """取得高鐵車站對應id   
+    
+    Arguments:
+        station_names {[list]} -- 想查詢的車站名稱
+    
+    Returns:
+        [dictionary] -- key: station name, value: station id
+    """
+
+    all_stations = get_station()
+    
+    matchs = {}
+    for station_name in station_names:
+        match = next(filter(lambda x: \
+            station_name.strip() in x['StationName']['Zh_tw'].strip() ,all_stations))
+
+        if match:
+            matchs[station_name.strip()] = match['StationID']
+
+    return matchs
 
 def get_fare(departure, destination):
     """GET /v2/Rail/THSR/ODFare/{OriginStationID}/to/{DestinationStationID}
@@ -96,6 +121,8 @@ def get_seat(id):
 
     if r.status_code == requests.codes.ok:
         return r.json()
+    else:
+       print(r) 
 
     return {}
     
