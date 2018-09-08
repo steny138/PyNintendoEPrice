@@ -51,7 +51,6 @@ class TrafficEvent(object):
         destination = ''
         destination_name = ''
         time = datetime.now()
-        logger.info(f'vocabulary {vocabulary}')
 
         # find the location
         for v in vocabulary:

@@ -30,6 +30,10 @@ from .basebot import BaseBot, UserProfile
 from events.default import DefaultEvent
 from events.analyzer import analyzer
 
+import logging
+
+logger = logging.getLogger('flask.app')
+
 class LYCLineBot(BaseBot):
 
     def __init__(self, access_token, secret):
@@ -88,6 +92,7 @@ class LYCLineBot(BaseBot):
         # 解析是不是有符合觸發事件
         if message.type == "text":
             seg_list = ", ".join(jieba.cut(message.text)).split(', ')
+            logger.info(f'vocabulary {seg_list}')
             match_event_message = analyzer.match(seg_list)
             match_event_message = list(filter(lambda x: x is not None, match_event_message))
             
