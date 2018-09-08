@@ -1,6 +1,7 @@
 
 from .games import GamesEvent
 from .lifes import LifeEvent
+from .traffic import TrafficEvent
 
 class EventAyalyzer(object):
     _instance = None
@@ -11,6 +12,7 @@ class EventAyalyzer(object):
 
             cls._instance.events.append(GamesEvent())
             cls._instance.events.append(LifeEvent())
+            cls._instance.events.append(TrafficEvent())
 
         return cls._instance 
 

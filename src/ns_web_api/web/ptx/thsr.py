@@ -42,10 +42,16 @@ def get_station_id(station_names):
     all_stations = get_station()
     
     matchs = {}
-    for station_name in station_names:
-        match = next(filter(lambda x: \
-            station_name.strip() in x['StationName']['Zh_tw'].strip() ,all_stations))
 
+    for station_name in station_names:
+        match = None
+           
+        try:
+            match = next(filter(lambda x: \
+                station_name.strip() in x['StationName']['Zh_tw'].strip() ,all_stations))
+        except StopIteration:
+            pass
+        
         if match:
             matchs[station_name.strip()] = match['StationID']
 
