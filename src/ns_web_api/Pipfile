@@ -22,7 +22,7 @@ gunicorn = "*"
 line-bot-sdk = "*"
 google-api-python-client = "*"
 python-dotenv = "*"
-jieba = "*"
+jieba = {git = "https://github.com/APCLab/jieba-tw.git"}
 
 [requires]
 python_version = "3.6"
