@@ -1,5 +1,6 @@
 
 import os
+import jieba
 # load dotenv in the base root
 from dotenv import load_dotenv, find_dotenv
 
@@ -13,5 +14,8 @@ from events.traffic import TrafficEvent
 
 
 traffic_event = TrafficEvent()
-message = traffic_event.occurs(['高鐵', '台北', '左營', '有', '空位'])
+vocabulary = ", ".join(jieba.cut('高鐵台中到台北有座位嗎')).split(', ')
+print(vocabulary)
+
+message = traffic_event.occurs(vocabulary)
 print(message)

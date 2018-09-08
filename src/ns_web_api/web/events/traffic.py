@@ -1,7 +1,11 @@
 import requests
+import logging
+
 from datetime import datetime
 
 from ptx import thsr
+
+logger = logging.getLogger('flask.app')
 
 class TrafficEvent(object):
     """ 交通事件
@@ -15,8 +19,9 @@ class TrafficEvent(object):
         """
         if not vocabulary:
             return
-        
+
         if "高鐵" in vocabulary:
+            logger.info('高鐵')
             return self.__thsr_event(vocabulary)
 
         elif "台鐵" in vocabulary:
@@ -46,6 +51,7 @@ class TrafficEvent(object):
         destination = ''
         destination_name = ''
         time = datetime.now()
+        logger.info(f'vocabulary {vocabulary}')
 
         # find the location
         for v in vocabulary:
@@ -53,12 +59,19 @@ class TrafficEvent(object):
                 continue
             
             if not departure:
+                logger.info(f'departure {departure} but v {v} {station_dict[v]}')
                 departure_name = v
                 departure = station_dict[v]
             elif not destination:
+                logger.info(f'destination {destination} but v {v} {station_dict[v]}')
+
                 destination_name = v
                 destination = station_dict[v]        
         
+        logger.info(f'departure {departure}')
+        logger.info(f'destination {destination}')
+        logger.info(f'time {time}')
+
         if not departure or not destination or not time:
             return ''
 
