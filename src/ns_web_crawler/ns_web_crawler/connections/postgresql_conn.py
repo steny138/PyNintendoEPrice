@@ -3,16 +3,19 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from ns_web_crawler.models.game_model import GameModel
 from ns_web_crawler.models.game_eprice_model import GameEPriceModel
 from ns_web_crawler.models.country_mapping_currency_model import CountryCurrencyModel
+
 from ns_web_crawler import settings
 
 # 创建对象的基类:
 Base = declarative_base()
 
-# 初始化数据库连接:
+# 初始化數據庫連結:
 engine = create_engine(settings.DATABASE_URL)
 
+GameModel.metadata.create_all(engine)
 GameEPriceModel.metadata.create_all(engine)
 CountryCurrencyModel.metadata.create_all(engine)
 
