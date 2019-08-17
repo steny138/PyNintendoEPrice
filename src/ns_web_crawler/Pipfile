@@ -1,16 +1,11 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [dev-packages]
 
-
-
 [packages]
-
 scrapy = "*"
 sqlalchemy = "*"
 "psycopg2" = "*"
@@ -18,7 +13,5 @@ uuid = "*"
 google-api-python-client = "*"
 python-dotenv = "*"
 
-
 [requires]
-
-python_version = "2.7"
+python_version = "3.6"

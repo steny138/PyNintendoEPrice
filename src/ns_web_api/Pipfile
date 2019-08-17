@@ -23,6 +23,7 @@ line-bot-sdk = "*"
 google-api-python-client = "*"
 python-dotenv = "*"
 jieba = {git = "https://github.com/APCLab/jieba-tw.git"}
+python-dotenv = "*"
 
 [requires]
 python_version = "3.6"

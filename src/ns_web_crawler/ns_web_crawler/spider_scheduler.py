@@ -17,7 +17,6 @@ def crawl_job():
     runner = CrawlerRunner(settings)
     yield runner.crawl("eshop-price-index")
     yield runner.crawl("eshop-price-onsale")
-    # yield runner.crawl("wiki-country-currency")
     yield runner.crawl("gamer-ns-games")
     # reactor.stop()
     defer.returnValue('success crawl job')
