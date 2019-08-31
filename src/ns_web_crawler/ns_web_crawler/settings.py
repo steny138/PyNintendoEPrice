@@ -2,7 +2,8 @@
 
 # load dotenv in the base root
 import os
-from dotenv import load_dotenv, find_dotenv
+
+from dotenv import find_dotenv, load_dotenv
 
 APP_ROOT = os.path.dirname(__file__)
 dotenv_path = os.path.join(APP_ROOT, '.env')
@@ -107,3 +108,18 @@ ITEM_PIPELINES = {
 DATABASE_URL = os.getenv('DATABASE_URL', '')
 
 SPREADSHEET = os.getenv('SPREADSHEET', '')
+
+# Nintendo Settings
+US_ALGOLIA_ID      = os.getenv('US_ALGOLIA_ID', 'U3B6GR4UA3')
+US_ALGOLIA_KEY     = os.getenv('US_ALGOLIA_KEY', '9a20c93440cf63cf1a7008d75f7438bf')
+US_GET_GAMES_URL   = os.getenv('US_GET_GAMES_URL', f'https://{US_ALGOLIA_ID}-dsn.algolia.net/1/indexes/*/queries')
+US_GAME_CHECK_CODE = os.getenv('US_GAME_CHECK_CODE', '70010000000185')
+
+EU_GET_GAMES_URL   = os.getenv('EU_GET_GAMES_URL', 'http://search.nintendo-europe.com/{locale}/select')
+EU_GAME_CHECK_CODE = os.getenv('EU_GAME_CHECK_CODE', '70010000000184')
+
+JP_GET_GAMES_CURRENT = os.getenv('JP_GET_GAMES_CURRENT', 'https://www.nintendo.co.jp/data/software/xml-system/switch-onsale.xml')
+JP_GET_GAMES_COMING  = os.getenv('JP_GET_GAMES_COMING', 'https://www.nintendo.co.jp/data/software/xml-system/switch-coming.xml')
+JP_GAME_CHECK_CODE   = os.getenv('JP_GAME_CHECK_CODE', '70010000000039')
+
+PRICE_GET_URL = os.getenv('PRICE_GET_URL', 'https://api.ec.nintendo.com/v1/price')
