@@ -12,6 +12,7 @@ sqlalchemy = "*"
 uuid = "*"
 google-api-python-client = "*"
 python-dotenv = "*"
+requests = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
