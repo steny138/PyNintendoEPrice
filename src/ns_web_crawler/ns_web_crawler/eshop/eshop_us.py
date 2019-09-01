@@ -11,7 +11,6 @@ US_ALGOLIA_KEY     = os.getenv('US_ALGOLIA_KEY', '9a20c93440cf63cf1a7008d75f7438
 US_GET_GAMES_URL   = os.getenv('US_GET_GAMES_URL', f'https://{US_ALGOLIA_ID}-dsn.algolia.net/1/indexes/*/queries')
 US_GAME_CHECK_CODE = os.getenv('US_GAME_CHECK_CODE', '70010000000185')
 
-
 class EShopUSApi(object):
     """The api helper for getting Nintendo US Eshop games.
     """
@@ -45,6 +44,8 @@ class EShopUSApi(object):
         pass
 
     def get_all_games(self):
+        """Get all eshop games in us.
+        """
         categories = self.__get_all_categories()
         all_games = {}
         for category_name, category_game_count in categories.items():
@@ -58,8 +59,8 @@ class EShopUSApi(object):
                 category_games = self.__get_category_games(category_name, price_range)
 
                 if category_games :
-                    for g in [game for game in category_games if not game['title'] in all_games]:
-                        all_games[g['title']] = g
+                    for g in [game for game in category_games if not game['slug'] in all_games]:
+                        all_games[g['slug']] = g
 
         print(len(all_games))
 
