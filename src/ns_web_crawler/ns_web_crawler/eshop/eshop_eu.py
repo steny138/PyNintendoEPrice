@@ -2,9 +2,6 @@ import json
 import requests
 
 import copy
-# 逗點隔開
-# https://api.ec.nintendo.com/v1/price?country=GB&lang=en&ids=70010000006852
-# %2C70010000019183%2C70010000013914%2C70010000019160%2C70010000019341
 
 import os
 EU_GET_GAMES_URL   = os.getenv('EU_GET_GAMES_URL', 'http://search.nintendo-europe.com/{locale}/select')
@@ -37,6 +34,8 @@ class EShopEUApi(object):
                 all_games[game['fs_id']] = game
 
         print(len(all_games))
+
+        return all_games
     
     def __get_api_result(self):
         querystring = copy.deepcopy(self.EU_GET_GAMES_OPTIONS)
@@ -45,7 +44,6 @@ class EShopEUApi(object):
         url = EU_GET_GAMES_URL.replace('{locale}', self.EU_DEFAULT_LOCALE)
 
         r = requests.get(url, params=querystring)
-        print(r.url)
         return r.json()
 
 

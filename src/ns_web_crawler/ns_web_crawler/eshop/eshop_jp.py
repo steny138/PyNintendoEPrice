@@ -37,6 +37,8 @@ class EShopJPApi(object):
                 all_games[gameid] = coming_game
 
         print(len(all_games))
+        
+        return all_games
 
     
     def __get_current_games(self):

@@ -63,6 +63,8 @@ class EShopUSApi(object):
                         all_games[g['slug']] = g
 
         print(len(all_games))
+        
+        return all_games
 
     def __get_category_games(self, category, price_range):
         """Get all Nintendo US Eshop games
