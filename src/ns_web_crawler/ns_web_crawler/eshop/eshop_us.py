@@ -3,6 +3,8 @@ import json
 import copy
 from urllib.parse import urlencode, quote
 
+from game_poco import EshopGame
+
 # from .. import settings
 
 import os
@@ -60,7 +62,17 @@ class EShopUSApi(object):
 
                 if category_games :
                     for g in [game for game in category_games if not game['slug'] in all_games]:
-                        all_games[g['slug']] = g
+                        # no nsuid cannot get eshop price.
+                        if not 'nsuid' in g:
+                            continue
+
+                        all_games[g['slug']] = EshopGame(
+                            g['nsuid'], 
+                            g['title'], 
+                            'us',
+                            f"https://www.nintendo.com{g['boxArt']}",
+                            ','.join(g['categories']),
+                            g['players'])
 
         print(len(all_games))
         
@@ -125,9 +137,6 @@ class EShopUSApi(object):
         hits_current = len(result['hits'])
 
         cursor = (hits_page * hits_size) + hits_current
-
-        if int(result['nbHits']) == 0:
-            print(body)
 
         return (cursor, reponse_values)
        

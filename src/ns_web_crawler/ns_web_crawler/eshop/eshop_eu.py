@@ -2,6 +2,7 @@ import json
 import requests
 
 import copy
+from game_poco import EshopGame
 
 import os
 EU_GET_GAMES_URL   = os.getenv('EU_GET_GAMES_URL', 'http://search.nintendo-europe.com/{locale}/select')
@@ -30,8 +31,20 @@ class EShopEUApi(object):
         game_count = response['response']['numFound']
         print(f"found {game_count} games in europe.")
         for game in response['response']['docs']:
-            if not game['fs_id'] in all_games :
-                all_games[game['fs_id']] = game
+            if not 'nsuid_txt' in game:
+                continue
+
+            gameid = ''.join(game['nsuid_txt'])
+
+            if not gameid in all_games :
+                
+                all_games[gameid] = EshopGame(
+                    gameid, 
+                    game['title'], 
+                    'eu',
+                    game['image_url'],
+                    ','.join(game['game_category']),
+                    f"{game.get('players_from','0')}-{game.get('players_to', '0')}")
 
         print(len(all_games))
 

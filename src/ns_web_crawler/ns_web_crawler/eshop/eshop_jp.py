@@ -3,6 +3,7 @@ import json
 import requests
 import xmltodict
 from urllib.parse import urlsplit, urlparse,unquote
+from game_poco import EshopGame
 
 JP_GET_GAMES_CURRENT = os.getenv('JP_GET_GAMES_CURRENT', 'https://www.nintendo.co.jp/data/software/xml-system/switch-onsale.xml')
 JP_GET_GAMES_COMING  = os.getenv('JP_GET_GAMES_COMING', 'https://www.nintendo.co.jp/data/software/xml-system/switch-coming.xml')
@@ -23,9 +24,8 @@ class EShopJPApi(object):
             path = urlparse(current_game['LinkURL']).path
             head, gameid = os.path.split(path)
 
-            if not gameid in all_games :
-                print(current_game['TitleName'])
-                all_games[gameid] = current_game
+            if not gameid and not gameid in all_games :
+                all_games[gameid] = EshopGame(gameid, current_game['TitleName'], 'jp', '', '', '')
 
         coming_games = self.__get_coming_games()
         for coming_game in coming_games['TitleInfoList']['TitleInfo']:
@@ -34,7 +34,7 @@ class EShopJPApi(object):
             
             if not gameid in all_games :
                 print(coming_game['TitleName'])
-                all_games[gameid] = coming_game
+                all_games[gameid] = EshopGame(gameid, coming_game['TitleName'], 'jp', '', '', '')
 
         print(len(all_games))
         
