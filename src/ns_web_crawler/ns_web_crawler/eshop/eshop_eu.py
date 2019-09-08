@@ -1,12 +1,15 @@
 import json
 import requests
-
+import logging
 import copy
-from game_poco import EshopGame
+from .game_poco import EshopGame
+from .eshop_costants import check_nsuid
 
 import os
 EU_GET_GAMES_URL   = os.getenv('EU_GET_GAMES_URL', 'http://search.nintendo-europe.com/{locale}/select')
 EU_GAME_CHECK_CODE = os.getenv('EU_GAME_CHECK_CODE', '70010000000184')
+
+logger = logging.getLogger(__name__)
 
 class EShopEUApi(object):
     EU_GET_GAMES_OPTIONS = {
@@ -29,14 +32,13 @@ class EShopEUApi(object):
         all_games = {}
         response = self.__get_api_result()
         game_count = response['response']['numFound']
-        print(f"found {game_count} games in europe.")
         for game in response['response']['docs']:
             if not 'nsuid_txt' in game:
                 continue
 
             gameid = ''.join(game['nsuid_txt'])
 
-            if not gameid in all_games :
+            if check_nsuid(gameid) and not gameid in all_games :
                 
                 all_games[gameid] = EshopGame(
                     gameid, 
@@ -45,8 +47,8 @@ class EShopEUApi(object):
                     game['image_url'],
                     ','.join(game['game_category']),
                     f"{game.get('players_from','0')}-{game.get('players_to', '0')}")
-
-        print(len(all_games))
+        
+        logger.info(f"found {len(all_games)} games in Europe.")
 
         return all_games
     

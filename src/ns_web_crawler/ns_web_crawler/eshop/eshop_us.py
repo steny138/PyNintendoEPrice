@@ -1,9 +1,11 @@
 import requests
 import json
 import copy
+import logging
 from urllib.parse import urlencode, quote
 
-from game_poco import EshopGame
+from .game_poco import EshopGame
+from .eshop_costants import check_nsuid
 
 # from .. import settings
 
@@ -12,6 +14,8 @@ US_ALGOLIA_ID      = os.getenv('US_ALGOLIA_ID', 'U3B6GR4UA3')
 US_ALGOLIA_KEY     = os.getenv('US_ALGOLIA_KEY', '9a20c93440cf63cf1a7008d75f7438bf')
 US_GET_GAMES_URL   = os.getenv('US_GET_GAMES_URL', f'https://{US_ALGOLIA_ID}-dsn.algolia.net/1/indexes/*/queries')
 US_GAME_CHECK_CODE = os.getenv('US_GAME_CHECK_CODE', '70010000000185')
+
+logger = logging.getLogger(__name__)
 
 class EShopUSApi(object):
     """The api helper for getting Nintendo US Eshop games.
@@ -65,17 +69,21 @@ class EShopUSApi(object):
                         # no nsuid cannot get eshop price.
                         if not 'nsuid' in g:
                             continue
+                        
+                        gameid = g['nsuid']
+                        if not check_nsuid(gameid):
+                            continue
 
-                        all_games[g['slug']] = EshopGame(
-                            g['nsuid'], 
+                        all_games[gameid] = EshopGame(
+                            gameid, 
                             g['title'], 
                             'us',
                             f"https://www.nintendo.com{g['boxArt']}",
                             ','.join(g['categories']),
                             g['players'])
-
-        print(len(all_games))
         
+        logger.info(f"found {len(all_games)} games in America.")
+
         return all_games
 
     def __get_category_games(self, category, price_range):
@@ -92,14 +100,14 @@ class EShopUSApi(object):
         while cursor <= (page + 1) * size:
             (current_position, values) = self.__get_api_result(category, page, size, price_range)
             if len(values) <= 0:
-                print(f"{category}-{price_range} current cursor position: {cursor} has no games")
+                logger.info(f"{category}-{price_range} current cursor position: {cursor} has no games")
                 break
 
             page += 1
             cursor = current_position
             games.extend(values)
 
-            print(f"{category}-{price_range} current cursor position: {cursor}[{values[0]['title']}]")
+            logger.info(f"{category}-{price_range} current cursor position: {cursor}[{values[0]['title']}]")
 
         return games
 

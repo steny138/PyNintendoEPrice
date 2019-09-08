@@ -1,14 +1,17 @@
 import os
 import json
+import logging
 import requests
 import xmltodict
 from urllib.parse import urlsplit, urlparse,unquote
-from game_poco import EshopGame
+from .game_poco import EshopGame
+from .eshop_costants import check_nsuid
 
 JP_GET_GAMES_CURRENT = os.getenv('JP_GET_GAMES_CURRENT', 'https://www.nintendo.co.jp/data/software/xml-system/switch-onsale.xml')
 JP_GET_GAMES_COMING  = os.getenv('JP_GET_GAMES_COMING', 'https://www.nintendo.co.jp/data/software/xml-system/switch-coming.xml')
 JP_GAME_CHECK_CODE   = os.getenv('JP_GAME_CHECK_CODE', '70010000000039')
 
+logger = logging.getLogger(__name__)
 
 class EShopJPApi(object):
     def __init__(self, *args):
@@ -24,19 +27,18 @@ class EShopJPApi(object):
             path = urlparse(current_game['LinkURL']).path
             head, gameid = os.path.split(path)
 
-            if not gameid and not gameid in all_games :
+            if check_nsuid(gameid) and not gameid in all_games :
                 all_games[gameid] = EshopGame(gameid, current_game['TitleName'], 'jp', '', '', '')
 
         coming_games = self.__get_coming_games()
         for coming_game in coming_games['TitleInfoList']['TitleInfo']:
-            path = urlparse(current_game['LinkURL']).path
+            path = urlparse(coming_game['LinkURL']).path
             head, gameid = os.path.split(path)
-            
-            if not gameid in all_games :
-                print(coming_game['TitleName'])
+
+            if check_nsuid(gameid) and not gameid in all_games :
                 all_games[gameid] = EshopGame(gameid, coming_game['TitleName'], 'jp', '', '', '')
 
-        print(len(all_games))
+        logger.info(f"found {len(all_games)} games in Japan.")
         
         return all_games
 
@@ -49,7 +51,7 @@ class EShopJPApi(object):
         return dict
 
     def __get_coming_games(self):
-        r = requests.get(JP_GET_GAMES_CURRENT)
+        r = requests.get(JP_GET_GAMES_COMING)
         r.encoding = 'utf-8'
         dict = xmltodict.parse(r.text)
 
