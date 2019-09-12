@@ -21,13 +21,14 @@ class GameModel(Base):
     """
     id          = Column(UUID(as_uuid=True),primary_key=True)
     nsuid       = Column(String(100),nullable=False)
+    code        = Column(String(100),nullable=False)
     name        = Column(String(100),nullable=False)
     name_tw     = Column(String(100),nullable=True)
     name_en     = Column(String(100),nullable=True)
     name_jp     = Column(String(100),nullable=True)
     category    = Column(String(100),nullable=True)
     cover       = Column(String(200),nullable=True)
-    players     = Column(String(20) ,nullable=True)
+    players     = Column(String(30) ,nullable=True)
 
     onsale_jp   = Column(Boolean, default=False)
     currency_jp = Column(String(10), nullable=True)
@@ -72,15 +73,16 @@ class GameModel(Base):
     create_time = Column(DateTime, nullable=False)
     update_time = Column(DateTime, nullable=False)
 
-    def __init__(self,id,name,country,eprice,currency=None,name_tw=None,create_time=None,update_time=None):
-        self.id                     =   id
-        self.name                   =   name
-        self.name_tw                =   name_tw
-        self.country                =   country
-        self.eprice                 =   eprice
-        self.currency               =   currency
-        self.create_time            =   create_time
-        self.update_time            =   update_time
+    def __init__(self,id,nsuid,code,name,category,cover,players=None,create_time=None,update_time=None):
+        self.id          = id
+        self.nsuid       = nsuid
+        self.code        = code
+        self.name        = name
+        self.category    = category
+        self.cover       = cover
+        self.players     = players
+        self.create_time = create_time
+        self.update_time = update_time
 
         if self.create_time is None:
             self.create_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")

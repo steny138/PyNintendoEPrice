@@ -65,22 +65,27 @@ class EShopUSApi(object):
                 category_games = self.__get_category_games(category_name, price_range)
 
                 if category_games :
-                    for g in [game for game in category_games if not game['slug'] in all_games]:
+                    for game in [category_game for category_game in category_games if not category_game['slug'] in all_games]:
                         # no nsuid cannot get eshop price.
-                        if not 'nsuid' in g:
+                        if not 'nsuid' in game:
                             continue
                         
-                        gameid = g['nsuid']
+                        gameid = game['nsuid']
                         if not check_nsuid(gameid):
                             continue
-
+                        
+                        gamecode = ''
+                        if 'id' in game:
+                            gamecode  = game['id']
+                            
                         all_games[gameid] = EshopGame(
-                            gameid, 
-                            g['title'], 
+                            gameid,
+                            gamecode,
+                            game['title'], 
                             'us',
-                            f"https://www.nintendo.com{g['boxArt']}",
-                            ','.join(g['categories']),
-                            g['players'])
+                            f"https://www.nintendo.com{game['boxArt']}",
+                            ','.join(game['categories']),
+                            game['players'])
         
         logger.info(f"found {len(all_games)} games in America.")
 

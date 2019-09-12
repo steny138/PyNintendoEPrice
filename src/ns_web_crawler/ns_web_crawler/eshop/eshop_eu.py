@@ -37,11 +37,12 @@ class EShopEUApi(object):
                 continue
 
             gameid = ''.join(game['nsuid_txt'])
-
+            gamecode = ''.join(game['product_code_txt'])
             if check_nsuid(gameid) and not gameid in all_games :
-                
+
                 all_games[gameid] = EshopGame(
-                    gameid, 
+                    gameid,
+                    gamecode,
                     game['title'], 
                     'eu',
                     game['image_url'],

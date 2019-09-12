@@ -28,7 +28,7 @@ class EShopJPApi(object):
             head, gameid = os.path.split(path)
 
             if check_nsuid(gameid) and not gameid in all_games :
-                all_games[gameid] = EshopGame(gameid, current_game['TitleName'], 'jp', '', '', '')
+                all_games[gameid] = EshopGame(gameid, '', current_game['TitleName'], 'jp', '', '', '')
 
         coming_games = self.__get_coming_games()
         for coming_game in coming_games['TitleInfoList']['TitleInfo']:
@@ -36,7 +36,7 @@ class EShopJPApi(object):
             head, gameid = os.path.split(path)
 
             if check_nsuid(gameid) and not gameid in all_games :
-                all_games[gameid] = EshopGame(gameid, coming_game['TitleName'], 'jp', '', '', '')
+                all_games[gameid] = EshopGame(gameid, '', coming_game['TitleName'], 'jp', '', '', '')
 
         logger.info(f"found {len(all_games)} games in Japan.")
         
