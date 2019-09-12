@@ -16,11 +16,12 @@ class EShopPriceApi(object):
 
         if not 'prices' in games_price:
             return all_games_price
-
+        
         for game_price in games_price['prices']:
-            gameid = game_price['title_id']
+            gameid = f"{country}-{game_price['title_id']}"
+
             if not gameid in all_games_price :
-                all_games_price[gameid] = games_price
+                all_games_price[gameid] = game_price
         # nsuid 並非遊戲ＩＤ, 是shop分辨遊戲的id, 故不同shop 同遊戲 會有不同nsuid
         return all_games_price
     
