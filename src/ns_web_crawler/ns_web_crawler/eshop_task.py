@@ -1,0 +1,143 @@
+
+import json
+import logging
+from uuid import uuid4
+from datetime import datetime
+
+from .eshop.eshop_eu import EShopEUApi
+from .eshop.eshop_us import EShopUSApi
+from .eshop.eshop_jp import EShopJPApi
+from .eshop.eshop_price import EShopPriceApi
+
+from .connections import postgresql_conn
+from .models.game_model import GameModel
+
+logger = logging.getLogger(__name__)
+
+class PullNsEshopGame(object):
+    def __init__(self, *args):
+        super(PullNsEshopGame, self).__init__(*args)
+        self.price_api = EShopPriceApi()
+        self.countries = ['jp', 'us', 'ca', 'za', 'nz', 'nl', 'mx', 'it', 'ch', 'au']
+
+    
+    def pulling(self, eshop_list):
+        """ pull the eshop games in eu, us, jp.
+        """
+
+        all_games = {}
+        # eshop in america
+        if 'us' in eshop_list:
+            eshop_us = EShopUSApi()
+            
+            all_games.update(eshop_us.get_all_games())
+
+        # eshop in europe
+        if 'eu' in eshop_list:
+            eshop_eu = EShopEUApi()
+
+            all_games.update(eshop_eu.get_all_games())
+
+        # eshop in japan
+        if 'jp' in eshop_list:
+            eshop_jp = EShopJPApi()
+
+            all_games.update(eshop_jp.get_all_games())
+
+        logger.info(f"found {len(all_games)} games totally.")
+        # [logger.info(key) for key, value in all_games.items()]
+
+        self.all_game_prices = {}
+        for game_price in self.__get_all_price(all_games):
+            self.all_game_prices.update(game_price)
+        
+        logger.info(f"found {len(self.all_game_prices)} game prices totally.")
+
+        session = postgresql_conn.loadSession()
+
+        counter = 0
+
+        try:
+            for nid, game in all_games.items():
+                logger.info(f"insert No {counter}. game model")
+                counter += 1
+                with session.no_autoflush:
+                    model = session.query(GameModel) \
+                                        .filter_by(nsuid = nid) \
+                                        .first()
+
+                    if not model:
+                        model = GameModel(
+                            id          = uuid4(),
+                            nsuid       = game.nsuid,
+                            code        = game.gamecode,
+                            name        = game.name,
+                            category    = game.category,
+                            cover       = game.cover,
+                            players     = game.players,
+                            create_time = datetime.now(),
+                            update_time = None
+                        )
+
+                    model = self.__pull_price(model)
+                    
+                    session.add(model)
+                
+                    session.commit()
+        finally:
+            session.close()
+
+    def __pull_price(self, model):
+
+        for country in self.countries:
+            key = f'{country.upper()}-{model.nsuid}'
+            if not key in self.all_game_prices:
+                continue
+
+            price = self.all_game_prices[key]
+
+            if model.nsuid.strip() != str(price['title_id']).strip():
+                logger.info(f"{model.nsuid} not equal {price['title_id']}")
+                continue
+
+            if not 'regular_price' in price:
+                # logger.info(f"{country}-{model.nsuid} eshop price has no regular_price")
+                continue
+            # else:
+            #     logger.info(f"{country}-{model.nsuid} eshop price has regular_price")
+
+            update_dit = {}
+            update_dit['onsale_'+country] = price['sales_status'] == 'onsale'
+            update_dit['currency_'+country] = price['regular_price']['currency']
+            update_dit['eprice_'+country] = price['regular_price']['raw_value']
+
+            model.__dict__.update(update_dit)
+
+        return model
+
+    def __get_all_price(self, all_games):
+        all_nsuids = [value.nsuid for key, value in all_games.items()]
+
+        nsuid_groups = [all_nsuids[x:x+50] for x in range(0, len(all_nsuids), 50)]
+        for nsuids in nsuid_groups:
+           
+            for country in self.countries:
+
+                game_price_dict = self.price_api.get_price(country.upper(), nsuids)
+                
+                logger.info(f"{country.upper()} found {len(game_price_dict)} games totally.")
+
+                # if '70010000003203' in nsuids:
+                #     print(game_price_dict[f'{country.upper()}-70010000003203'])
+
+                yield game_price_dict
+
+    @staticmethod
+    def startup():
+        puller = PullNsEshopGame()
+
+        puller.pulling(['us', 'eu', 'jp'])
+
+if __name__ == '__main__':
+
+    PullNsEshopGame.startup()
