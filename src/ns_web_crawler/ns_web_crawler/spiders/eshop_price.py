@@ -4,7 +4,7 @@ import re
 import scrapy
 import datetime 
 import logging
-from ns_web_crawler.items.eshop_price import EshopProductItem, EshopPriceCountryItem
+from ns_web_crawler.items.eshop_price import EshopProductItem
 
 class EshopPriceSpider(scrapy.Spider):
     name = "eshop-price-index"

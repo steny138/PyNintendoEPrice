@@ -40,31 +40,7 @@ class PostgreSqlPipeline(object):
         self.session.close()
 
     def process_item(self, item, spider):
-        if spider.name == "eshop-price-index":
-            for price in item["prices"]:
-                model = self.session.query(GameModel) \
-                                    .filter_by(country = price["country"]["name"], name = item["name"]) \
-                                    .first()
-                if model:
-                    model.eprice=price["price"]
-                    model.eprice_specified=price["price"]
-                    model.currency_specified=price["currency"]
-                    model.update_time = item["last_updated"]
-                else:
-                    model = GameModel(
-                        id = uuid4(),
-                        name = item["name"],
-                        country = price["country"]["name"],
-                        eprice=price["price"],
-                        eprice_specified=price["price"],
-                        onsale= price["onsale"],
-                        currency_specified=price["currency"],
-                        name_tw=None,
-                        create_time= datetime.now(),
-                        update_time = item["last_updated"]
-                    )
-                self.session.add(model)
-        elif spider.name == "gamer-ns-games":
+        if spider.name == "gamer-ns-games":
             if item["name_english"]:
                 logging.info("update game name: %s", item["name_english"].strip())
                 filter_name = item["name_english"].strip()
