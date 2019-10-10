@@ -2,11 +2,11 @@
 import os
 import re
 from flask import Flask, render_template, send_from_directory
-from models import Eprice,CountryCurrency
+from models import Game
 from rate import CurrencyRate
 from settings import db,app
 from events.analyzer import analyzer
-
+from viewmodels.game import GameViewModel
 import jieba
 
 @app.route('/favicon.ico')
@@ -18,21 +18,16 @@ def favicon():
 @app.route('/games/', defaults={'category': None})
 @app.route('/games/<category>/')
 def games(category):
-    items = Eprice.query.distinct(Eprice.name)
+    """遊戲列表頁
+    """
+    items = Game.query.distinct(Game.name)
 
     if category == "named":
-        items = items.filter(Eprice.name_tw != None)
+        items = items.filter(Game.name_tw != None)
     elif category:
-        items = items.filter(Eprice.name_tw == category or Eprice.name == category)
+        items = items.filter(Game.name_tw == category or Game.name == category)
 
     return render_template('games.html',
-        items = items
-    )
-
-@app.route("/currency")
-def currency():
-    items = CountryCurrency.query.all()
-    return render_template('currency.html',
         items = items
     )
 
@@ -48,32 +43,52 @@ def find_message(message):
     
 @app.route('/<game_name>')
 def eprice(game_name):
+    """遊戲明細頁
+    """
     if not game_name:
         game_name = app.config['DEFAULT_GAME_NAME']
     
-    items = Eprice.query.filter(Eprice.name == game_name)
+    games = Game.query.filter(Game.name == game_name)
     
-    if items.count() == 0:
+    if games.count() == 0:
         if re.search("([\u4e00-\u9fff]{2,}|[a-zA-Z]{4,})", game_name):
-            items = Eprice.query.filter(Eprice.name_tw.ilike(f'%{game_name}%') | Eprice.name.ilike(f'%{game_name}%'))
+            games = Game.query.filter(Game.name_tw.ilike(f'%{game_name}%') | Game.name.ilike(f'%{game_name}%'))
 
     currency_rate = CurrencyRate()
-    for item in items:
+    items = []
+
+    for game in games:
         currency = ""
 
-        if item.currency_specified:
-            currency = item.currency_specified
-        else:
-            country = CountryCurrency.query.filter(CountryCurrency.country == item.country).first()
-            if country:
-                currency = country.currency
-        
-        if currency:
-            item.eprice = item.eprice * currency_rate.caculate_rate(currency, 'TWD')
+        # get all eprice with this game.
+        for key, value in [(key, value) for key, value in game.__dict__.items()]:
+            if not 'eprice_' in key:
+                continue
+            
+            country = key.split('_')[1]
+            eprice = value
+            currency = game.__dict__[f'currency_{country}']
+            onsale = game.__dict__[f'onsale_{country}']
+
+            item = GameViewModel()
+            item.name    = game.name
+            item.name_tw = game.name_tw
+            item.country = country.upper()
+            item.eprice  = eprice or 0
+            item.onsale  = onsale
+            print(eprice)
+            print(onsale)
+
+            if currency:
+                item.eprice = eprice * currency_rate.caculate_rate(currency, 'TWD')
+
+            if item.eprice > 0:
+                items.append(item)
+
             
     return render_template('eprice.html',
         items = sorted(items, key=lambda d: d.eprice, reverse=False),
-        game_name = game_name
+        game_name = game_name   
     )
 
 @app.teardown_request
