@@ -110,3 +110,5 @@ ENV/
 deploy/
 src/ns_web_crawler/ns_web_crawler/client_secret.json
 src/ns_web_crawler/ns_web_crawler/google_sheet_api_secret.json
+.vs/
+.vscode/
