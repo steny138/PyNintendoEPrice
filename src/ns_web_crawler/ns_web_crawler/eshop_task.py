@@ -1,8 +1,10 @@
 
 import json
 import logging
+import pytz
+import dateutil.parser
 from uuid import uuid4
-from datetime import datetime
+from datetime import datetime, date
 
 from .eshop.eshop_eu import EShopEUApi
 from .eshop.eshop_us import EShopUSApi
@@ -63,8 +65,8 @@ class PullNsEshopGame(object):
                 counter += 1
                 with session.no_autoflush:
                     model = session.query(GameModel) \
-                                        .filter_by(nsuid = nid) \
-                                        .first()
+                                    .filter_by(nsuid = nid) \
+                                    .first()
 
                     if not model:
                         model = GameModel(
@@ -82,8 +84,9 @@ class PullNsEshopGame(object):
                     model = self.__pull_price(model)
                     
                     session.add(model)
-                
+
                     session.commit()
+
         finally:
             session.close()
 
@@ -107,11 +110,27 @@ class PullNsEshopGame(object):
             #     logger.info(f"{country}-{model.nsuid} eshop price has regular_price")
 
             update_dit = {}
-            update_dit['onsale_'+country] = price['sales_status'] == 'onsale'
+            update_dit['onsale_'+country] = False
             update_dit['currency_'+country] = price['regular_price']['currency']
             update_dit['eprice_'+country] = price['regular_price']['raw_value']
+            
+            # discount price onsale in time range.
+            if 'discount_price' in price:
+                start = dateutil.parser.parse(price['discount_price']['start_datetime']).replace(tzinfo=pytz.timezone('UTC'))
+                end = dateutil.parser.parse(price['discount_price']['end_datetime']).replace(tzinfo=pytz.timezone('UTC'))
+                now = datetime.now().replace(tzinfo=pytz.timezone('UTC'))
 
-            model.__dict__.update(update_dit)
+                if start <= now <= end:
+                    update_dit['onsale_'+country] = True
+                    update_dit['currency_'+country] = price['discount_price']['currency']
+                    update_dit['eprice_'+country] = price['discount_price']['raw_value']
+            
+            for key, value in update_dit.items():
+                setattr(model, key, value) 
+
+            # update the model __dict__ cannot trigger sqlalchemy update attribute work,
+            # so we got to use setattr to fix this problem.
+            # model.__dict__.update(update_dit)
 
         return model
 
@@ -126,9 +145,6 @@ class PullNsEshopGame(object):
                 game_price_dict = self.price_api.get_price(country.upper(), nsuids)
                 
                 logger.info(f"{country.upper()} found {len(game_price_dict)} games totally.")
-
-                # if '70010000003203' in nsuids:
-                #     print(game_price_dict[f'{country.upper()}-70010000003203'])
 
                 yield game_price_dict
 
