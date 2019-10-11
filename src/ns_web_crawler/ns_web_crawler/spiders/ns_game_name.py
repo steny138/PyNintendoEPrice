@@ -10,8 +10,12 @@ class NSGameNameSpider(scrapy.Spider):
     name = "gamer-ns-games"
     def start_requests(self):
         urls = [
+            # 已發售
             'https://acg.gamer.com.tw/index.php?page=1&p=NS',
-            'https://acg.gamer.com.tw/billboard.php?t=4&p=NS&page=1'
+            # 期待排行
+            'https://acg.gamer.com.tw/billboard.php?t=4&p=NS&page=1',
+            # 人氣排行(半年內)
+            'https://acg.gamer.com.tw/billboard.php?p=NS&t=2&period=halfyear' 
         ]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
@@ -30,7 +34,6 @@ class NSGameNameSpider(scrapy.Spider):
             game_names = cover_dom.css("::attr(title)").extract_first()
             if game_names:
                 game_names = game_names.strip()
-
             nameDict = self.parse_game_names(game_names)
 
             name_type = response.css("div.ACG-mainbox2 ul li::text").extract_first().strip()
