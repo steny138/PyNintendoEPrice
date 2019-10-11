@@ -33,7 +33,8 @@ def games(category):
 
 @app.route("/find/<message>")
 def find_message(message):
-    
+    """測試傳入訊息jieba分段
+    """
     seg_list = ", ".join(jieba.cut(message)).split(', ')
     match_event_message = analyzer.match(seg_list)
     if match_event_message:
