@@ -50,10 +50,12 @@ def eprice(game_name):
         game_name = app.config['DEFAULT_GAME_NAME']
     
     games = Game.query.filter(Game.name == game_name)
-    
+
     if games.count() == 0:
-        if re.search("([\u4e00-\u9fff]{2,}|[a-zA-Z]{4,})", game_name):
-            games = Game.query.filter(Game.name_tw.ilike(f'%{game_name}%') | Game.name.ilike(f'%{game_name}%'))
+        if re.search("([\u4e00-\u9fff]{2,}|[a-zA-Z0-9]{4,})", game_name):
+            games = Game.query.filter(
+                Game.name_tw.ilike(f'%{game_name}%') | 
+                Game.name.ilike(f'%{game_name}%'))
 
     currency_rate = CurrencyRate()
     items = []
@@ -77,9 +79,7 @@ def eprice(game_name):
             item.country = country.upper()
             item.eprice  = eprice or 0
             item.onsale  = onsale
-            print(eprice)
-            print(onsale)
-
+           
             if currency:
                 item.eprice = eprice * currency_rate.caculate_rate(currency, 'TWD')
 
