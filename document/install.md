@@ -6,7 +6,7 @@
 
 ```
 env LDFLAGS='-L/usr/local/lib -L/usr/local/opt/openssl/lib
--L/usr/local/opt/readline/lib' pip install psycopg2
+-L/usr/local/opt/readline/lib' pipenv install psycopg2
 ```
 
 若Ｍac的Command Line Tools後發現無法成功安裝，得到下列訊息
