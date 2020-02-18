@@ -1,7 +1,7 @@
 #! /bin/sh
 
 cd ../deploy/deploy.ns_web_api.production
-git checkout master
+git checkout -q master
 
 cd ../../
 cp -R src/ns_web_api/web/ deploy/deploy.ns_web_api.production
