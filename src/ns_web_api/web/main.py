@@ -97,7 +97,9 @@ def shutdown_session(exception=None):
     db.session.remove()
 
 from linebot_apis import line_bot_api_blueprint
+from mask import mask_api_blueprint
 app.register_blueprint(line_bot_api_blueprint)
+app.register_blueprint(mask_api_blueprint)
 
 if __name__ == "__main__":
     app.run()
