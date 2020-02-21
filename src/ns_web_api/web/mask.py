@@ -1,6 +1,7 @@
 import json
 import pandas as pd
 from flask import Blueprint, jsonify, request, abort
+from cache import cache
 
 mask_api_blueprint = Blueprint('mask_api', __name__)
 
@@ -12,7 +13,7 @@ def find_pharmacy_reserve():
 
     ids = ids.split(',')
 
-    df = pd.read_csv("https://data.nhi.gov.tw/Datasets/Download.ashx?rid=A21030000I-D50001-001&l=https://data.nhi.gov.tw/resource/mask/maskdata.csv")
+    df = __get_pharmacy_reserve()
 
     # filter pharmacy identity
     df = df[df['醫事機構代碼'].isin(ids)]
@@ -28,3 +29,11 @@ def find_pharmacy_reserve():
     mask_dict = df.to_dict(orient='records')
 
     return jsonify({'data': mask_dict})
+
+@cache.cached(timeout=30, key_prefix='all_pharmacy_reserve')
+def __get_pharmacy_reserve():
+    df = pd.read_csv("https://data.nhi.gov.tw/Datasets/Download.ashx?rid=A21030000I-D50001-001&l=https://data.nhi.gov.tw/resource/mask/maskdata.csv")
+
+    return df
+
+    
