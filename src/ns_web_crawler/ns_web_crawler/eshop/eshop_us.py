@@ -74,18 +74,18 @@ class EShopUSApi(object):
                         if not check_nsuid(gameid):
                             continue
                         
-                        gamecode = ''
-                        if 'id' in game:
-                            gamecode  = game['id']
-                            
+                        cover = ''
+                        if 'boxArt' in game:
+                            cover = f"https://www.nintendo.com{game['boxArt']}"
+
                         all_games[gameid] = EshopGame(
-                            gameid,
-                            gamecode,
-                            game['title'], 
+                            game.get('nsuid'),
+                            game.get('id'),
+                            game.get('title'), 
                             'us',
-                            f"https://www.nintendo.com{game['boxArt']}",
-                            ','.join(game['categories']),
-                            game['players'])
+                            cover,
+                            ','.join(game.get('categories')),
+                            game.get('players'))
         
         logger.info(f"found {len(all_games)} games in America.")
 

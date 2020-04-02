@@ -6,14 +6,14 @@ from .game_poco import EshopGame
 from .eshop_costants import check_nsuid
 
 import os
-EU_GET_GAMES_URL   = os.getenv('EU_GET_GAMES_URL', 'http://search.nintendo-europe.com/{locale}/select')
+EU_GET_GAMES_URL   = os.getenv('EU_GET_GAMES_URL', 'https://search.nintendo-europe.com/{locale}/select')
 EU_GAME_CHECK_CODE = os.getenv('EU_GAME_CHECK_CODE', '70010000000184')
 
 logger = logging.getLogger(__name__)
 
 class EShopEUApi(object):
     EU_GET_GAMES_OPTIONS = {
-        'fq': 'type:GAME AND system_type:nintendoswitch* AND product_code_txt:*',
+        'fq': 'type:GAME AND ((playable_on_txt:"HAC")) AND sorting_title:* AND *:*',
         'q': '*',
         'sort': 'sorting_title asc',
         'start': '0',
@@ -36,17 +36,17 @@ class EShopEUApi(object):
             if not 'nsuid_txt' in game:
                 continue
 
-            gameid = ''.join(game['nsuid_txt'])
-            gamecode = ''.join(game['product_code_txt'])
+            gameid = ''.join(game.get('nsuid_txt'))
+            gamecode = ''.join(game.get('product_code_txt', []))
             if check_nsuid(gameid) and not gameid in all_games :
 
                 all_games[gameid] = EshopGame(
                     gameid,
                     gamecode,
-                    game['title'], 
+                    game.get('title'), 
                     'eu',
-                    game['image_url'],
-                    ','.join(game['game_category']),
+                    game.get('image_url'),
+                    ','.join(game.get('game_category')),
                     f"{game.get('players_from','0')}-{game.get('players_to', '0')}")
         
         logger.info(f"found {len(all_games)} games in Europe.")
@@ -58,7 +58,8 @@ class EShopEUApi(object):
         querystring['rows'] = self.EU_GAME_LIST_LIMIT
 
         url = EU_GET_GAMES_URL.replace('{locale}', self.EU_DEFAULT_LOCALE)
-
+        logger.info(f"get eu api {url} with {querystring}")
+        
         r = requests.get(url, params=querystring)
         return r.json()
 
