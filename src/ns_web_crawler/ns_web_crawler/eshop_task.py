@@ -21,8 +21,7 @@ class PullNsEshopGame(object):
         super(PullNsEshopGame, self).__init__(*args)
         self.price_api = EShopPriceApi()
         self.countries = ['jp', 'us', 'ca', 'za', 'nz', 'nl', 'mx', 'it', 'ch', 'au']
-
-    
+   
     def pulling(self, eshop_list):
         """ pull the eshop games in eu, us, jp.
         """
@@ -47,7 +46,6 @@ class PullNsEshopGame(object):
             all_games.update(eshop_jp.get_all_games())
 
         logger.info(f"found {len(all_games)} games totally.")
-        # [logger.info(key) for key, value in all_games.items()]
 
         self.all_game_prices = {}
         for game_price in self.__get_all_price(all_games):
@@ -104,10 +102,7 @@ class PullNsEshopGame(object):
                 continue
 
             if not 'regular_price' in price:
-                # logger.info(f"{country}-{model.nsuid} eshop price has no regular_price")
                 continue
-            # else:
-            #     logger.info(f"{country}-{model.nsuid} eshop price has regular_price")
 
             update_dit = {}
             update_dit['onsale_'+country] = False
@@ -138,22 +133,28 @@ class PullNsEshopGame(object):
         all_nsuids = [value.nsuid for key, value in all_games.items()]
 
         nsuid_groups = [all_nsuids[x:x+50] for x in range(0, len(all_nsuids), 50)]
+        
         for nsuids in nsuid_groups:
-           
+            
             for country in self.countries:
-
+                # get 50 games per county for once api reuslt
                 game_price_dict = self.price_api.get_price(country.upper(), nsuids)
                 
-                logger.info(f"{country.upper()} found {len(game_price_dict)} games totally.")
+                # list slice rule => [start:stop:step]
+                show_id = '~'.join(nsuids[::len(nsuids)-1])
+                logger.info(f"{show_id}-{country.upper()} found {len(game_price_dict)} games totally.")
 
                 yield game_price_dict
 
     @staticmethod
     def startup():
+        """startup pulling ns eshop games
+
+        It will pull us, eu, jp region games.
+        """
         puller = PullNsEshopGame()
 
-        puller.pulling(['us', 'eu', 'jp'])
+        puller.pulling(['us','eu','jp'])
 
 if __name__ == '__main__':
-
     PullNsEshopGame.startup()
