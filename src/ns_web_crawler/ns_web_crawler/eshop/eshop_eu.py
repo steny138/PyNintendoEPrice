@@ -31,13 +31,25 @@ class EShopEUApi(object):
         """
         all_games = {}
         response = self.__get_api_result()
-        game_count = response['response']['numFound']
-        for game in response['response']['docs']:
+
+        if not response:
+            logger.info(f"api result is none, No games in Europe.")
+            return all_games
+
+        game_count = response.get('response').get('numFound', 0)
+        eshop_games = response.get('response').get('docs', [])
+        
+        if not eshop_games:
+            logger.info(f"expect {game_count} games, but no games in Europe.")
+
+            return all_games
+
+        for game in eshop_games:
             if not 'nsuid_txt' in game:
                 continue
 
             gameid = ''.join(game.get('nsuid_txt'))
-            gamecode = ''.join(game.get('product_code_txt', []))
+            gamecode = ''.join(game.get('product_code_txt', ['unrelease']))
             if check_nsuid(gameid) and not gameid in all_games :
 
                 all_games[gameid] = EshopGame(
@@ -60,9 +72,19 @@ class EShopEUApi(object):
         url = EU_GET_GAMES_URL.replace('{locale}', self.EU_DEFAULT_LOCALE)
         logger.info(f"get eu api {url} with {querystring}")
         
-        r = requests.get(url, params=querystring)
-        return r.json()
+        try:
+            r = requests.get(url, params=querystring)
+            # throw error if status not 200 requests.codes.ok
+            r.raise_for_status()
+        except requests.ConnectTimeout:
+            logger.warning(f'get eu eshop api result timeout')
+            return {}
 
+        except requests.HTTPError:
+            logger.warning(f'get eu eshop api result failed, status code is {r.status_code}')
+            return {}
+
+        return r.json()
 
 if __name__ == '__main__':
     req = EShopEUApi()

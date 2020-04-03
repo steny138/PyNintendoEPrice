@@ -80,7 +80,7 @@ class EShopUSApi(object):
 
                         all_games[gameid] = EshopGame(
                             game.get('nsuid'),
-                            game.get('id'),
+                            game.get('id', 'unrelease'),
                             game.get('title'), 
                             'us',
                             cover,
