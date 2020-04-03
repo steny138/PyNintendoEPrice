@@ -16,6 +16,7 @@ requests = "*"
 xmltodict = "*"
 python-dateutil = "*"
 pytz = "*"
+apscheduler = "*"
 
 [requires]
 python_version = "3.7"

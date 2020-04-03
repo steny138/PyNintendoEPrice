@@ -6,7 +6,7 @@
 最後得到錯誤 ImportErrored: Not module named xxx...
 """
 
-import multiprocessing, logging
+import logging
 from twisted.internet import reactor, defer
 from scrapy.crawler import CrawlerRunner
 from scrapy.utils.log import configure_logging
@@ -16,7 +16,6 @@ from .eshop_task import PullNsEshopGame
 logging.getLogger('urllib3.connectionpool').setLevel(logging.ERROR)
 
 runner = CrawlerRunner(get_project_settings())
-multiprocessing.get_logger()
 
 @defer.inlineCallbacks
 def crawl():
