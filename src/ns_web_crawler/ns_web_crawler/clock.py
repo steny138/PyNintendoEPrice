@@ -11,7 +11,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from . import spider_runner
 sched = BlockingScheduler()
 
-@sched.scheduled_job('cron', hour='10', minute=0)
+@sched.scheduled_job('cron', hour='5', minute=10)
 def startup():
     spider_runner.startup()
 
