@@ -44,8 +44,13 @@ class LYCLineBot(BaseBot):
     def send_message(self, text, user_id):
         self.line_bot_api.push_message(user_id, TextSendMessage(text=text))
 
-        return "Send"
+        return "send"
     
+    def boardcast(self, text):
+        self.line_bot_api.broadcast(TextSendMessage(text=text))
+
+        return "broadcast"
+
     def reply_message(self, text, body, signature):
         try:
             events = self.parser.parse(body, signature)

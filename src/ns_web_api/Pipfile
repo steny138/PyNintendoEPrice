@@ -24,6 +24,7 @@ google-api-python-client = "*"
 python-dotenv = "*"
 jieba = {git = "https://github.com/APCLab/jieba-tw.git"}
 pandas = "*"
+beautifulsoup4 = "*"
 
 [requires]
 python_version = "3.7"
