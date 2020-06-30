@@ -10,29 +10,35 @@ def build_alert_msg(schedule = None):
     
     msg = ''
 
-    date = datetime.today() + timedelta(days=1)
-    
+    today = datetime.today()
+    today = datetime(today.year, today.month, today.day)
+
     if "presale_s" in schedule and "presale_d" in schedule:
         presale_s = datetime.strptime(schedule["presale_s"], "%m/%d")
         presale_d = datetime.strptime(schedule["presale_d"], "%m/%d")
+        
+        presale_s = presale_s.replace(year=today.year)
+        presale_d = presale_d.replace(year=today.year)
 
-        presale_s = presale_s.replace(year=date.year)
-        presale_d = presale_d.replace(year=date.year)
-        if presale_s <= date <= presale_d:
+        if presale_s <= today <= presale_d:
             msg += f'預購繳費就從 *{schedule["presale_s"]}* ~ *{schedule["presale_d"]}*'
 
     if "receive_s" in schedule and "receive_d" in schedule:
         receive_s = datetime.strptime(schedule["receive_s"], "%m/%d")
         receive_d = datetime.strptime(schedule["receive_d"], "%m/%d")
 
-        receive_s = receive_s.replace(year=date.year)
-        receive_d = receive_d.replace(year=date.year)
+        receive_s = receive_s.replace(year=today.year)
+        receive_d = receive_d.replace(year=today.year)
 
-        if receive_s <= date <= receive_d:
-            msg += f'*{schedule["receive_s"]}* ~ *{schedule["receive_d"]}* 就可到指定超商領取口罩囉'
-    
+        if receive_s <= today <= receive_d:
+            if receive_s == today:
+                msg += f'*{schedule["receive_s"]}* ~ *{schedule["receive_d"]}* 就可到指定超商領取口罩囉'
+
+            if receive_d == today:
+                msg += f'今天是 *{schedule["receive_d"]}* 最後一天可到指定超商領取口罩別忘囉'
+
     if msg and "periods" in schedule:
-        msg = f'第{schedule["periods"]}期口罩預購：{msg}'
+        msg = f'第{schedule["periods"]}期口罩預購: \r\n{msg}'
 
     return msg
 
