@@ -12,7 +12,7 @@ def build_alert_msg(schedule = None):
 
     today = datetime.today()
     today = datetime(today.year, today.month, today.day)
-
+    print(schedule)
     if "presale_s" in schedule and "presale_d" in schedule:
         presale_s = datetime.strptime(schedule["presale_s"], "%m/%d")
         presale_d = datetime.strptime(schedule["presale_d"], "%m/%d")
@@ -72,18 +72,18 @@ def get_schedule():
             result['periods'] = match_periods.group()
             continue
 
-        match_presale = re.search(r'(?<=預購繳費)\s?(?P<s>\d+\/\d+)-(?P<d>\d+\/\d+)', schedule_content.text)
+        match_presale = re.search(r'(?<=\(新訂購\)預購繳費)\s?(?P<sd>\d+\/\d+)\s?(?P<st>\d+:\d+)\s?-\s?(?P<dd>\d+\/\d+)\s?(?P<dt>\d+:\d+)', schedule_content.text)
 
         if match_presale:
-            result['presale_s'] = match_presale.group('s')
-            result['presale_d'] = match_presale.group('d')
+            result['presale_s'] = match_presale.group('sd')
+            result['presale_d'] = match_presale.group('dd')
             continue
 
-        match_receive = re.search(r'(?<=領取口罩)\s?(?P<s>\d+\/\d+)-(?P<d>\d+\/\d+)', schedule_content.text)
+        match_receive = re.search(r'(?<=領取口罩)\s?(?P<sd>\d+\/\d+)\s?(?P<st>\d+:\d+)\s?-\s?(?P<dd>\d+\/\d+)\s?(?P<dt>\d+:\d+)', schedule_content.text)
 
         if match_receive:
-            result['receive_s'] = match_receive.group('s')
-            result['receive_d'] = match_receive.group('d')
+            result['receive_s'] = match_receive.group('sd')
+            result['receive_d'] = match_receive.group('dd')
             continue
 
     return result
