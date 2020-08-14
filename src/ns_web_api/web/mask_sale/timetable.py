@@ -12,7 +12,7 @@ def build_alert_msg(schedule = None):
 
     today = datetime.today()
     today = datetime(today.year, today.month, today.day)
-    print(schedule)
+
     if "presale_s" in schedule and "presale_d" in schedule:
         presale_s = datetime.strptime(schedule["presale_s"], "%m/%d")
         presale_d = datetime.strptime(schedule["presale_d"], "%m/%d")
