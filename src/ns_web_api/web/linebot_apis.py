@@ -18,6 +18,7 @@ def linechatbot():
     app.logger.info('body: %s', body)
 
     bot_service = LYCLineBot(app.config['LINEBOT_CHANNEL_ACCESS_TOKEN'],app.config['LINEBOT_CHANNEL_SECRET'])
+
     bot_service.reply_message('', body, signature)
 
     return 'OK'
