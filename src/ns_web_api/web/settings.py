@@ -14,6 +14,8 @@ load_dotenv(dotenv_path, override=True)
 # Build Flask app
 app = Flask(__name__, template_folder='templates', static_url_path='/static')
 
+print(f'!!! flask app logger name is: {__name__} !!!')
+
 # this may have to change with environment variable
 app.config.from_object(os.getenv('CONFIG_ENVIRONMENT', 'config.DevelopmentConfig'))
 
