@@ -20,8 +20,8 @@ rm deploy/deploy.ns_web_crawler.production/ns_web_crawler/.env
 cp .gitignore deploy/deploy.ns_web_crawler.production
 
 # copy pipfile that install requirement packages
-cp -R src/ns_web_crawler/Pipfile deploy/deploy.ns_web_crawler.production/Pipfile
-cp -R src/ns_web_crawler/Pipfile.lock deploy/deploy.ns_web_crawler.production/Pipfile.lock
+cp -R src/ns_web_crawler/pyproject.toml deploy/deploy.ns_web_crawler.production/pyproject.toml
+cp -R src/ns_web_crawler/poetry.lock deploy/deploy.ns_web_crawler.production/poetry.lock
 
 # copy project setting file
 cp -R src/ns_web_crawler/scrapy.cfg deploy/deploy.ns_web_crawler.production/scrapy.cfg

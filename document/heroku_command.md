@@ -12,3 +12,10 @@ heroku pg:psql -a [heroku app name]
 cd scripts
 sh heroku_deploy.sh
 ```
+
+# install heroku buildpacks with poetry
+```
+heroku buildpacks:clear -a ns-eshop-lyc
+heroku buildpacks:add https://github.com/moneymeets/python-poetry-buildpack.git -a ns-eshop-lyc
+heroku buildpacks:add heroku/python -a ns-eshop-lyc
+```

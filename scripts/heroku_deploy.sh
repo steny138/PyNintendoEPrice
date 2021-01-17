@@ -7,8 +7,8 @@ cd ../../
 cp -R src/ns_web_api/web/ deploy/deploy.ns_web_api.production
 cp -R src/ns_web_api/web/ deploy/deploy.ns_web_api.production
 cp .gitignore deploy/deploy.ns_web_api.production
-cp -R src/ns_web_api/Pipfile deploy/deploy.ns_web_api.production/Pipfile
-cp -R src/ns_web_api/Pipfile.lock deploy/deploy.ns_web_api.production/Pipfile.lock
+cp -R src/ns_web_api/pyproject.toml deploy/deploy.ns_web_api.production/pyproject.toml
+cp -R src/ns_web_api/poetry.lock deploy/deploy.ns_web_api.production/poetry.lock
 cp deploy/procfiles/ns_webapi.production.Procfile deploy/deploy.ns_web_api.production/Procfile
 cd deploy/deploy.ns_web_api.production
 git add -A
