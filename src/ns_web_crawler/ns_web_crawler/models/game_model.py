@@ -27,7 +27,7 @@ class GameModel(Base):
     name_en     = Column(String(100),nullable=True)
     name_jp     = Column(String(100),nullable=True)
     category    = Column(String(100),nullable=True)
-    cover       = Column(String(200),nullable=True)
+    cover       = Column(String(300),nullable=True)
     players     = Column(String(30) ,nullable=True)
 
     onsale_jp   = Column(Boolean, default=False)

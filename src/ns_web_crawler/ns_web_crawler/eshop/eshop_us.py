@@ -11,7 +11,7 @@ from .eshop_costants import check_nsuid
 
 import os
 US_ALGOLIA_ID      = os.getenv('US_ALGOLIA_ID', 'U3B6GR4UA3')
-US_ALGOLIA_KEY     = os.getenv('US_ALGOLIA_KEY', '9a20c93440cf63cf1a7008d75f7438bf')
+US_ALGOLIA_KEY     = os.getenv('US_ALGOLIA_KEY', 'c4da8be7fd29f0f5bfa42920b0a99dc7')
 US_GET_GAMES_URL   = os.getenv('US_GET_GAMES_URL', f'https://{US_ALGOLIA_ID}-dsn.algolia.net/1/indexes/*/queries')
 US_GAME_CHECK_CODE = os.getenv('US_GAME_CHECK_CODE', '70010000000185')
 
@@ -55,7 +55,7 @@ class EShopUSApi(object):
         categories = self.__get_all_categories()
         all_games = {}
         for category_name, category_game_count in categories.items():
-            
+           
             price_ranges = self.US_PRICE_RANGES
 
             if category_game_count <= self.US_GAME_QUERY_LIMIT:
@@ -84,7 +84,7 @@ class EShopUSApi(object):
                             game.get('title'), 
                             'us',
                             cover,
-                            ','.join(game.get('categories')),
+                            ','.join(game.get('genres')),
                             game.get('players'))
         
         logger.info(f"found {len(all_games)} games in America.")
@@ -119,13 +119,12 @@ class EShopUSApi(object):
     def __get_api_result(self, category, page, size, price_range = None):
         parameters = copy.deepcopy(self.default_parameters)
 
-        parameters['facetFilters'].append([f'categories:{category}'])
-        parameters['facets'] = ["platform", "availability"]
+        parameters['facetFilters'].append([f'genres:{category}'])
+        parameters['facets'] = ["platform", "availability", "genres"]
         parameters['hitsPerPage'] = size
         parameters['page'] = page
         parameters['tagFilters'] = ''
         parameters['maxValuesPerFacet'] = 30
-
         if price_range:
             parameters['facetFilters'].append([f'priceRange:{price_range}'])
 
@@ -135,7 +134,7 @@ class EShopUSApi(object):
         body = {
             'requests':[
                 {
-                    'indexName': f'noa_aem_game_en_us_{sort}_{direction}',
+                    'indexName': f'ncom_game_en_us_{sort}_{direction}',
                     'params': urlencode(parameters, quote_via=quote).replace('%27','%22')
                 }
             ]
@@ -143,7 +142,6 @@ class EShopUSApi(object):
 
         r = requests.post(US_GET_GAMES_URL, params=self.QUERYSTRING, json=body)
         result = r.json()['results'][0]
-
         reponse_values= result['hits']
         hits_page = int(result['page'])
         hits_size = int(result['hitsPerPage'])
@@ -161,8 +159,8 @@ class EShopUSApi(object):
         """
 
         parameters = copy.deepcopy(self.default_parameters)
-        parameters['facets'] = ["categories"]
-        parameters['hitsPerPage'] = 0
+        parameters['facets'] = ["genres"]
+        parameters['hitsPerPage'] = 1
 
         sort = self.US_GET_GAMES_OPTIONS['sort']
         direction = self.US_GET_GAMES_OPTIONS['direction']
@@ -170,7 +168,7 @@ class EShopUSApi(object):
         body = {
             'requests':[
                 {
-                    'indexName': f'noa_aem_game_en_us_{sort}_{direction}',
+                    'indexName': f'ncom_game_en_us_{sort}_{direction}',
                     'params': urlencode(parameters, quote_via=quote).replace('%27','%22')
                 }
             ]
@@ -178,7 +176,7 @@ class EShopUSApi(object):
 
         r = requests.post(US_GET_GAMES_URL, params=self.QUERYSTRING, json=body)
 
-        return r.json()['results'][0]['facets']['categories']
+        return r.json()['results'][0]['facets']['genres']
 
 if __name__ == '__main__':
     req = EShopUSApi()
