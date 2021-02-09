@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 
 logger = logging.getLogger('flask.app')
 
+
 class DivingEvent(object):
     """ 潛水事件
     """
@@ -26,13 +27,13 @@ class DivingEvent(object):
             return
 
         return_msg = []
-        
+
         logger.info(f'潛點事件處理: {vocabulary}')
 
         if all(elem in self.diving_place for elem in vocabulary):
             for v in vocabulary:
                 return_msg.append(self.__diving_event(v))
-        
+
         return ', '.join(return_msg)
 
     def __diving_event(self, vocabulary):
@@ -46,7 +47,7 @@ class DivingEvent(object):
                 'tidal': 'NSea07',
                 'tidal_keyword': '琉球'
             },
-            '綠島':{
+            '綠島': {
                 'temp': 'OSea10',
                 'temp_keyword': '綠島',
                 'tidal': 'NSea11',
@@ -76,14 +77,15 @@ class DivingEvent(object):
                 'tidal': 'NSea01',
                 'tidal_keyword': '萬里'
             }
-        }        
+        }
 
         sea_id = sea_id_dict.get(vocabulary)
 
-        sea_info = self.__sea_temperature(sea_id['temp'], sea_id['temp_keyword'])
-        
+        sea_info = self.__sea_temperature(
+            sea_id['temp'], sea_id['temp_keyword'])
+
         tidal_info = self.__tidal(sea_id['tidal'], sea_id['tidal_keyword'])
-        
+
         if sea_info or tidal_info:
             return vocabulary + '\n' + sea_info + '\n' + tidal_info
 
@@ -94,7 +96,7 @@ class DivingEvent(object):
         海溫資訊
         1. sea temperature
         2. wind direction
-        """ 
+        """
 
         url = f'https://www.cwb.gov.tw/V8/C/M/OBS_Marine/48hrsSeaObs_MOD/{sea_id}.html'
         response = requests.get(url)
@@ -107,7 +109,7 @@ class DivingEvent(object):
         for row in rows:
             title = row.select_one('th a').getText()
             title = " ".join(title.split())
-            
+
             if keyword not in title:
                 continue
 
@@ -118,19 +120,19 @@ class DivingEvent(object):
             temperature_txt = temperature.getText() if temperature is not None else ''
 
             if temperature_txt and temperature_txt != '-':
-                msg.append( f'風向{" ".join(wind_txt.split())}' + \
-                            f' 海溫{" ".join(temperature_txt.split())}度')
+                msg.append(f'風向{" ".join(wind_txt.split())}' +
+                           f' 海溫{" ".join(temperature_txt.split())}度')
 
         if msg:
             return ' '.join(msg)
-        
+
         return ''
 
     def __tidal(self, sea_id, keyword):
         """
         潮汐資訊
         """
-       
+
         url = f'https://www.cwb.gov.tw/V8/C/M/Fishery/tide_MOD/{sea_id}_1.html'
 
         response = requests.get(url)
@@ -140,11 +142,11 @@ class DivingEvent(object):
         rows = soup.select('.table-blueroute tbody')
 
         msg = []
-        
+
         for row in rows:
             title = row.select_one(f'#{sea_id}').getText()
             title = " ".join(title.split())
-            
+
             if keyword not in title:
                 continue
 
@@ -163,5 +165,5 @@ class DivingEvent(object):
 
         if msg:
             return ' '.join(msg)
-        
+
         return ''
