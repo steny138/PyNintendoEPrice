@@ -3,6 +3,7 @@ from .games import GamesEvent
 from .lifes import LifeEvent
 from .traffic import TrafficEvent
 from .diving import DivingEvent
+from .stock import StockEvent
 
 
 class EventAyalyzer(object):
@@ -17,6 +18,7 @@ class EventAyalyzer(object):
             cls._instance.events.append(LifeEvent())
             cls._instance.events.append(TrafficEvent())
             cls._instance.events.append(DivingEvent())
+            cls._instance.events.append(StockEvent())
 
         return cls._instance
 
