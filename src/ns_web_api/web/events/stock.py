@@ -22,8 +22,6 @@ class StockEvent(object):
             logger.info(vocabulary)
             return self.__stock_price_event(vocabulary)
 
-        print(f'stock event {vocabulary}')
-
         return
 
     def __stock_price_event(self, vocabulary):

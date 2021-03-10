@@ -19,6 +19,7 @@ from linebot.models import (
     MessageTemplateAction,
     URITemplateAction,
     DatetimePickerTemplateAction,
+    PostbackAction,
     ImageCarouselTemplate,
     ImageCarouselColumn
 )
@@ -57,11 +58,11 @@ class LYCLineBot(BaseBot):
 
             for event in events:
                 return_message = self.special_reply(event.message)
-
                 # 沒有特殊處理過的回應, 解析一下訊息在處理回應
                 if not return_message:
                     return_message = self.analysis_message(event.message)
 
+                logger.info(f'return message: {return_message}')
                 self.line_bot_api.reply_message(
                     event.reply_token, return_message)
 
@@ -264,7 +265,7 @@ class LYCLineBot(BaseBot):
                 columns=[
                     ImageCarouselColumn(
                         image_url='https://i.imgur.com/njZeeBz.jpg',
-                        action=PostbackTemplateAction(
+                        action=PostbackAction(
                             label='Splatoon 2 漆彈大作戰',
                             text='快來打漆彈',
                             data='action=buy&itemid=1'
@@ -272,7 +273,7 @@ class LYCLineBot(BaseBot):
                     ),
                     ImageCarouselColumn(
                         image_url='https://i.imgur.com/p3ozN9s.jpg',
-                        action=PostbackTemplateAction(
+                        action=PostbackAction(
                             label='薩爾達傳說之精神時光屋',
                             text='人馬？ 給虐嗎?',
                             data='action=buy&itemid=2'
@@ -303,7 +304,7 @@ class LYCLineBot(BaseBot):
         if message.type == "sticker":
             key = "{0}-{1}".format(message.package_id, message.sticker_id)
             func = match_stickers.get(key, lambda s: None)
-
+            logger.info(func)
             return func(message)
 
         return None

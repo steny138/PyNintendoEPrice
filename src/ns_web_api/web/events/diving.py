@@ -28,9 +28,8 @@ class DivingEvent(object):
 
         return_msg = []
 
-        logger.info(f'潛點事件處理: {vocabulary}')
-
         if all(elem in self.diving_place for elem in vocabulary):
+            logger.info(f'潛點事件處理: {vocabulary}')
             for v in vocabulary:
                 return_msg.append(self.__diving_event(v))
 
