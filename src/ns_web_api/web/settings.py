@@ -12,17 +12,22 @@ dotenv_path = os.path.join(APP_ROOT, '.env')
 load_dotenv(dotenv_path, override=True)
 
 # Build Flask app
-app = Flask(__name__, template_folder='templates', static_url_path='/static')
+app_name = 'flask.app'
+app = Flask(app_name, template_folder='templates',
+            static_url_path='/static')
 
-print(f'!!! flask app logger name is: {__name__} !!!')
+print(f'!!! flask app logger name is: {app_name} !!!')
 
 # this may have to change with environment variable
-app.config.from_object(os.getenv('CONFIG_ENVIRONMENT', 'config.DevelopmentConfig'))
+app.config.from_object(
+    os.getenv('CONFIG_ENVIRONMENT', 'config.DevelopmentConfig'))
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', '') # 'postgresql://admin:1qaz2wsx@localhost/'
-app.config['DEFAULT_GAME_NAME']= os.getenv('DEFAULT_GAME_NAME', 'Splatoon 2') 
-app.config['LINEBOT_CHANNEL_ACCESS_TOKEN']= os.getenv('LINEBOT_CHANNEL_ACCESS_TOKEN', '') 
-app.config['LINEBOT_CHANNEL_SECRET']= os.getenv('LINEBOT_CHANNEL_SECRET', '')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
+    'DATABASE_URL', '')  # 'postgresql://admin:1qaz2wsx@localhost/'
+app.config['DEFAULT_GAME_NAME'] = os.getenv('DEFAULT_GAME_NAME', 'Splatoon 2')
+app.config['LINEBOT_CHANNEL_ACCESS_TOKEN'] = os.getenv(
+    'LINEBOT_CHANNEL_ACCESS_TOKEN', '')
+app.config['LINEBOT_CHANNEL_SECRET'] = os.getenv('LINEBOT_CHANNEL_SECRET', '')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 db = SQLAlchemy(app)

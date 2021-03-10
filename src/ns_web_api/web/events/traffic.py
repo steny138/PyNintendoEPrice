@@ -7,6 +7,7 @@ from ptx import thsr
 
 logger = logging.getLogger('flask.app')
 
+
 class TrafficEvent(object):
     """ 交通事件
     """
@@ -25,20 +26,20 @@ class TrafficEvent(object):
             return self.__thsr_event(vocabulary)
 
         elif "台鐵" in vocabulary:
-            print("traffic-台鐵")
+            logger.info("traffic-台鐵")
         elif "統聯" in vocabulary:
-            print("traffic-統聯")
+            logger.info("traffic-統聯")
         elif "國光" in vocabulary:
-            print("traffic-國光")
-        
+            logger.info("traffic-國光")
+
         return
-    
+
     def __thsr_event(self, vocabulary):
         """高鐵事件處理
-        
+
         Arguments:
             vocabulary {list of string} -- request vocabulary
-        
+
         Returns:
             [string] -- reply message
         """
@@ -56,17 +57,19 @@ class TrafficEvent(object):
         for v in vocabulary:
             if not v in station_dict:
                 continue
-            
+
             if not departure:
-                logger.info(f'departure {departure} but v {v} {station_dict[v]}')
+                logger.info(
+                    f'departure {departure} but v {v} {station_dict[v]}')
                 departure_name = v
                 departure = station_dict[v]
             elif not destination:
-                logger.info(f'destination {destination} but v {v} {station_dict[v]}')
+                logger.info(
+                    f'destination {destination} but v {v} {station_dict[v]}')
 
                 destination_name = v
-                destination = station_dict[v]        
-        
+                destination = station_dict[v]
+
         logger.info(f'departure {departure}')
         logger.info(f'destination {destination}')
         logger.info(f'time {time}')
@@ -77,23 +80,23 @@ class TrafficEvent(object):
         if not "位" in ''.join(vocabulary):
             return ''
 
-        reply_message = self.__thsr_seat_event(departure, departure_name, destination, destination_name, time)
-        
+        reply_message = self.__thsr_seat_event(
+            departure, departure_name, destination, destination_name, time)
+
         return reply_message
 
-    def __thsr_seat_event(self, departure, departure_name, \
-                                destination, destination_name, \
-                                respect_time):
-
+    def __thsr_seat_event(self, departure, departure_name,
+                          destination, destination_name,
+                          respect_time):
         """高鐵 - 找還有座位的班次
-        
+
         Arguments:
             depature {[type]} -- departure station id.
             departure_name {[type]} -- departure station name.
             destination {[type]} -- destination station id.
             destination_name {[type]} -- destination station name.
             respect_time {[type]} -- respect time.
-        
+
         Returns:
             [type] -- [description]
         """
@@ -106,12 +109,12 @@ class TrafficEvent(object):
             return ''
 
         for seat_timetable in seat_timetables[0]['AvailableSeats']:
-            depart_time = datetime.strptime(f"{respect_time.date().strftime('%y %m %d')} {seat_timetable['DepartureTime']}", \
+            depart_time = datetime.strptime(f"{respect_time.date().strftime('%y %m %d')} {seat_timetable['DepartureTime']}",
                                             '%y %m %d %H:%M')
-            # find the nearest 
+            # find the nearest
             if depart_time < respect_time:
                 continue
-            
+
             for stop_station in seat_timetable['StopStations']:
                 if stop_station['StationID'] != destination:
                     continue
@@ -125,5 +128,3 @@ class TrafficEvent(object):
                 return reply_message
 
         return reply_message
-
-                        
