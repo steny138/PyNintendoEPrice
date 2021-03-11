@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from linebot import (
     LineBotApi, WebhookHandler, WebhookParser
 )
@@ -7,18 +5,16 @@ from linebot.exceptions import (
     InvalidSignatureError, LineBotApiError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, StickerSendMessage,
+    TextSendMessage,
+    StickerSendMessage,
     TemplateSendMessage,
-    Template,
     ButtonsTemplate,
     ConfirmTemplate,
     CarouselTemplate,
     CarouselColumn,
-    TemplateAction,
     PostbackTemplateAction,
     MessageTemplateAction,
     URITemplateAction,
-    DatetimePickerTemplateAction,
     PostbackAction,
     ImageCarouselTemplate,
     ImageCarouselColumn
