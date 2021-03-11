@@ -44,9 +44,9 @@ class StockEvent(object):
 
         name = realtime["info"]["name"]
         price = realtime["realtime"]["latest_trade_price"]
-
-        logger.info(
-            f'get stock[{stock_no}] real time: {price} ')
+        if price == "-":
+            # get buyer first price replace non trade price
+            price = realtime["realtime"]["best_bid_price"][0]
 
         reply_message = f'{name} 現價 {float(price):.0f}'
 
