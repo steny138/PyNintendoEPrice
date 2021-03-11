@@ -49,5 +49,22 @@ class StockEvent(object):
             price = realtime["realtime"]["best_bid_price"][0]
 
         reply_message = f'{name} 現價 {float(price):.0f}'
-
+        reply_message += self.__reply_volume(realtime)
         return reply_message
+
+    def __reply_volume(self, realtime):
+        seller_volume = [int(s)
+                         for s in realtime["realtime"]["best_ask_volume"]]
+
+        seller_volume = sum(seller_volume)
+        buyer_volume = [int(s)
+                        for s in realtime["realtime"]["best_bid_volume"]]
+        buyer_volume = sum(buyer_volume)
+        print(f'{buyer_volume}-{seller_volume}')
+
+        if seller_volume > buyer_volume:
+            return " 多軍壓境🧨"
+        elif seller_volume < buyer_volume:
+            return " 賣壓高漲🚁"
+
+        return ""
