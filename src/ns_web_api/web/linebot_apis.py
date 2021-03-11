@@ -27,12 +27,12 @@ def linechatbot():
     return 'OK'
 
 
-@line_bot_api_blueprint.route('/api/v1/chatbot/line/message/<msg>')
-def linechatbot_send_message(msg):
+@line_bot_api_blueprint.route('/api/v1/chatbot/line/message/<user_id>/<msg>')
+def linechatbot_send_message(user_id, msg):
     bot_service = LYCLineBot(
         app.config['LINEBOT_CHANNEL_ACCESS_TOKEN'],
         app.config['LINEBOT_CHANNEL_SECRET'])
-    bot_service.send_message(msg)
+    bot_service.send_message(msg, user_id)
     return jsonify({'message': msg})
 
 
