@@ -60,11 +60,10 @@ class StockEvent(object):
         buyer_volume = [int(s)
                         for s in realtime["realtime"]["best_bid_volume"]]
         buyer_volume = sum(buyer_volume)
-        print(f'{buyer_volume}-{seller_volume}')
 
         if seller_volume > buyer_volume:
-            return " 多軍壓境🧨"
-        elif seller_volume < buyer_volume:
             return " 賣壓高漲🚁"
+        elif seller_volume < buyer_volume:
+            return " 多軍壓境🧨"
 
         return ""
