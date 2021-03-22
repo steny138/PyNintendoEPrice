@@ -1,4 +1,4 @@
-from main import app
+from settings import app
 from bot.line import LYCLineBot
 from mask_sale import timetable
 from flask import Blueprint, jsonify, request

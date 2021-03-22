@@ -12,7 +12,7 @@ dotenv_path = os.path.join(APP_ROOT, '.env')
 load_dotenv(dotenv_path, override=True)
 
 # Build Flask app
-app_name = 'flask.app'
+app_name = 'flask.main'
 app = Flask(app_name, template_folder='templates',
             static_url_path='/static')
 

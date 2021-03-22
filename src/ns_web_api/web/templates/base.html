@@ -1,5 +1,18 @@
 {% extends "bootstrap/base.html" %}
 {% block title %}Nintendo EShop Price.{% endblock %}
+{% block head %}
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BB161JWN57"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-BB161JWN57');
+</script>
+{{super()}}
+{% endblock %}
+
 {% block navbar %}
 <nav class="navbar navbar-default">
     <div class="container-fluid">
