@@ -1,14 +1,15 @@
-from linebot_apis import line_bot_api_blueprint
-from mask import mask_api_blueprint
 import os
 import re
+import jieba
 from flask import render_template, send_from_directory
 from models import Game
 from rate import CurrencyRate
 from settings import db, app
 from events.analyzer import analyzer
 from viewmodels.game import GameViewModel
-import jieba
+from mask import mask_api_blueprint
+from linebot_apis import line_bot_api_blueprint
+from clinic_apis import clinic_api_blueprint
 
 
 @app.route('/favicon.ico')
@@ -31,8 +32,7 @@ def games(category):
     elif category:
         items = items.filter(Game.name_tw == category or Game.name == category)
 
-    return render_template('games.html',
-                           items=items)
+    return render_template('games.html', items=items)
 
 
 @app.route("/find/<message>")
@@ -69,7 +69,8 @@ def eprice(game_name):
         currency = ""
 
         # get all eprice with this game.
-        for key, value in [(key, value) for key, value in game.__dict__.items()]:
+        for key, value in [(key, value) for key, value
+                           in game.__dict__.items()]:
             if 'eprice_' not in key:
                 continue
 
@@ -106,6 +107,7 @@ def shutdown_session(exception=None):
 
 app.register_blueprint(line_bot_api_blueprint)
 app.register_blueprint(mask_api_blueprint)
+app.register_blueprint(clinic_api_blueprint)
 
 if __name__ == "__main__":
     app.run()

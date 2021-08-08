@@ -1,4 +1,3 @@
-import json
 import pandas as pd
 from flask import Blueprint, jsonify, request, abort
 from cache import cache
