@@ -20,6 +20,9 @@ def register_job():
     register_clinic_jobs = list(
         filter(lambda x: x is not None, register_clinic_jobs))
 
+    if not register_clinic_jobs:
+        return "NO Jobs"
+
     clinic = BobsonClinicProgress()
     event = ClinicEvent()
     bot_service = LYCLineBot(
