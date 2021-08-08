@@ -59,8 +59,3 @@ def linechatbot_mask_boardcast():
         bot_service.boardcast(schedule_msg)
 
     return jsonify({'message': schedule_msg})
-
-
-@line_bot_api_blueprint.route('/api/v1/chatbot/facebook/webhook')
-def facebook_chatbot():
-    pass
