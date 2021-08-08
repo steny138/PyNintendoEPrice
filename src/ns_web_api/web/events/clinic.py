@@ -38,19 +38,18 @@ class ClinicEvent(DefaultEvent):
         r = clinic.check_clinic_progress(doctor)
         self.logger.info(f'line user: {user_id}')
 
-        if user_id:
-            reserve_info = {
-                'doctor': doctor,
-                'number': int(number),
-                'user': user_id
-            }
-
-            cache.append_clinic_cache(doctor, reserve_info)
-
-            self.logger.info(f'register clinic job for {doctor}')
-
         if r:
             # register job for check clinic status
+            if user_id:
+                reserve_info = {
+                    'doctor': doctor,
+                    'number': int(number),
+                    'user': user_id
+                }
+
+                cache.append_clinic_cache(doctor, reserve_info)
+
+                self.logger.info(f'register clinic job for {doctor}')
 
             current = int(r["current"])
             mine = int(number)
