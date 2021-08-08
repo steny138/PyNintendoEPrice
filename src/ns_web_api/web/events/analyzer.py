@@ -4,6 +4,7 @@ from .lifes import LifeEvent
 from .traffic import TrafficEvent
 from .diving import DivingEvent
 from .stock import StockEvent
+from .clinic import ClinicEvent
 
 
 class EventAyalyzer(object):
@@ -19,11 +20,12 @@ class EventAyalyzer(object):
             cls._instance.events.append(TrafficEvent())
             cls._instance.events.append(DivingEvent())
             cls._instance.events.append(StockEvent())
+            cls._instance.events.append(ClinicEvent())
 
         return cls._instance
 
-    def match(self, fragments):
-        match_events = [(lambda x: x.occurs(fragments))(x)
+    def match(self, fragments, *args, **kwargs):
+        match_events = [(lambda x: x.occurs(fragments, *args, **kwargs))(x)
                         for x in self.events]
 
         return list(filter(None, match_events))  # remove empty string

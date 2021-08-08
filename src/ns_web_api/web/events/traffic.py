@@ -1,21 +1,20 @@
-import requests
 import logging
 
 from datetime import datetime
-
 from ptx import thsr
+from events.default import DefaultEvent
 
 logger = logging.getLogger('flask.app')
 
 
-class TrafficEvent(object):
+class TrafficEvent(DefaultEvent):
     """ 交通事件
     """
 
     def __init__(self):
-        pass
+        super().__init__()
 
-    def occurs(self, vocabulary):
+    def occurs(self, vocabulary, *args, **kwargs):
         """交通事件觸發
         """
         if not vocabulary:

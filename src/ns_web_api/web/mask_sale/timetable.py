@@ -1,13 +1,14 @@
 import re
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
+from datetime import datetime
 
-def build_alert_msg(schedule = None):
+
+def build_alert_msg(schedule=None):
 
     if not schedule:
         schedule = get_schedule()
-    
+
     msg = ''
 
     today = datetime.today()
@@ -16,7 +17,7 @@ def build_alert_msg(schedule = None):
     if "presale_s" in schedule and "presale_d" in schedule:
         presale_s = datetime.strptime(schedule["presale_s"], "%m/%d")
         presale_d = datetime.strptime(schedule["presale_d"], "%m/%d")
-        
+
         presale_s = presale_s.replace(year=today.year)
         presale_d = presale_d.replace(year=today.year)
 
@@ -42,19 +43,21 @@ def build_alert_msg(schedule = None):
 
     return msg
 
+
 def get_schedule():
     url = "https://emask.taiwan.gov.tw/msk/index.jsp"
     user_agent = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
     headers = {'User-Agent': user_agent}
 
     resp = requests.get(url, headers=headers)
-    
+
     if resp.status_code != 200:
         print(resp)
 
     soup = BeautifulSoup(resp.text, 'html.parser')
 
-    schedule_contents = soup.select('div.row.justify-content-center > div.col > p')
+    schedule_contents = soup.select(
+        'div.row.justify-content-center > div.col > p')
 
     result = {}
 
@@ -66,20 +69,23 @@ def get_schedule():
         if not schedule_content.text:
             continue
 
-        match_periods = re.search(r'(?<=第)\d+(?=期口罩預購各階段開放時程)', schedule_content.text)
+        match_periods = re.search(
+            r'(?<=第)\d+(?=期口罩預購各階段開放時程)', schedule_content.text)
 
         if match_periods:
             result['periods'] = match_periods.group()
             continue
 
-        match_presale = re.search(r'(?<=\(新訂購\)預購繳費)\s?(?P<sd>\d+\/\d+)\s?(?P<st>\d+:\d+)\s?-\s?(?P<dd>\d+\/\d+)\s?(?P<dt>\d+:\d+)', schedule_content.text)
+        match_presale = re.search(
+            r'(?<=\(新訂購\)預購繳費)\s?(?P<sd>\d+\/\d+)\s?(?P<st>\d+:\d+)\s?-\s?(?P<dd>\d+\/\d+)\s?(?P<dt>\d+:\d+)', schedule_content.text)
 
         if match_presale:
             result['presale_s'] = match_presale.group('sd')
             result['presale_d'] = match_presale.group('dd')
             continue
 
-        match_receive = re.search(r'(?<=領取口罩)\s?(?P<sd>\d+\/\d+)\s?(?P<st>\d+:\d+)\s?-\s?(?P<dd>\d+\/\d+)\s?(?P<dt>\d+:\d+)', schedule_content.text)
+        match_receive = re.search(
+            r'(?<=領取口罩)\s?(?P<sd>\d+\/\d+)\s?(?P<st>\d+:\d+)\s?-\s?(?P<dd>\d+\/\d+)\s?(?P<dt>\d+:\d+)', schedule_content.text)
 
         if match_receive:
             result['receive_s'] = match_receive.group('sd')

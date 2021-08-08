@@ -1,17 +1,18 @@
 import logging
 import twstock
+from events.default import DefaultEvent
 
 logger = logging.getLogger('flask.app')
 
 
-class StockEvent(object):
+class StockEvent(DefaultEvent):
     """ 股市事件
     """
 
     def __init__(self):
-        pass
+        super().__init__()
 
-    def occurs(self, vocabulary):
+    def occurs(self, vocabulary, *args, **kwargs):
         """股市事件觸發
         """
 

@@ -56,7 +56,8 @@ class LYCLineBot(BaseBot):
                 return_message = self.special_reply(event.message)
                 # 沒有特殊處理過的回應, 解析一下訊息在處理回應
                 if not return_message:
-                    return_message = self.analysis_message(event.message)
+                    return_message = self.analysis_message(
+                        event.message, user_id=event.source.sender_id)
 
                 logger.info(f'return message: {return_message}')
                 self.line_bot_api.reply_message(
@@ -82,7 +83,7 @@ class LYCLineBot(BaseBot):
 
         return profile
 
-    def analysis_message(self, message):
+    def analysis_message(self, message, *args, **kwargs):
         """解析使用者傳的訊息來決定回傳什麼東西給使用者
 
         Arguments:
@@ -96,18 +97,20 @@ class LYCLineBot(BaseBot):
         if message.type == "text":
             seg_list = ", ".join(jieba.cut(message.text)).split(', ')
             logger.info(f'vocabulary {seg_list}')
-            match_event_message = analyzer.match(seg_list)
+            match_event_message = analyzer.match(seg_list, *args, **kwargs)
             match_event_message = list(
                 filter(lambda x: x is not None, match_event_message))
             if match_event_message and len(match_event_message) > 0:
-                print(f'match event {match_event_message}')
-                return TextSendMessage(text=''.join(filter(lambda x: x is not None, match_event_message)))
+                logger.info(fr'reply message: {match_event_message}')
+
+                return TextSendMessage(text=''.join(match_event_message))
 
         # 沒有就去當鸚鵡吧
         allow_message_type = {"text": self.reply_by_text,
                               "sticker": self.reply_by_sticker}
 
         func = allow_message_type.get(message.type, self.reply_default)
+
         return func(message)
 
     def reply_by_text(self, message):

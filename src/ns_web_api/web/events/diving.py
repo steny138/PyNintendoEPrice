@@ -1,16 +1,14 @@
 import requests
-import logging
-
 from bs4 import BeautifulSoup
+from events.default import DefaultEvent
 
-logger = logging.getLogger('flask.app')
 
-
-class DivingEvent(object):
+class DivingEvent(DefaultEvent):
     """ 潛水事件
     """
 
     def __init__(self):
+        super().__init__()
         self.diving_place = [
             '小琉球',
             '墾丁',
@@ -20,7 +18,7 @@ class DivingEvent(object):
             '東北角'
         ]
 
-    def occurs(self, vocabulary):
+    def occurs(self, vocabulary, *args, **kwargs):
         """潛水事件觸發
         """
         if not vocabulary:
@@ -29,7 +27,7 @@ class DivingEvent(object):
         return_msg = []
 
         if all(elem in self.diving_place for elem in vocabulary):
-            logger.info(f'潛點事件處理: {vocabulary}')
+            self.logger.info(f'潛點事件處理: {vocabulary}')
             for v in vocabulary:
                 return_msg.append(self.__diving_event(v))
 
