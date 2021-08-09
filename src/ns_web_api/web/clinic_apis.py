@@ -34,11 +34,12 @@ def register_job():
     for clinic_progress in clinic_progress_list:    # progressing clinics
         for clinic_jobs in register_clinic_jobs:    # every doctor list
             for clinic_job in clinic_jobs:          # every patient per doctor
-
+                if not clinic_job.get("working", True):
+                    continue
                 if clinic_job['doctor'] != clinic_progress['doctor']:
                     continue
-
-                if not clinic_job.get("working", True):
+                if int(clinic_job.get("current", 0)) == \
+                        int(clinic_progress.get("current", 0)):
                     continue
 
                 msg = event.occurs(
@@ -52,13 +53,13 @@ def register_job():
                 # message not None
                 bot_service.send_message(msg, clinic_job['user'])
 
+                clinic_job['current'] = clinic_progress["current"]
+
                 if "過號了" in msg:
                     # clean job in cache
                     clinic_job["working"] = False
 
     for clinic_jobs in register_clinic_jobs:    # every doctor list
-        if [clinic_job for clinic_job in clinic_jobs if not clinic_job.get("working", True)]:
-            print("replace_clinic_cache")
-            replace_clinic_cache(clinic_jobs[0]["doctor"], clinic_jobs)
+        replace_clinic_cache(clinic_jobs[0]["doctor"], clinic_jobs)
 
     return 'OK'
