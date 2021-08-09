@@ -18,3 +18,7 @@ def append_clinic_cache(doctor, reserve_info):
     reserve_info_list.append(reserve_info)
 
     cache.set(key, reserve_info_list, timeout=60*60*8)
+
+
+def replace_clinic_cache(doctor, reserve_info_list):
+    cache.set(f'clinic:{doctor}', reserve_info_list, timeout=60*30)
