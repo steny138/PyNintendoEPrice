@@ -1,11 +1,11 @@
 # coding: utf-8
 import os
-from flask import Flask, url_for
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 
 # load dotenv in the base root
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
 
 APP_ROOT = os.path.dirname(__file__)
 dotenv_path = os.path.join(APP_ROOT, '.env')
@@ -29,6 +29,10 @@ app.config['LINEBOT_CHANNEL_ACCESS_TOKEN'] = os.getenv(
     'LINEBOT_CHANNEL_ACCESS_TOKEN', '')
 app.config['LINEBOT_CHANNEL_SECRET'] = os.getenv('LINEBOT_CHANNEL_SECRET', '')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['REDIS_HOST'] = os.getenv('REDIS_HOST', '')
+app.config['REDIS_PORT'] = os.getenv('REDIS_PORT', '')
+app.config['REDIS_PASSWORD'] = os.getenv('REDIS_PASSWORD', '')
 
 db = SQLAlchemy(app)
 
