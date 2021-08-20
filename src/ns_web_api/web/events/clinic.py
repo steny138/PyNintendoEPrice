@@ -2,6 +2,8 @@ import re
 import cache
 from events.default import DefaultEvent
 from baby.hosipital_state import BobsonClinicProgress
+from datetime import datetime
+from pytz import timezone
 
 
 class ClinicEvent(DefaultEvent):
@@ -64,6 +66,16 @@ class ClinicEvent(DefaultEvent):
             elif diff < 20:
                 notice_message = f'剩下{diff}個了，趕快出門'
 
+            if(self.__checkin_taipei_time()):
+                notice_message += '，要在12:00完成報到'
             return f'{doctor}[{r["current"]}號]{notice_message}，在{r["room"]}看診'
 
         return f'{doctor} 尚無門診'
+
+    def __checkin_taipei_time(self):
+        TIME_FORMAT = '%H:%M'
+        taipei_now = datetime.now(tz=timezone(
+            'Asia/Taipei')).strftime(TIME_FORMAT)
+        taipei_now = datetime.strptime(taipei_now, TIME_FORMAT)
+        return (datetime.strptime('08:00', TIME_FORMAT) < taipei_now and
+                datetime.strptime('12:00', TIME_FORMAT) > taipei_now)
