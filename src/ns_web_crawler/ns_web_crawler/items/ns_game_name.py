@@ -2,6 +2,7 @@
 
 import scrapy
 
+
 class NsGameNameItem(scrapy.Item):
     game_names = scrapy.Field()
     name_chinese = scrapy.Field()

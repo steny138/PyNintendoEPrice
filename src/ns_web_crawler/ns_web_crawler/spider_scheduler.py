@@ -7,6 +7,7 @@ from scrapy.utils.project import get_project_settings
 
 configure_logging()
 
+
 @defer.inlineCallbacks
 def crawl_job():
     """
@@ -21,11 +22,13 @@ def crawl_job():
     # reactor.stop()
     defer.returnValue('success crawl job')
 
+
 def schedule_next_crawl(null, sleep_time):
     """
     Schedule the next crawl
     """
     reactor.callLater(sleep_time, crawl)
+
 
 def crawl():
     """
@@ -39,9 +42,11 @@ def crawl():
     d.addCallback(schedule_next_crawl, 86400)
     d.addErrback(catch_error)
 
+
 def catch_error(failure):
     print(failure.value)
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     crawl()
-    reactor.run() # the script will block here until the last crawl call is finished
+    reactor.run()  # the script will block here until the last crawl call is finished

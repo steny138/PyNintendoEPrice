@@ -25,6 +25,7 @@ cp -R src/ns_web_crawler/poetry.lock deploy/deploy.ns_web_crawler.production/poe
 
 # copy project setting file
 cp -R src/ns_web_crawler/scrapy.cfg deploy/deploy.ns_web_crawler.production/scrapy.cfg
+cp -R src/ns_web_crawler/scrapyd.conf deploy/deploy.ns_web_crawler.production/scrapyd.conf
 
 # copy procfile from procfiles folder, it decide how to startup the project on heroku
 cp deploy/procfiles/ns_web_crawler.production.Procfile deploy/deploy.ns_web_crawler.production/Procfile
