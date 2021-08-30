@@ -2,6 +2,7 @@
 
 import scrapy
 
+
 class CountryCurrencyItem(scrapy.Item):
     country = scrapy.Field()
     country_name = scrapy.Field()
@@ -11,4 +12,3 @@ class CountryCurrencyItem(scrapy.Item):
     unit = scrapy.Field()
     digit = scrapy.Field()
     last_updated = scrapy.Field(serializer=str)
-

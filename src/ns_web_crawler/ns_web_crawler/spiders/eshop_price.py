@@ -2,20 +2,23 @@
 
 import re
 import scrapy
-import datetime 
+import datetime
 import logging
 from ns_web_crawler.items.eshop_price import EshopProductItem
+from ns_web_crawler.items.eshop_price_onsale import EshopOnsaleItem
+
 
 class EshopPriceSpider(scrapy.Spider):
     name = "eshop-price-index"
+
     def start_requests(self):
 
         # 省空間...這些國家先暫時不轉
         self.exclude_country = {
-            "BEL", "BGR", "AUT", "HRV", "CYP", 
-            "CZE", "FIN", "EST", "GRC", "HUN", 
-            "IRL", "ITA", "LVA", "LTU", "LUX", 
-            "MLT", "NLD", "NOR", "POL", "PRT", 
+            "BEL", "BGR", "AUT", "HRV", "CYP",
+            "CZE", "FIN", "EST", "GRC", "HUN",
+            "IRL", "ITA", "LVA", "LTU", "LUX",
+            "MLT", "NLD", "NOR", "POL", "PRT",
             "ROU", "RUS", "SVK", "SVN", "ESP",
             "SWE", "CHE", "GBR"}
 
@@ -38,29 +41,29 @@ class EshopPriceSpider(scrapy.Spider):
 
             if not country:
                 continue
-                
+
             if not country["code"]:
                 continue
-            
+
             countries.append(country)
 
         for game_dom in games_dom:
             game = self.get_game_item(game_dom, countries)
-            
+
             if not game:
                 continue
-            
+
             yield game
 
             logging.info("find the game: %s", game["name"])
-    
+
     def get_country_item(self, th):
         country = {}
         country["code"] = th.css("th::attr(title)").extract_first()
         country["name"] = th.css("::text").extract_first().strip()
 
         return country
-    
+
     def get_game_item(self, tr, countries):
 
         if tr.css("th > a > span.game-serie").extract_first():
@@ -94,9 +97,10 @@ class EshopPriceSpider(scrapy.Spider):
         return game
 
     def get_game_price_item(self, td, country):
-        price = EshopPriceCountryItem()
+        price = EshopOnsaleItem()
 
-        price_text = re.findall("\d+\.\d+", td.css("::text").extract_first().strip())
+        price_text = re.findall(
+            "\d+\.\d+", td.css("::text").extract_first().strip())
 
         if not price_text:
             return None
@@ -104,8 +108,7 @@ class EshopPriceSpider(scrapy.Spider):
         # 最高價的國家 會有class = h
         # 最低價的國家 會有class = l
         price["country"] = country
-        price["currency"] = "USD" # because querystring is based on USD
+        price["currency"] = "USD"  # because querystring is based on USD
         price["price"] = price_text[0]
-        price["onsale"] = False # td.css('.l').extract_first() is not None
+        price["onsale"] = False  # td.css('.l').extract_first() is not None
         return price
-

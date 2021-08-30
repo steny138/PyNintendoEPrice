@@ -1,10 +1,8 @@
-
-import json
 import logging
 import pytz
 import dateutil.parser
 from uuid import uuid4
-from datetime import datetime, date
+from datetime import datetime
 
 from .eshop.eshop_eu import EShopEUApi
 from .eshop.eshop_us import EShopUSApi
@@ -61,6 +59,15 @@ class PullNsEshopGame(object):
 
         try:
             for nid, game in all_games.items():
+                if len(game.name) > 100:
+                    continue
+
+                if not game.cover:
+                    continue
+
+                if not game.cover:
+                    continue
+
                 logger.info(f"insert No {counter}. game model")
                 counter += 1
                 with session.no_autoflush:
