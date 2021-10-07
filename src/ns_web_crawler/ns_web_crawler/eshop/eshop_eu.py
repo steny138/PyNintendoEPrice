@@ -49,7 +49,7 @@ class EShopEUApi(object):
             if 'nsuid_txt' not in game:
                 continue
 
-            gameid = next(iter(game.get('nsuid_txt')))
+            gameid = next(iter(game.get('nsuid_txt')), None)
             gamecode = ''.join(game.get('product_code_txt', ['unrelease']))
             if check_nsuid(gameid) and gameid not in all_games:
 
