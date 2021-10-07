@@ -11,6 +11,7 @@ from .eshop.eshop_price import EShopPriceApi
 
 from .connections import postgresql_conn
 from .models.game_model import GameModel
+from ns_web_crawler.models import game_model
 
 logger = logging.getLogger(__name__)
 
@@ -64,12 +65,10 @@ class PullNsEshopGame(object):
 
                 if not game.cover:
                     continue
-
-                if not game.cover:
-                    continue
-
                 logger.info(f"insert No {counter}. game model")
+
                 counter += 1
+
                 with session.no_autoflush:
                     model = session.query(GameModel) \
                         .filter_by(nsuid=nid) \
@@ -101,7 +100,7 @@ class PullNsEshopGame(object):
 
         for country in self.countries:
             key = f'{country.upper()}-{model.nsuid}'
-            if not key in self.all_game_prices:
+            if key not in self.all_game_prices:
                 continue
 
             price = self.all_game_prices[key]
@@ -150,14 +149,18 @@ class PullNsEshopGame(object):
                         for x in range(0, len(all_nsuids), 50)]
 
         for nsuids in nsuid_groups:
-
             for country in self.countries:
                 # get 50 games per county for once api reuslt
                 game_price_dict = self.price_api.get_price(
                     country.upper(), nsuids)
 
                 # list slice rule => [start:stop:step]
-                show_id = '~'.join(nsuids[::len(nsuids)-1])
+
+                if len(nsuids) == 1:
+                    show_id = f'{nsuids[0]}'
+                else:
+                    show_id = '~'.join(nsuids[::len(nsuids)-1])
+
                 logger.info(
                     f"{show_id}-{country.upper()} found {len(game_price_dict)} games totally.")
 

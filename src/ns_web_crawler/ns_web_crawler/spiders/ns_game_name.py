@@ -3,7 +3,7 @@
 import re
 import scrapy
 import logging
-from urllib.parse import urlencode, urlparse, urlunparse, parse_qsl, ParseResult
+from urllib.parse import urlencode, urlparse, parse_qsl, ParseResult
 from ns_web_crawler.items.ns_game_name import NsGameNameItem
 
 

@@ -1,5 +1,4 @@
 import requests
-import json
 import copy
 import logging
 from urllib.parse import urlencode, quote
@@ -29,11 +28,9 @@ class EShopUSApi(object):
     US_GAME_LIST_LIMIT = 100
     US_GAME_QUERY_LIMIT = 1000
     US_PRICE_RANGES = [
-        'Free to start',
-        '$0 - $4.99',
         '$5 - $9.99',
         '$10 - $19.99',
-        '$20 - $39.99',
+        '$20 - $39.99'
         '$40+'
     ]
 
@@ -70,7 +67,9 @@ class EShopUSApi(object):
                     category_name, price_range)
 
                 if category_games:
-                    for game in [category_game for category_game in category_games if not category_game['slug'] in all_games]:
+                    for game in [category_game for category_game
+                                 in category_games
+                                 if not category_game['slug'] in all_games]:
                         # no nsuid cannot get eshop price.
                         if 'nsuid' not in game:
                             continue

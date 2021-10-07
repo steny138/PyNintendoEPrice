@@ -1,4 +1,3 @@
-import json
 import requests
 import logging
 import copy
@@ -6,10 +5,12 @@ from .game_poco import EshopGame
 from .eshop_costants import check_nsuid
 
 import os
-EU_GET_GAMES_URL   = os.getenv('EU_GET_GAMES_URL', 'https://search.nintendo-europe.com/{locale}/select')
+EU_GET_GAMES_URL = os.getenv(
+    'EU_GET_GAMES_URL', 'https://search.nintendo-europe.com/{locale}/select')
 EU_GAME_CHECK_CODE = os.getenv('EU_GAME_CHECK_CODE', '70010000000184')
 
 logger = logging.getLogger(__name__)
+
 
 class EShopEUApi(object):
     EU_GET_GAMES_OPTIONS = {
@@ -38,53 +39,56 @@ class EShopEUApi(object):
 
         game_count = response.get('response').get('numFound', 0)
         eshop_games = response.get('response').get('docs', [])
-        
+
         if not eshop_games:
             logger.info(f"expect {game_count} games, but no games in Europe.")
 
             return all_games
 
         for game in eshop_games:
-            if not 'nsuid_txt' in game:
+            if 'nsuid_txt' not in game:
                 continue
 
-            gameid = ''.join(game.get('nsuid_txt'))
+            gameid = next(game.get('nsuid_txt'))
             gamecode = ''.join(game.get('product_code_txt', ['unrelease']))
-            if check_nsuid(gameid) and not gameid in all_games :
+            if check_nsuid(gameid) and gameid not in all_games:
 
                 all_games[gameid] = EshopGame(
                     gameid,
                     gamecode,
-                    game.get('title'), 
+                    game.get('title'),
                     'eu',
                     game.get('image_url'),
                     ','.join(game.get('game_category')),
                     f"{game.get('players_from','0')}-{game.get('players_to', '0')}")
-        
+
         logger.info(f"found {len(all_games)} games in Europe.")
 
         return all_games
-    
+
     def __get_api_result(self):
         querystring = copy.deepcopy(self.EU_GET_GAMES_OPTIONS)
         querystring['rows'] = self.EU_GAME_LIST_LIMIT
 
         url = EU_GET_GAMES_URL.replace('{locale}', self.EU_DEFAULT_LOCALE)
         logger.info(f"get eu api {url} with {querystring}")
-        
+
         try:
             r = requests.get(url, params=querystring)
+
             # throw error if status not 200 requests.codes.ok
             r.raise_for_status()
         except requests.ConnectTimeout:
-            logger.warning(f'get eu eshop api result timeout')
+            logger.warning('get eu eshop api result timeout')
             return {}
 
         except requests.HTTPError:
-            logger.warning(f'get eu eshop api result failed, status code is {r.status_code}')
+            logger.warning(
+                f'get eu eshop api result failed, status code is {r.status_code}')
             return {}
 
         return r.json()
+
 
 if __name__ == '__main__':
     req = EShopEUApi()
