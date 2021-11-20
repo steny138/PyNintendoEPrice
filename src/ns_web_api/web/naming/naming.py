@@ -1,5 +1,6 @@
 import os
 import json
+import math
 
 
 class PreferNamingGenerator:
@@ -19,7 +20,54 @@ class PreferNamingGenerator:
     def gen(self, last_name, curr_zodiac) -> list:
         """產生匹配姓名"""
 
-        pass
+        score_dict = {}
+        for second in self.characters_arr:
+            for third in self.characters_arr:
+
+                second_name = second["chars"][0]
+                third_name = third["chars"][0]
+                last_strokes = self.strokes(last_name)
+                second_strokes = second["draw"]
+                third_strokes = third["draw"]
+
+                if second_strokes < 5 or third_strokes < 5 \
+                        or second_strokes > 20 or third_strokes > 20:
+                    continue
+
+                # 先天命數 = 姓 + 名第一個字筆畫，尾數不為9,0
+
+                if (last_strokes + second_strokes) % 10 in [9, 0]:
+                    continue
+
+                if (last_strokes + second_strokes + third_strokes) % 10 \
+                        in [9, 0]:
+                    continue
+
+                sc = self.score(last_name, second_name, third_name)
+
+                second_better, second_worse = self.zodiac(
+                    curr_zodiac, second_strokes)
+                third_better, third_worse = self.zodiac(
+                    curr_zodiac, third_strokes)
+
+                second_names = [c for c in second["chars"]
+                                if c not in second_worse]
+
+                third_names = [c for c in third["chars"]
+                               if c not in third_worse]
+
+                for name in [f'{last_name}{sec}{thd}'
+                             for thd in third_names
+                             for sec in second_names]:
+
+                    if name[1] not in second_better and \
+                            name[2] not in third_better:
+                        continue
+
+                    score_dict.setdefault(sc, []).append(name)
+
+        with open(os.path.join(self.base_path, 'liu_name.json'), 'w') as f:
+            json.dump(score_dict[100], f, ensure_ascii=False)
 
     def score(self, last_name, second_name, third_name) -> list:
         """計算姓名評分"""
@@ -29,27 +77,21 @@ class PreferNamingGenerator:
 
         five_elements = self.calculate_five_elements(
             last_strokes, second_strokes, third_strokes)
-        print(five_elements)
 
         sancai_chr = "".join((five_elements['sky_attr'],
                               five_elements['people_attr'],
                               five_elements['land_attr']))
 
         sancai = self._sancai(sancai_chr)
-        print(sancai)
 
         # 81
         score = self._81math(five_elements['sky'])['value']
-        print(score)
         score += self._81math(five_elements['people'])['value']
-        print(score)
         score += self._81math(five_elements['land'])['value']
-        print(score)
         score += self._81math(five_elements['out'])['value']
-        print(score)
         score += self._81math(five_elements['total'])['value']
-        print(score)
-        print(f"81: {score}")
+
+        return math.floor(score * 2 * 0.9) + sancai["value"]
 
     def calculate_five_elements(self,
                                 last_name_strokes,
@@ -155,4 +197,5 @@ if __name__ == "__main__":
 
     generator = PreferNamingGenerator("../static/naming")
 
-    generator.score("劉", "倚", "汎")
+    generator.gen("劉", "tiger")
+    # print(generator.score("劉", "妯", "錛"))
