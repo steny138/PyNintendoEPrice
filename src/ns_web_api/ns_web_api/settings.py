@@ -33,6 +33,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['REDIS_HOST'] = os.getenv('REDIS_HOST', '')
 app.config['REDIS_PORT'] = os.getenv('REDIS_PORT', '')
 app.config['REDIS_PASSWORD'] = os.getenv('REDIS_PASSWORD', '')
+app.config['SPOTIFY_CLIENT_ID'] = os.getenv('SPOTIFY_CLIENT_ID', '')
+app.config['SPOTIFY_CLIENT_SECRET'] = os.getenv('SPOTIFY_CLIENT_SECRET', '')
 
 db = SQLAlchemy(app)
 

@@ -1,7 +1,7 @@
 import os
 import re
 import jieba
-from flask import render_template, send_from_directory
+from flask import render_template, send_from_directory, request
 from models import Game
 from rate import CurrencyRate
 from settings import db, app
@@ -103,6 +103,13 @@ def eprice(game_name):
 @app.teardown_request
 def shutdown_session(exception=None):
     db.session.remove()
+
+
+@app.route("/oauth2/callback")
+def oauth2_callback():
+    print(request.values)
+
+    return request.url
 
 
 app.register_blueprint(line_bot_api_blueprint)
