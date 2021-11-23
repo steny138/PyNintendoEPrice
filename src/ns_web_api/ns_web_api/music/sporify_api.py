@@ -48,7 +48,7 @@ class SpotifyApi:
                 "id": track["id"],
                 "name": track["name"],
                 "artist": track["artists"][0]["name"],
-                "uri": track["uri"],
+                "url": track["uri"],
             }
 
         return None
@@ -63,9 +63,3 @@ class SpotifyApi:
                    'Authorization': f'Bearer {self.client_credentials_token}'}
         session.headers.update(headers)
         return session
-
-
-if __name__ == '__main__':
-    api = SpotifyApi("40375dc7a37b496d84ae5468bc484e9f",
-                     "5eda3296dd804b93a2a78603902f09ce")
-    api.auth_client_redentials()
