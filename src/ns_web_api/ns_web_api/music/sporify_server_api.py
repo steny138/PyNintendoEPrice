@@ -3,19 +3,19 @@ from requests.auth import HTTPBasicAuth
 from jsonpath import jsonpath
 
 
-class SpotifyApi:
+class SpotifyServerApi:
 
     def __init__(self, client_id, client_secret) -> None:
         self.client_id = client_id
         self.client_secret = client_secret
         self.domain_url = "https://api.spotify.com"
-
+        self.auth_domain = "https://accounts.spotify.com"
         self.auth_client_redentials()
         self.session = self.__create_request()
 
     def auth_client_redentials(self):
         payload = {"grant_type": "client_credentials"}
-        url = "https://accounts.spotify.com/api/token"
+        url = f"{self.auth_domain}/api/token"
         headers = {"content-type": "application/x-www-form-urlencoded",
                    "user-agent": "lyc-music-app/0.0.1"}
         auth = HTTPBasicAuth(self.client_id, self.client_secret)

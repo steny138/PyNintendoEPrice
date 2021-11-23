@@ -10,7 +10,7 @@ class SpotifyOAuth2:
     def offline_auth(self):
         authorization_url, state = self.authorize()
 
-        print(authorization_url, state)
+        print("\n", authorization_url, "\n", state)
 
         response_url = input(
             "please input redirect response url from authorization_url: \n")
