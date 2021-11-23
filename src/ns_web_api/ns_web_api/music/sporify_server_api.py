@@ -33,6 +33,7 @@ class SpotifyServerApi:
 
     def query(self, q):
         url = f"{self.domain_url}/v1/search"
+
         params = {
             "q": q,
             "type": "track",
@@ -44,13 +45,17 @@ class SpotifyServerApi:
 
         if resp.status_code == requests.codes.ok:
             response = resp.json()
-            track = jsonpath(response, "$.tracks.items.0")[0]
-            return {
-                "id": track["id"],
-                "name": track["name"],
-                "artist": track["artists"][0]["name"],
-                "url": track["uri"],
-            }
+            tracks = jsonpath(response, "$.tracks.items")[0]
+            if len(tracks) > 0:
+
+                track = tracks[0]
+
+                return {
+                    "id": track["id"],
+                    "name": track["name"],
+                    "artist": track["artists"][0]["name"],
+                    "uri": track["uri"],
+                }
 
         return None
 
