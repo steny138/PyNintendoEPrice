@@ -30,7 +30,10 @@ class TestSpotifyUserApi:
                  'scope': ['playlist-modify-public'],
                  'expires_at': 1637638561.311397}
 
-        api = SpotifyUserApi(self.client_id, self.client_secret, token)
+        api = SpotifyUserApi(self.client_id,
+                             self.client_secret,
+                             token,
+                             self.redirect_uri)
 
         user = api.current_user(self.user)
 
@@ -52,9 +55,12 @@ class TestSpotifyUserApi:
             {"uri": "spotify:track:7cHZIHlewdmRCBmuOn4ssV"}
         ]
 
-        api = SpotifyUserApi(self.client_id, self.client_secret, token)
+        api = SpotifyUserApi(self.client_id,
+                             self.client_secret,
+                             token,
+                             self.redirect_uri)
 
-        playlist = api.create_playlist(self.user, "API DEMO", tracks=tracks)
+        playlist = api.create_playlist(self.user, "GO API DEMO", tracks=tracks)
 
         assert playlist
 
