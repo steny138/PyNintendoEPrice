@@ -2,10 +2,11 @@ from requests_oauthlib import OAuth2Session
 
 
 class SpotifyOAuth2:
-    def __init__(self, client_id, client_secret) -> None:
+    def __init__(self, client_id, client_secret, redirect_uri) -> None:
         self.auth_domain = "https://accounts.spotify.com"
         self.client_id = client_id
         self.client_secret = client_secret
+        self.redirect_uri = redirect_uri
 
     def offline_auth(self):
         authorization_url, state = self.authorize()
@@ -46,10 +47,8 @@ class SpotifyOAuth2:
         # Note that these are Google specific scopes
         scope = ['playlist-modify-public']
 
-        redirect_uri = "https://3e48-211-23-179-226.ngrok.io/oauth2/callback"
-
         oauth = OAuth2Session(self.client_id,
-                              redirect_uri=redirect_uri,
+                              redirect_uri=self.redirect_uri,
                               scope=scope,
                               state=state)
 

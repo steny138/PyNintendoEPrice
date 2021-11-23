@@ -27,8 +27,9 @@ class SpotifyServerApi:
 
         if resp.status_code == requests.codes.ok:
             self._access_token = resp.json()
+            return self.client_credentials_token
 
-        return self.client_credentials_token
+        return ""
 
     def query(self, q):
         url = f"{self.domain_url}/v1/search"
@@ -55,7 +56,9 @@ class SpotifyServerApi:
 
     @property
     def client_credentials_token(self):
-        return self._access_token["access_token"]
+        return self._access_token["access_token"] \
+            if hasattr(self, "_access_token") \
+            else ""
 
     def __create_request(self):
         session = requests.Session()

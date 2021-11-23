@@ -22,5 +22,4 @@ class TestSpotifyServerApi:
 
         actual = self.sut.query(query)
 
-        print(actual)
         assert actual

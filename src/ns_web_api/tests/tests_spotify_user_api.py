@@ -19,6 +19,7 @@ class TestSpotifyUserApi:
         self.access_token = os.getenv('SPOTIFY_ACCESS_TOKEN', '')
         self.refresh_token = os.getenv('SPOTIFY_REFRESH_TOKEN', '')
         self.user = os.getenv('SPOTIFY_USER', '')
+        self.redirect_uri = os.getenv('SPOTIFY_AUTH_REDIRECT_URI', '')
 
     @pytest.mark.skip(reason="skip auth tests")
     def test_spotify_api_current_user(self):
@@ -41,7 +42,7 @@ class TestSpotifyUserApi:
                  'expires_in': 3600,
                  'refresh_token': self.refresh_token,
                  'scope': ['playlist-modify-public'],
-                 'expires_at': 1637648928.805232}
+                 'expires_at': 1637683195.175843}
 
         tracks = [
             {"uri": "spotify:track:55h7vJchibLdUkxdlX3fK7"},
@@ -59,10 +60,11 @@ class TestSpotifyUserApi:
 
     @pytest.mark.skip(reason="skip auth tests")
     def test_spotify_api_auth(self):
-        api = SpotifyOAuth2(self.client_id, self.client_secret)
+        api = SpotifyOAuth2(self.client_id,
+                            self.client_secret,
+                            self.redirect_uri)
 
         access_token = api.offline_auth()
 
         print(access_token)
-
         assert access_token
