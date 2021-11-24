@@ -1,6 +1,5 @@
 from .sporify_server_api import SpotifyServerApi
 from .spotify_user_api import SpotifyUserApi
-from .spotify_oauth import SpotifyOAuth2
 from .youtube_music_api import YoutubeMusicApi
 import re
 
@@ -14,10 +13,6 @@ class MusicSync:
                  y_api_key) -> None:
         self.spotify_server_client = SpotifyServerApi(s_client_id,
                                                       s_client_secret)
-
-        self.spotify_oauth2_client = SpotifyOAuth2(s_client_id,
-                                                   s_client_secret,
-                                                   s_redirect_uri)
 
         self.spotify_user_client = SpotifyUserApi(s_client_id,
                                                   s_client_secret,

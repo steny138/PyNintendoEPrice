@@ -10,6 +10,7 @@ from viewmodels.game import GameViewModel
 from mask import mask_api_blueprint
 from linebot_apis import line_bot_api_blueprint
 from clinic_apis import clinic_api_blueprint
+from music_api import music_api_blueprint
 
 
 @app.route('/favicon.ico')
@@ -105,16 +106,10 @@ def shutdown_session(exception=None):
     db.session.remove()
 
 
-@app.route("/oauth2/callback")
-def oauth2_callback():
-    print(request.values)
-
-    return request.url
-
-
 app.register_blueprint(line_bot_api_blueprint)
 app.register_blueprint(mask_api_blueprint)
 app.register_blueprint(clinic_api_blueprint)
+app.register_blueprint(music_api_blueprint)
 
 if __name__ == "__main__":
     app.run()
