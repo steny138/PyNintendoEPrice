@@ -32,9 +32,9 @@ def oauth2_callback():
         bot_service = LYCLineBot(app.config['LINEBOT_CHANNEL_ACCESS_TOKEN'],
                                  app.config['LINEBOT_CHANNEL_SECRET'])
 
-        push_msg = "Spotify 授權完成！ 請輸入您要新增播放清單的 spotify user name 🥺🥺🥺\n" + \
-            "輸入格式為 Spotify*{spotify user name}"
+        push_msg = "Spotify 授權完成！ 請輸入您喜歡的youtube播放清單連結🥺🥺🥺\n" + \
+            "輸入格式為 Playlist*{youtube playlist id}"
 
-        bot_service.send_message(push_msg, state_info["user_id"])
+    bot_service.send_message(push_msg, state_info["user_id"])
 
     return request.url
