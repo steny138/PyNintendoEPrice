@@ -5,6 +5,7 @@ from .traffic import TrafficEvent
 from .diving import DivingEvent
 from .stock import StockEvent
 from .clinic import ClinicEvent
+from .music import MusicEvent
 
 
 class EventAyalyzer(object):
@@ -21,6 +22,7 @@ class EventAyalyzer(object):
             cls._instance.events.append(DivingEvent())
             cls._instance.events.append(StockEvent())
             cls._instance.events.append(ClinicEvent())
+            cls._instance.events.append(MusicEvent())
 
         return cls._instance
 
