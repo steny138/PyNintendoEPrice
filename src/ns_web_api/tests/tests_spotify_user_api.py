@@ -1,9 +1,8 @@
 import os
 import pytest
-from ns_web_api.music.spotify_user_api import SpotifyUserApi
-from ns_web_api.music.spotify_oauth import SpotifyOAuth2
-from dotenv import load_dotenv
 import logging
+from dotenv import load_dotenv
+from ns_web_api.music.music_client_factory import MusicClientFactory
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -14,38 +13,34 @@ class TestSpotifyUserApi:
         dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
         load_dotenv(dotenv_path, override=True)
 
-        self.client_id = os.getenv('SPOTIFY_CLIENT_ID', '')
-        self.client_secret = os.getenv('SPOTIFY_CLIENT_SECRET', '')
-        self.access_token = os.getenv('SPOTIFY_ACCESS_TOKEN', '')
-        self.refresh_token = os.getenv('SPOTIFY_REFRESH_TOKEN', '')
-        self.user = os.getenv('SPOTIFY_USER', '')
-        self.redirect_uri = os.getenv('SPOTIFY_AUTH_REDIRECT_URI', '')
+        factory = MusicClientFactory()
+        config = {
+            'SPOTIFY_CLIENT_ID': os.getenv('SPOTIFY_CLIENT_ID', ''),
+            'SPOTIFY_CLIENT_SECRET': os.getenv('SPOTIFY_CLIENT_SECRET', ''),
+            'SPOTIFY_AUTH_REDIRECT_URI': os.getenv('SPOTIFY_AUTH_REDIRECT_URI', ''),
+            'YOUTUBE_API_KEY': os.getenv('YOUTUBE_API_KEY', '')
+        }
+
+        token = {
+            'access_token': os.getenv('SPOTIFY_ACCESS_TOKEN', ''),
+            'token_type': 'Bearer',
+            'expires_in': 3600,
+            'refresh_token': os.getenv('SPOTIFY_REFRESH_TOKEN', ''),
+            'scope': ['playlist-modify-public'],
+            'expires_at': 1637638561.311397}
+
+        self.sut = factory.spotify_user_client(config, token)
+        self.sut_auth = factory.spotify_oauth_client(config)
 
     @pytest.mark.skip(reason="skip auth tests")
     def test_spotify_api_current_user(self):
-        token = {'access_token': self.access_token,
-                 'token_type': 'Bearer',
-                 'expires_in': 3600,
-                 'refresh_token': self.refresh_token,
-                 'scope': ['playlist-modify-public'],
-                 'expires_at': 1637638561.311397}
+        user_id = os.getenv('SPOTIFY_USER', '')
 
-        api = SpotifyUserApi(self.client_id,
-                             self.client_secret,
-                             token,
-                             self.redirect_uri)
-
-        user = api.current_user(self.user)
+        user = self.sut.current_user(user_id)
 
         assert user
 
     def test_spotify_api_create_playlist(self):
-        token = {'access_token': self.access_token,
-                 'token_type': 'Bearer',
-                 'expires_in': 3600,
-                 'refresh_token': self.refresh_token,
-                 'scope': ['playlist-modify-public'],
-                 'expires_at': 1637683195.175843}
 
         tracks = [
             {"uri": "spotify:track:55h7vJchibLdUkxdlX3fK7"},
@@ -55,22 +50,15 @@ class TestSpotifyUserApi:
             {"uri": "spotify:track:7cHZIHlewdmRCBmuOn4ssV"}
         ]
 
-        api = SpotifyUserApi(self.client_id,
-                             self.client_secret,
-                             token,
-                             self.redirect_uri)
-
-        playlist = api.create_playlist(self.user, "GO API DEMO", tracks=tracks)
+        playlist = self.sut.create_playlist(
+            self.user, "GO API DEMO", tracks=tracks)
 
         assert playlist
 
     @pytest.mark.skip(reason="skip auth tests")
     def test_spotify_api_auth(self):
-        api = SpotifyOAuth2(self.client_id,
-                            self.client_secret,
-                            self.redirect_uri)
 
-        access_token = api.offline_auth()
+        access_token = self.sut_auth.offline_auth()
 
         print(access_token)
         assert access_token

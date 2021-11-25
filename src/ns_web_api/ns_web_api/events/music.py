@@ -2,8 +2,7 @@ import logging
 
 from events.default import DefaultEvent
 from cache import distribute_cache
-from music.spotify_oauth import SpotifyOAuth2
-from music.music_sync import MusicSync
+from music.music_client_factory import MusicClientFactory
 from flask import current_app as app
 
 logger = logging.getLogger('flask.app')
@@ -15,9 +14,7 @@ class MusicEvent(DefaultEvent):
 
     def __init__(self):
         super().__init__()
-        self.client = SpotifyOAuth2(app.config["SPOTIFY_CLIENT_ID"],
-                                    app.config["SPOTIFY_CLIENT_SECRET"],
-                                    app.config["SPOTIFY_AUTH_REDIRECT_URI"])
+        self.clientFactory = MusicClientFactory()
 
     def occurs(self, vocabulary, *args, **kwargs):
         """音樂事件觸發
@@ -52,7 +49,8 @@ class MusicEvent(DefaultEvent):
 
         if not user:
             #  請user 授權spotify
-            authorization_url, state = self.client.authorize()
+            oauth_client = self.clientFactory.spotify_oauth_client(app.config)
+            authorization_url, state = oauth_client.authorize()
 
             distribute_cache.set(user_id, {
                 "authorization_url": authorization_url,
@@ -64,7 +62,7 @@ class MusicEvent(DefaultEvent):
             return reply_message
 
         token = user["token"]
-        client = self.__get_sync_client(token)
+        client = self.clientFactory.music_sync(app.config, token)
 
         s_playlist = client.sync_from_youtube_music_to_spotify(
             y_playlist_id, s_user_id)
@@ -76,10 +74,3 @@ class MusicEvent(DefaultEvent):
             f"馬上就點開 {link} 到 Spotify 瞧瞧吧 🚀🚀🚀"
 
         return reply_message
-
-    def __get_sync_client(self, token):
-        return MusicSync(app.config["SPOTIFY_CLIENT_ID"],
-                         app.config["SPOTIFY_CLIENT_SECRET"],
-                         app.config["SPOTIFY_AUTH_REDIRECT_URI"],
-                         token,
-                         app.config["YOUTUBE_API_KEY"],)

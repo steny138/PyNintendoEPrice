@@ -1,4 +1,4 @@
-from ns_web_api.music.music_sync import MusicSync
+from ns_web_api.music.music_client_factory import MusicClientFactory
 from dotenv import load_dotenv
 import os
 
@@ -15,11 +15,15 @@ class TestSpotifyServerApi:
                  'scope': ['playlist-modify-public'],
                  'expires_at': 1637638561.311397}
 
-        self.sut = MusicSync(os.getenv('SPOTIFY_CLIENT_ID', ''),
-                             os.getenv('SPOTIFY_CLIENT_SECRET', ''),
-                             os.getenv('SPOTIFY_AUTH_REDIRECT_URI', ''),
-                             token,
-                             os.getenv('YOUTUBE_API_KEY', ''))
+        factory = MusicClientFactory()
+        config = {
+            'SPOTIFY_CLIENT_ID': os.getenv('SPOTIFY_CLIENT_ID', ''),
+            'SPOTIFY_CLIENT_SECRET': os.getenv('SPOTIFY_CLIENT_SECRET', ''),
+            'SPOTIFY_AUTH_REDIRECT_URI': os.getenv('SPOTIFY_AUTH_REDIRECT_URI', ''),
+            'YOUTUBE_API_KEY': os.getenv('YOUTUBE_API_KEY', '')
+        }
+
+        self.sut = factory.music_sync(config, token)
 
     def test_sync_from_youtube_music_to_spotify(self):
         id = "RDCLAK5uy_kY7Uomg8uSGAGuvMIKc3HsVg_ipocKTrE"
