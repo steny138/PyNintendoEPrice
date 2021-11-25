@@ -2,7 +2,7 @@ import logging
 import requests
 from requests_oauthlib import OAuth2Session
 
-logger = logging.getLogger(__file__)
+logger = logging.getLogger('flask.main')
 
 
 class SpotifyUserApi:
@@ -50,6 +50,7 @@ class SpotifyUserApi:
                 "title": response["name"],
                 "link": response["external_urls"]["spotify"]
             }
+        logger.warning(resp.text)
 
     def _append_tracks_in_playlist(self, playlist_id, tracks):
         url = f"{self.domain}/v1/playlists/{playlist_id}/tracks"

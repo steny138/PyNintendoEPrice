@@ -1,11 +1,15 @@
 import re
+from .spotify_oauth import SpotifyOAuth2
+from .sporify_server_api import SpotifyServerApi
+from .spotify_user_api import SpotifyUserApi
+from .youtube_music_api import YoutubeMusicApi
 
 
 class MusicSync:
     def __init__(self,
-                 spotify_server_client,
-                 spotify_user_client,
-                 youtube_music_client) -> None:
+                 spotify_server_client: SpotifyServerApi,
+                 spotify_user_client: SpotifyUserApi,
+                 youtube_music_client: YoutubeMusicApi) -> None:
         self.spotify_server_client = spotify_server_client
         self.spotify_user_client = spotify_user_client
         self.youtube_music_client = youtube_music_client
@@ -35,11 +39,7 @@ class MusicSync:
             if track:
                 tracks.append(track)
 
-        s_playlist = self.spotify_user_client.create_playlist
-        (
-            s_user_id,
-            y_playlist["name"],
-            tracks
-        )
+        s_playlist = self.spotify_user_client.create_playlist(
+            s_user_id, y_playlist["name"], tracks)
 
         return s_playlist

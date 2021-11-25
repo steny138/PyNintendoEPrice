@@ -14,14 +14,19 @@ def oauth2_callback():
     code = request.values.get("code")
     state = request.values.get("state")
     state_info = distribute_cache.get(state)
-
-    if not state_info:
-        distribute_cache.set(state_info["user_id"], {
+    if state_info:
+        user_id = state_info.get("user_id", '')
+        app.logger.info(f"found user id: {user_id}")
+        url = request.url.replace("http://", "https://")
+        distribute_cache.set(user_id, {
             "code": code,
             "state": state,
-            "auth_response_url": re.sub(r'http:\/\/',  request.url, "https://")
+            "auth_response_url": url
         }, timeout=120)
 
+        user_authorized = distribute_cache.get(user_id)
+
+        app.logger.info(user_authorized)
         app.logger.info('set spotify authorized code in cache: ok.')
 
         bot_service = LYCLineBot(app.config['LINEBOT_CHANNEL_ACCESS_TOKEN'],

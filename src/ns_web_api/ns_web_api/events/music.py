@@ -5,11 +5,11 @@ from cache import distribute_cache
 from music.music_client_factory import MusicClientFactory
 from flask import current_app as app
 
-logger = logging.getLogger('flask.app')
+logger = logging.getLogger('flask.main')
 
 reply_msg_dict = {
-    11: "請點選以下網址，透過spotify取得用戶授權\n\n",
-    12: "請點選以下網址，透過spotify取得用戶授權\n\n",
+    11: "[1]請點選以下網址，透過spotify取得用戶授權\n\n",
+    12: "[2]請點選以下網址，透過spotify取得用戶授權\n\n",
     13: "請輸入您喜歡的youtube播放清單連結🥺🥺🥺\n" +
     "輸入格式為 Youtube*{youtube playlist id}",
     14: "請輸入您要新增播放清單的 spotify user name 🥺🥺🥺\n" +
@@ -29,22 +29,22 @@ class MusicEvent(DefaultEvent):
         """音樂事件觸發
         """
 
+        logger.info(vocabulary)
         if not vocabulary:
             return
 
         user_id = kwargs.get('user_id', None)
         if not user_id:
             return
-
         if "同步音樂" in "".join(vocabulary):
             logger.info('同步音樂')
             return self.__music_sync_start_event(user_id)
         elif "Spotify" in "".join(vocabulary):
             logger.info('Spotify')
-            return self.__spotify_user_id_event(vocabulary, user_id, "", "")
+            return self.__spotify_user_id_event(vocabulary, user_id)
         elif "Playlist" in "".join(vocabulary):
             logger.info('Youtube Playlist')
-            return self.__youtube_playlist_event(vocabulary, user_id, "", "")
+            return self.__youtube_playlist_event(vocabulary, user_id)
         return
 
     def __music_sync_start_event(self, user_id):
@@ -90,44 +90,42 @@ class MusicEvent(DefaultEvent):
 
     def __youtube_playlist_event(self, vocabulary, user_id):
         user_authorized = distribute_cache.get(user_id)
-        validate_result = self.__validate_user_authorized(user_authorized)
-        if validate_result > 0 and validate_result <= 13:
-            return self.__map_reply_message(validate_result)
         ix = vocabulary.index('*')
-
-        youtube_playlist_id = vocabulary[ix+1:][0]
+        youtube_playlist_id = "".join(vocabulary[ix+1:])
         user_authorized["youtube_playlist_id"] = youtube_playlist_id
+        logger.info(user_authorized)
         distribute_cache.set(user_id, user_authorized, timeout=120)
 
         return self.__music_sync_start_event(user_id)
 
     def __spotify_user_id_event(self, vocabulary, user_id):
         user_authorized = distribute_cache.get(user_id)
-        validate_result = self.__validate_user_authorized(user_authorized)
-        if validate_result > 0 and validate_result <= 14:
-            return self.__map_reply_message(validate_result)
-
         ix = vocabulary.index('*')
-
-        spotify_user_id = vocabulary[ix+1:][0]
+        spotify_user_id = "".join(vocabulary[ix+1:])
         user_authorized["spotify_user_id"] = spotify_user_id
+        logger.info(user_authorized)
         distribute_cache.set(user_id, user_authorized, timeout=120)
 
-        return self.__music_sync_start_event(user_id)
+        reply = self.__music_sync_start_event(user_id)
+
+        if reply:
+            distribute_cache.delete(user_id)
+
+        return reply
 
     def __map_reply_message(self, validate_result):
         return reply_msg_dict.get(validate_result, '')
 
     def __validate_user_authorized(self, user_authorized):
         if not user_authorized \
-                or not hasattr(user_authorized, "code") \
-                or not hasattr(user_authorized, "auth_response_url"):
+                or "code" not in user_authorized \
+                or "auth_response_url" not in user_authorized:
             return 11
-        elif not hasattr(user_authorized, "token"):
+        elif "token" not in user_authorized:
             return 12
-        elif not hasattr(user_authorized, "youtube_playlist_id"):
+        elif "youtube_playlist_id" not in user_authorized:
             return 13
-        elif not hasattr(user_authorized, "spotify_user_id"):
+        elif "spotify_user_id" not in user_authorized:
             return 14
 
         return 0

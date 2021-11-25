@@ -9,7 +9,8 @@ distribute_cache = Cache(app, config={
     'CACHE_TYPE': 'RedisCache',
     'CACHE_REDIS_PASSWORD': app.config['REDIS_PASSWORD'],
     'CACHE_REDIS_HOST': app.config['REDIS_HOST'],
-    'CACHE_REDIS_PORT': app.config['REDIS_PORT']})
+    'CACHE_REDIS_PORT': app.config['REDIS_PORT'],
+    'CACHE_KEY_PREFIX': 'LYC_SITE:'})
 
 
 def append_clinic_cache(doctor, reserve_info):
