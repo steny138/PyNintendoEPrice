@@ -21,10 +21,6 @@
             <label for="youtube_playlist_id">Youtube 播放清單連結</label>
             <input type="text" class="form-text text-muted form-control" id="youtube_playlist_id" placeholder="播放清單連結網址">
         </div>
-        <div class="form-group">
-            <label for="spotify_user_id">Spotify用戶代號</label>
-            <input type="text" class="form-control" id="spotify_user_id" placeholder="spotify登入帳號">
-        </div>
 
         <button type="button" 
             id="send_playlist_btn"
@@ -82,14 +78,12 @@ function get_line_id(){
 
 function send_playlist(){
     const youtube_playlist_link = $('#youtube_playlist_id').val();
-    const spotify_user_id = $('#spotify_user_id').val();
     const line_id=get_line_id();
 
     const url = "/api/v1/music/spotify/playlist";
     const data = {
         line_id: line_id,
         youtube_playlist_link: youtube_playlist_link,
-        spotify_user_id: spotify_user_id
     };
 
     axios({

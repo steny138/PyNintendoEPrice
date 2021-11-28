@@ -38,7 +38,7 @@ def oauth2_callback():
         push_msg = "Spotify 授權完成！ 請輸入您喜歡的youtube播放清單連結🥺🥺🥺\n" + \
             "輸入格式為 Playlist*{youtube playlist id}"
 
-    bot_service.send_message(push_msg, state_info["user_id"])
+        bot_service.send_message(push_msg, state_info["user_id"])
 
     liff_id = app.config["LINE_LIFF_ID"]
 
@@ -73,8 +73,7 @@ def create_playlist():
             "state": state
         }, status_codes.codes.unauthorized
 
-    if not data.get("youtube_playlist_link", '') or \
-            not data.get("spotify_user_id", ''):
+    if not data.get("youtube_playlist_link", ''):
         return {
             "error_msg":  "cannot sync without playlist link",
         }, status_codes.codes.bad_request
@@ -95,6 +94,12 @@ def create_playlist():
             user_authorized["auth_response_url"],
             user_authorized["state"])
 
+        spotify_user_client = clientFactory.spotify_user_client(
+            app.config,
+            user_authorized["token"])
+        spotify_user = spotify_user_client.current_user()
+
+        user_authorized["spotify_user_id"] = spotify_user.get("id", "")
         distribute_cache.set(user_id, user_authorized, timeout=120)
 
     sync_client = clientFactory.music_sync(
@@ -103,6 +108,7 @@ def create_playlist():
 
     playlist = sync_client.sync_from_youtube_music_to_spotify(
         y_playlist_id,
-        data['spotify_user_id'])
+        user_authorized["spotify_user_id"]
+    )
 
     return playlist

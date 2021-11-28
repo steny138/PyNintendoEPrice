@@ -63,13 +63,21 @@ class SpotifyUserApi:
 
         return resp.status_code == requests.status_codes.codes.created
 
-    def current_user(self, user_id):
+    def find_user(self, user_id):
         url = f"{self.domain}/v1/users/{user_id}"
 
         resp = self.session.get(url)
 
         if resp.status_code == requests.status_codes.codes.ok:
             return resp.text
+
+    def current_user(self):
+        url = f"{self.domain}/v1/me"
+
+        resp = self.session.get(url)
+
+        if resp.status_code == requests.status_codes.codes.ok:
+            return resp.json()
 
     def __create_session(self):
 

@@ -33,13 +33,20 @@ class TestSpotifyUserApi:
         self.sut_auth = factory.spotify_oauth_client(config)
 
     @pytest.mark.skip(reason="skip auth tests")
-    def test_spotify_api_current_user(self):
+    def test_spotify_api_find_user(self):
         user_id = os.getenv('SPOTIFY_USER', '')
 
-        user = self.sut.current_user(user_id)
+        user = self.sut.find_user(user_id)
 
         assert user
 
+    def test_spotify_api_current_user(self):
+        user = self.sut.current_user()
+        print(user)
+
+        assert user
+
+    @pytest.mark.skip(reason="skip auth tests")
     def test_spotify_api_create_playlist(self):
 
         tracks = [

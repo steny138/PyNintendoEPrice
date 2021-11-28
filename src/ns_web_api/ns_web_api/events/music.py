@@ -11,9 +11,7 @@ reply_msg_dict = {
     11: "[1]請點選以下網址，透過spotify取得用戶授權\n\n",
     12: "[2]請點選以下網址，透過spotify取得用戶授權\n\n",
     13: "請輸入您喜歡的youtube播放清單連結🥺🥺🥺\n" +
-    "輸入格式為 Playlist*{youtube playlist id}",
-    14: "請輸入您要新增播放清單的 spotify user name 🥺🥺🥺\n" +
-    "輸入格式為 Spotify*{spotify user name}}",
+    "輸入格式為 Playlist*{youtube playlist id}"
 }
 
 
@@ -39,9 +37,6 @@ class MusicEvent(DefaultEvent):
         if "同步音樂" in "".join(vocabulary):
             logger.info('同步音樂')
             return self.__music_sync_start_event(user_id)
-        elif "Spotify" in "".join(vocabulary):
-            logger.info('Spotify')
-            return self.__spotify_user_id_event(vocabulary, user_id)
         elif "Playlist" in "".join(vocabulary):
             logger.info('Youtube Playlist')
             return self.__youtube_playlist_event(vocabulary, user_id)
@@ -74,6 +69,13 @@ class MusicEvent(DefaultEvent):
             user_authorized["token"] = auth_client.get_token(
                 auth_response_url, state)
 
+            user_client = self.clientFactory.spotify_user_client(
+                app.config,
+                user_authorized["token"])
+
+            spotify_user = user_client.current_user()
+            user_authorized["spotify_user_id"] = spotify_user.get("id", "")
+
             distribute_cache.set(user_id, user_authorized, timeout=120)
 
         validate_result = self.__validate_user_authorized(user_authorized)
@@ -98,21 +100,6 @@ class MusicEvent(DefaultEvent):
 
         return self.__music_sync_start_event(user_id)
 
-    def __spotify_user_id_event(self, vocabulary, user_id):
-        user_authorized = distribute_cache.get(user_id)
-        ix = vocabulary.index('*')
-        spotify_user_id = "".join(vocabulary[ix+1:])
-        user_authorized["spotify_user_id"] = spotify_user_id
-        logger.info(user_authorized)
-        distribute_cache.set(user_id, user_authorized, timeout=120)
-
-        reply = self.__music_sync_start_event(user_id)
-
-        if reply:
-            distribute_cache.delete(user_id)
-
-        return reply
-
     def __map_reply_message(self, validate_result):
         return reply_msg_dict.get(validate_result, '')
 
@@ -123,10 +110,10 @@ class MusicEvent(DefaultEvent):
             return 11
         elif "token" not in user_authorized:
             return 12
+        elif "spotify_user_id" not in user_authorized:
+            return 12
         elif "youtube_playlist_id" not in user_authorized:
             return 13
-        elif "spotify_user_id" not in user_authorized:
-            return 14
 
         return 0
 
