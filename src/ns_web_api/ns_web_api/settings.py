@@ -36,6 +36,7 @@ app.config['SPOTIFY_CLIENT_SECRET'] = os.getenv('SPOTIFY_CLIENT_SECRET', '')
 app.config['SPOTIFY_AUTH_REDIRECT_URI'] = os.getenv(
     'SPOTIFY_AUTH_REDIRECT_URI', '')
 app.config['YOUTUBE_API_KEY'] = os.getenv('YOUTUBE_API_KEY', '')
+app.config['LINE_LIFF_ID'] = os.getenv('LINE_LIFF_ID', '')
 
 db = SQLAlchemy(app)
 

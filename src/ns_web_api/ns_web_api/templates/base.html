@@ -86,5 +86,18 @@
   </nav>
 {% endblock %}
 {% block content %}
-    <div>{% block page_content %}{% endblock %}</div>
+    <div class="container-fluid">
+      {% block page_content %}{% endblock %}
+    </div>
+    
+    <footer class="text-center text-lg-start bg-light text-muted mx-md-n5" style="margin-top: 1em;">
+      <!-- Copyright -->
+      <div class="text-left p-4" style="margin-left: 1em;background-color: rgba(0, 0, 0, 0.05);">
+        Copyright Yuchen Liu © 2021
+        <a class="text-reset fw-bold" href="https://github.com/steny138" target="_blank">Follow Me</a>
+      </div>
+      <!-- Copyright -->
+    </footer>
+    {% block script %} {% endblock %}
 {% endblock %}
+

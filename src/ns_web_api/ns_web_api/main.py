@@ -11,6 +11,7 @@ from mask import mask_api_blueprint
 from linebot_apis import line_bot_api_blueprint
 from clinic_apis import clinic_api_blueprint
 from music_api import music_api_blueprint
+from line_liff import line_liff_blueprint
 
 
 @app.route('/favicon.ico')
@@ -110,6 +111,7 @@ app.register_blueprint(line_bot_api_blueprint)
 app.register_blueprint(mask_api_blueprint)
 app.register_blueprint(clinic_api_blueprint)
 app.register_blueprint(music_api_blueprint)
+app.register_blueprint(line_liff_blueprint)
 
 if __name__ == "__main__":
     app.run()

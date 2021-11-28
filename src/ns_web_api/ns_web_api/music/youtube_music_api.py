@@ -19,6 +19,7 @@ class YoutubeMusicApi:
 
         tracks = {}
         response = resp.json()
+        print(response)
         playlist = response["items"][0]
         if resp.status_code == requests.codes.ok:
             for track in self.playlist_tracks(id):
