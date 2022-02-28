@@ -17,7 +17,7 @@ class PreferNamingGenerator:
         with open(f'{base_path}/sancai.json', "r") as f:
             self.sancai_dict = json.load(f)
 
-    def gen(self, last_name, curr_zodiac) -> list:
+    def gen(self, last_name, curr_zodiac, quality=100) -> list:
         """產生匹配姓名"""
 
         score_dict = {}
@@ -67,7 +67,12 @@ class PreferNamingGenerator:
                     score_dict.setdefault(sc, []).append(name)
 
         with open(os.path.join(self.base_path, 'liu_name_new.json'), 'w') as f:
-            json.dump(score_dict[100], f, ensure_ascii=False)
+            for i in range(1, 101):
+                if i < quality:
+                    return
+
+                # write name into json file
+                json.dump(score_dict[i], f, ensure_ascii=False)
 
     def score(self, last_name, second_name, third_name):
         """計算姓名評分"""
@@ -82,6 +87,7 @@ class PreferNamingGenerator:
                               five_elements['people_attr'],
                               five_elements['land_attr']))
 
+        # 以人格為中心，天對人的五行相生相剋以及地對人的五行相生相剋可比較
         sancai = self._sancai(sancai_chr)
 
         # 81
@@ -90,6 +96,11 @@ class PreferNamingGenerator:
         score += self._81math(five_elements['land'])['value']
         score += self._81math(five_elements['out'])['value']
         score += self._81math(five_elements['total'])['value']
+
+        # 評分標準
+        # 1. 五格對應的81數理吉凶評分1-10 * 5
+        # 2. 三才五行表的對應評分1-10
+        # 3. 五格 最高50 *0.9 + 三才 10 = 最高100分
         total_score = math.floor(score * 2 * 0.9) + sancai["value"]
 
         print(f"姓名評分: {last_name}{second_name}{third_name}")
@@ -123,7 +134,8 @@ class PreferNamingGenerator:
 
         sancai = self._sancai(sancai_chr)
 
-        # 81
+        # 81 主要看 人 地 總
+        # 天地人 的 吉凶關係
         score = self._81math(five_elements['sky'])['value']
         score += self._81math(five_elements['people'])['value']
         score += self._81math(five_elements['land'])['value']
@@ -151,15 +163,15 @@ class PreferNamingGenerator:
             second_strokes ([int]): 名字第一個字筆劃
             third_strokes ([int]): 名字第二個字筆劃
         """
-        # 天
+        # 天: 姓筆畫 + 1
         sky = last_name_strokes + 1
-        # 地
+        # 地 (1~16歲的運勢) 名第一個字筆畫 + 名第二個字筆畫
         land = second_strokes + third_strokes
-        # 人
+        # 人 (17~32歲的運勢) 姓筆畫 + 名第一個字筆畫
         people = last_name_strokes + second_strokes
-        # 外
+        # 外 (33~48歲的運勢) 名第二個字筆畫 + 1
         out_ = third_strokes + 1
-        # 總
+        # 總 (48歲以後的運勢) 姓筆畫 + 名第一個字筆畫 + 名第二個字筆畫
         total = last_name_strokes + second_strokes + third_strokes
 
         return {
@@ -177,7 +189,10 @@ class PreferNamingGenerator:
         }
 
     def _sancai(self, sancai_chr):
-        """三才"""
+        """
+            三才 => 天人地 組合
+            以人格為中心，天對人的五行相生相剋以及地對人的五行相生相剋可比較
+        """
         return self.sancai_dict[sancai_chr]
 
     def _81math(self, strokes):
