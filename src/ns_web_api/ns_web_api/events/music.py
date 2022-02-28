@@ -5,7 +5,7 @@ from cache import distribute_cache
 from music.music_client_factory import MusicClientFactory
 from flask import current_app as app
 
-logger = logging.getLogger('flask.main')
+logger = logging.getLogger('flask.app')
 
 reply_msg_dict = {
     11: "[1]請點選以下網址，透過spotify取得用戶授權\n\n",
@@ -27,7 +27,6 @@ class MusicEvent(DefaultEvent):
         """音樂事件觸發
         """
 
-        logger.info(vocabulary)
         if not vocabulary:
             return
 

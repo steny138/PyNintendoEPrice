@@ -97,9 +97,13 @@ def create_playlist():
         spotify_user_client = clientFactory.spotify_user_client(
             app.config,
             user_authorized["token"])
+
+        app.logger.info(user_authorized)
+
         spotify_user = spotify_user_client.current_user()
 
         user_authorized["spotify_user_id"] = spotify_user.get("id", "")
+
         distribute_cache.set(user_id, user_authorized, timeout=120)
 
     sync_client = clientFactory.music_sync(

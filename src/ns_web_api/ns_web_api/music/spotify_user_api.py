@@ -2,7 +2,7 @@ import logging
 import requests
 from requests_oauthlib import OAuth2Session
 
-logger = logging.getLogger('flask.main')
+logger = logging.getLogger('flask.app')
 
 
 class SpotifyUserApi:
