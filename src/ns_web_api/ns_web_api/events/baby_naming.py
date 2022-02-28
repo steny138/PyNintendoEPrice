@@ -20,23 +20,21 @@ class BabyNamingEvent(DefaultEvent):
             return
 
         logger.info(vocabulary)
-
-        if "劉" in vocabulary[0]:
-            logger.info("???")
-            return self.__baby_naming_event(vocabulary)
+        name = "".join(vocabulary)
+        if "劉" in name[:1] and len(name) == 3:
+            return self.__baby_naming_event(name)
 
         return
 
-    def __baby_naming_event(self, vocabulary):
+    def __baby_naming_event(self, name):
         """小孩事件處理
 
         Arguments:
-            vocabulary {list of string} -- request vocabulary
+            name {list of string} -- request name
 
         Returns:
             [string] -- reply message
         """
-        name = vocabulary[0]
         generator = PreferNamingGenerator("./static/naming")
 
         info = generator.info(*name)
