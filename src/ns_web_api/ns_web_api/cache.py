@@ -1,16 +1,25 @@
 # -*- coding: utf-8 -*-
 
-from flask_caching import Cache
-from .settings import app
+from flask import g
+from werkzeug.local import LocalProxy
 
 # Check Configuring Flask-Cache section for more details
-cache = Cache(app, config={'CACHE_TYPE': 'simple'})
-distribute_cache = Cache(app, config={
-    'CACHE_TYPE': 'RedisCache',
-    'CACHE_REDIS_PASSWORD': app.config['REDIS_PASSWORD'],
-    'CACHE_REDIS_HOST': app.config['REDIS_HOST'],
-    'CACHE_REDIS_PORT': app.config['REDIS_PORT'],
-    'CACHE_KEY_PREFIX': 'LYC_SITE:'})
+
+
+def get_cache():
+    if 'db' not in g:
+        pass
+    return g.cache
+
+
+def get_distribute_cache():
+    if 'distribute_cache' not in g:
+        pass
+    return g.distribute_cache
+
+
+cache = LocalProxy(get_cache)
+distribute_cache = LocalProxy(get_distribute_cache)
 
 
 def append_clinic_cache(doctor, reserve_info):
@@ -27,4 +36,5 @@ def append_clinic_cache(doctor, reserve_info):
 
 
 def replace_clinic_cache(doctor, reserve_info_list):
-    distribute_cache.set(f'clinic:{doctor}', reserve_info_list, timeout=60*30)
+    distribute_cache.set(
+        f'clinic:{doctor}', reserve_info_list, timeout=60*30)

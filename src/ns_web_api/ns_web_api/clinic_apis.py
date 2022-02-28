@@ -1,4 +1,4 @@
-from .main import app
+from flask import current_app as app
 from .bot.line import LYCLineBot
 from .baby.hosipital_state import BobsonClinicProgress
 from flask import Blueprint

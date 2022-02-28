@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask_script import Manager, Server
-from main import app
+from flask import current_app as app
 
 # 設定你的 app
 manager = Manager(app)

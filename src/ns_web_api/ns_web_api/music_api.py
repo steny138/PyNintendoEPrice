@@ -1,4 +1,4 @@
-from .settings import app
+from flask import current_app as app
 from flask import Blueprint, request, redirect
 from .cache import distribute_cache
 from .bot.line import LYCLineBot

@@ -1,17 +1,20 @@
-import os
-from .settings import db, app
-import re
 import jieba
+import re
+import os
+from ns_web_api.settings import create_app
+from ns_web_api.models import Game
+from ns_web_api.rate import CurrencyRate
+from ns_web_api.events.analyzer import analyzer
+from ns_web_api.viewmodels.game import GameViewModel
+from ns_web_api.mask import mask_api_blueprint
+from ns_web_api.linebot_apis import line_bot_api_blueprint
+from ns_web_api.clinic_apis import clinic_api_blueprint
+from ns_web_api.music_api import music_api_blueprint
+from ns_web_api.line_liff import line_liff_blueprint
+
 from flask import render_template, send_from_directory
-from .models import Game
-from .rate import CurrencyRate
-from .events.analyzer import analyzer
-from .viewmodels.game import GameViewModel
-from .mask import mask_api_blueprint
-from .linebot_apis import line_bot_api_blueprint
-from .clinic_apis import clinic_api_blueprint
-from .music_api import music_api_blueprint
-from .line_liff import line_liff_blueprint
+
+app, db, bootstrap = create_app()
 
 
 @app.route('/favicon.ico')
