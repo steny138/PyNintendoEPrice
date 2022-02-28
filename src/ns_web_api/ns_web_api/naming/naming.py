@@ -10,7 +10,7 @@ class PreferNamingGenerator:
         self.base_path = base_path
 
         # load jsons
-        with open(f'{base_path}/chinese_characters.json', "r") as f:
+        with open(f'{base_path}/lyc_chinese_characters.json', "r") as f:
             self.characters_arr = json.load(f)
         with open(f'{base_path}/eightyone.json', "r") as f:
             self.eightyone_arr = json.load(f)
@@ -66,10 +66,10 @@ class PreferNamingGenerator:
 
                     score_dict.setdefault(sc, []).append(name)
 
-        with open(os.path.join(self.base_path, 'liu_name.json'), 'w') as f:
+        with open(os.path.join(self.base_path, 'liu_name_new.json'), 'w') as f:
             json.dump(score_dict[100], f, ensure_ascii=False)
 
-    def score(self, last_name, second_name, third_name) -> list:
+    def score(self, last_name, second_name, third_name):
         """計算姓名評分"""
         last_strokes = self.strokes(last_name)
         second_strokes = self.strokes(second_name)
@@ -90,8 +90,55 @@ class PreferNamingGenerator:
         score += self._81math(five_elements['land'])['value']
         score += self._81math(five_elements['out'])['value']
         score += self._81math(five_elements['total'])['value']
+        total_score = math.floor(score * 2 * 0.9) + sancai["value"]
 
-        return math.floor(score * 2 * 0.9) + sancai["value"]
+        print(f"姓名評分: {last_name}{second_name}{third_name}")
+        print("五格")
+        print(f"天: {five_elements['sky_attr']}" +
+              f"\n地: {five_elements['land_attr']}" +
+              f"\n人: {five_elements['land_attr']}" +
+              f"\n外: {five_elements['out_attr']}" +
+              f"\n總: {five_elements['total_attr']}")
+        print("三才")
+        print(f"三才: {sancai_chr}" +
+              f"\n評價: {sancai['text']}" +
+              f"\n解釋: {sancai['content']}")
+        print(f"81數: {score}")
+        print(f"總評分: {total_score}")
+
+        return total_score
+
+    def info(self, last_name, second_name, third_name):
+        """計算姓名評分詳情"""
+        last_strokes = self.strokes(last_name)
+        second_strokes = self.strokes(second_name)
+        third_strokes = self.strokes(third_name)
+
+        five_elements = self.calculate_five_elements(
+            last_strokes, second_strokes, third_strokes)
+
+        sancai_chr = "".join((five_elements['sky_attr'],
+                              five_elements['people_attr'],
+                              five_elements['land_attr']))
+
+        sancai = self._sancai(sancai_chr)
+
+        # 81
+        score = self._81math(five_elements['sky'])['value']
+        score += self._81math(five_elements['people'])['value']
+        score += self._81math(five_elements['land'])['value']
+        score += self._81math(five_elements['out'])['value']
+        score += self._81math(five_elements['total'])['value']
+
+        total_score = math.floor(score * 2 * 0.9) + sancai["value"]
+
+        return {
+            "five_elements": five_elements,
+            "sancai_chr": sancai_chr,
+            "sancai": sancai,
+            "score_81": score,
+            "total_score": total_score,
+        }
 
     def calculate_five_elements(self,
                                 last_name_strokes,
@@ -126,7 +173,7 @@ class PreferNamingGenerator:
             'people_attr': self.attribute_num(people),
             'land_attr': self.attribute_num(land),
             'out_attr': self.attribute_num(out_),
-            'totla_attr': self.attribute_num(total),
+            'total_attr': self.attribute_num(total),
         }
 
     def _sancai(self, sancai_chr):
@@ -197,5 +244,9 @@ if __name__ == "__main__":
 
     generator = PreferNamingGenerator("../static/naming")
 
-    generator.gen("劉", "tiger")
-    # print(generator.score("劉", "妯", "錛"))
+    # generator.gen("劉", "tiger")
+
+    # print(generator.score("劉", "恆", "宇"))
+
+    name = "劉騏睿"
+    generator.score(*name)

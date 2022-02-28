@@ -1,0 +1,477 @@
+[
+  {
+    "draw": 1,
+    "fiveEle": "土",
+    "chars": "一"
+  },
+  {
+    "draw": 2,
+    "fiveEle": "金",
+    "chars": "人"
+  },
+  {
+    "draw": 2,
+    "fiveEle": "水",
+    "chars": "卜"
+  },
+  {
+    "draw": 2,
+    "fiveEle": "火",
+    "chars": "力"
+  },
+  {
+    "draw": 2,
+    "fiveEle": "土",
+    "chars": "又"
+  },
+  {
+    "draw": 3,
+    "fiveEle": "金",
+    "chars": "千上士夕"
+  },
+  {
+    "draw": 3,
+    "fiveEle": "木",
+    "chars": "弓巾久"
+  },
+  {
+    "draw": 3,
+    "fiveEle": "水",
+    "chars": "子"
+  },
+  {
+    "draw": 3,
+    "fiveEle": "土",
+    "chars": "山"
+  },
+  {
+    "draw": 4,
+    "fiveEle": "金",
+    "chars": "仁少氏心"
+  },
+  {
+    "draw": 4,
+    "fiveEle": "木",
+    "chars": "介今孔木元月勻"
+  },
+  {
+    "draw": 4,
+    "fiveEle": "水",
+    "chars": "方互化幻水文"
+  },
+  {
+    "draw": 4,
+    "fiveEle": "火",
+    "chars": "丹日太天午中"
+  },
+  {
+    "draw": 4,
+    "fiveEle": "土",
+    "chars": "尹引尤友予曰允"
+  },
+  {
+    "draw": 5,
+    "fiveEle": "金",
+    "chars": "冊申石史矢世仕司仙正主"
+  },
+  {
+    "draw": 5,
+    "fiveEle": "木",
+    "chars": "本功古加可巧丘未玉札"
+  },
+  {
+    "draw": 5,
+    "fiveEle": "水",
+    "chars": "白弗付禾弘民末目平玄"
+  },
+  {
+    "draw": 5,
+    "fiveEle": "火",
+    "chars": "代旦冬立令冉"
+  },
+  {
+    "draw": 5,
+    "fiveEle": "土",
+    "chars": "央永用由幼"
+  },
+  {
+    "draw": 6,
+    "fiveEle": "金",
+    "chars": "丞列任如式守曳州舟字"
+  },
+  {
+    "draw": 6,
+    "fiveEle": "木",
+    "chars": "交戎旭仰聿朱竹"
+  },
+  {
+    "draw": 6,
+    "fiveEle": "水",
+    "chars": "百冰帆妃伏亥合米名向行休印"
+  },
+  {
+    "draw": 6,
+    "fiveEle": "火",
+    "chars": "亙光匠兆旨仲"
+  },
+  {
+    "draw": 6,
+    "fiveEle": "土",
+    "chars": "安圭灰伊衣宇羽"
+  },
+  {
+    "draw": 7,
+    "fiveEle": "金",
+    "chars": "成赤辛秀序巡助壯佐"
+  },
+  {
+    "draw": 7,
+    "fiveEle": "木",
+    "chars": "岑杜伽谷君言"
+  },
+  {
+    "draw": 7,
+    "fiveEle": "水",
+    "chars": "貝伯步池汎宏江冷希孝"
+  },
+  {
+    "draw": 7,
+    "fiveEle": "火",
+    "chars": "玎良伶廷志"
+  },
+  {
+    "draw": 7,
+    "fiveEle": "土",
+    "chars": "辰圻"
+  },
+  {
+    "draw": 8,
+    "fiveEle": "金",
+    "chars": "昌忱承初垂庚淨青宙宗"
+  },
+  {
+    "draw": 8,
+    "fiveEle": "木",
+    "chars": "昂東官果季京玖咖抗肯林奇穹松欣芎杳宜杼"
+  },
+  {
+    "draw": 8,
+    "fiveEle": "水",
+    "chars": "岸秉帛奉岡虎孟宓明姆沐牧沛佩朋沁汶武弦享協幸雨狀"
+  },
+  {
+    "draw": 8,
+    "fiveEle": "火",
+    "chars": "佰長狄典定昊昆崙旻奈昕炎易政知直忠卓"
+  },
+  {
+    "draw": 8,
+    "fiveEle": "土",
+    "chars": "艾坤坦宛亞夜詠侑昀"
+  },
+  {
+    "draw": 9,
+    "fiveEle": "金",
+    "chars": "宮柔衫帥思信星敘宣頁則"
+  },
+  {
+    "draw": 9,
+    "fiveEle": "木",
+    "chars": "冠癸虹紀建矜勁軍科芃契俠相彥奕弈羿胤柚"
+  },
+  {
+    "draw": 9,
+    "fiveEle": "水",
+    "chars": "波泊法飛風封泓奐計玫美咪玟品屏泉沿泱盈"
+  },
+  {
+    "draw": 9,
+    "fiveEle": "火",
+    "chars": "待帝訂段盾柬俊厘亮律耐南泰亭映昱重奏"
+  },
+  {
+    "draw": 9,
+    "fiveEle": "土",
+    "chars": "垵昶奎趴娃威韋畏怡音勇宥禹垣玥"
+  },
+  {
+    "draw": 10,
+    "fiveEle": "金",
+    "chars": "財倉乘扇射師書素隼息席修脩真"
+  },
+  {
+    "draw": 10,
+    "fiveEle": "木",
+    "chars": "芙高哥格耕恭貢桂家兼雋起桑芯栩倚原芸芷"
+  },
+  {
+    "draw": 10,
+    "fiveEle": "水",
+    "chars": "班般豹倍舫峰函航恆津洛秘眠珀紗紋效衍湮"
+  },
+  {
+    "draw": 10,
+    "fiveEle": "火",
+    "chars": "島耿晄晉倔朗凌旅倫能秦條庭烏夏訊迅展珍朕值祝"
+  },
+  {
+    "draw": 10,
+    "fiveEle": "土",
+    "chars": "城埕恩埔容"
+  },
+  {
+    "draw": 11,
+    "fiveEle": "金",
+    "chars": "彩參曹常晨紹悉祥旋悅族"
+  },
+  {
+    "draw": 11,
+    "fiveEle": "木",
+    "chars": "笛梵符敢堅健教婕堇康苓茂梅啟卿笙偕珝研翊英梓"
+  },
+  {
+    "draw": 11,
+    "fiveEle": "水",
+    "chars": "斌浮海浩凰浚麥脈曼覓密喵敏渠望習雪"
+  },
+  {
+    "draw": 11,
+    "fiveEle": "火",
+    "chars": "烽將訣翎珞焐晞烯珣章偵振執"
+  },
+  {
+    "draw": 11,
+    "fiveEle": "土",
+    "chars": "崗基堂唯偉尉翌悠"
+  },
+  {
+    "draw": 12,
+    "fiveEle": "金",
+    "chars": "鈔超朝創詞絕鈞竣甯然韌善勝盛舒述順舜絲斯晰羨琇須絮絢喻鑰掌詔眾註尊"
+  },
+  {
+    "draw": 12,
+    "fiveEle": "木",
+    "chars": "棒筆策棣棟貴皓閎薈嵇集絳傑景珺凱茗棚棲棋強喬荃筌茹森棠茼皖雅堯茵棧植棕"
+  },
+  {
+    "draw": 12,
+    "fiveEle": "水",
+    "chars": "備博淳淬發富涵賀淮惠淩閔淇深淞雄淵雲"
+  },
+  {
+    "draw": 12,
+    "fiveEle": "火",
+    "chars": "程登迪敦晶瑯理晴婷焱智"
+  },
+  {
+    "draw": 12,
+    "fiveEle": "土",
+    "chars": "崴為惟"
+  },
+  {
+    "draw": 13,
+    "fiveEle": "金",
+    "chars": "鉑琩琛琮捷靖鈴詩獅勢軾嗣肅新歆煦暄鉉資"
+  },
+  {
+    "draw": 13,
+    "fiveEle": "木",
+    "chars": "荻楓莩詿琯筧睫睛櫸筠揩楷廉楠琦琪祺琴勤群頌皙莧楔業義預"
+  },
+  {
+    "draw": 13,
+    "fiveEle": "水",
+    "chars": "湖琥郇暉盟莫微湘遊"
+  },
+  {
+    "draw": 13,
+    "fiveEle": "火",
+    "chars": "當殿煌琭祿路農艇煒琰煬暘煜照"
+  },
+  {
+    "draw": 13,
+    "fiveEle": "土",
+    "chars": "愛奧聖塘琬詡"
+  },
+  {
+    "draw": 14,
+    "fiveEle": "金",
+    "chars": "察誠慈精聚逡瑞睿壽速瑜嘖"
+  },
+  {
+    "draw": 14,
+    "fiveEle": "木",
+    "chars": "榜菖菲鼓菡赫萑嘉萌幕榿綺榮榕萸語瑗願"
+  },
+  {
+    "draw": 14,
+    "fiveEle": "水",
+    "chars": "滄滌翡逢鳳福輔豪華萍溥聞舞"
+  },
+  {
+    "draw": 14,
+    "fiveEle": "火",
+    "chars": "暢綽盡愷綸寧台圖團綰毓彰禎"
+  },
+  {
+    "draw": 14,
+    "fiveEle": "土",
+    "chars": "維瑋嫣禕瑛"
+  },
+  {
+    "draw": 15,
+    "fiveEle": "金",
+    "chars": "鋒劍靚賞審實駛諏陬"
+  },
+  {
+    "draw": 15,
+    "fiveEle": "木",
+    "chars": "葆廣稷葭寬樓慶樞葶葳葦賢緗萱儀誼毅"
+  },
+  {
+    "draw": 15,
+    "fiveEle": "水",
+    "chars": "範賦漢輝慧墨慕霆萬霄漩震"
+  },
+  {
+    "draw": 15,
+    "fiveEle": "火",
+    "chars": "皚褚德樂黎厲諒劉論瑭躺瑤熠"
+  },
+  {
+    "draw": 15,
+    "fiveEle": "土",
+    "chars": "緯逸影緣院增"
+  },
+  {
+    "draw": 16,
+    "fiveEle": "金",
+    "chars": "璀靜穆錡儒錫羲醒縝錚"
+  },
+  {
+    "draw": 16,
+    "fiveEle": "木",
+    "chars": "蒼橙樺夢樸橋親蓉筱嘯蓄諺縈穎蓁樽"
+  },
+  {
+    "draw": 16,
+    "fiveEle": "水",
+    "chars": "澳澄霏奮翰翮寰霖蒙謀霓霈潛憲興學潯"
+  },
+  {
+    "draw": 16,
+    "fiveEle": "火",
+    "chars": "導道燈瑾璃龍陸諾熹曉璇曄燁璋臻"
+  },
+  {
+    "draw": 16,
+    "fiveEle": "土",
+    "chars": "衡墾融燕運"
+  },
+  {
+    "draw": 17,
+    "fiveEle": "金",
+    "chars": "聰駿謖翼"
+  },
+  {
+    "draw": 17,
+    "fiveEle": "木",
+    "chars": "璣覬艱蓮聯蹊謙檀蔚"
+  },
+  {
+    "draw": 17,
+    "fiveEle": "水",
+    "chars": "擘繁鴻璞霜澤"
+  },
+  {
+    "draw": 17,
+    "fiveEle": "火",
+    "chars": "臨隆瞳疃襄燮遙擇縱"
+  },
+  {
+    "draw": 17,
+    "fiveEle": "土",
+    "chars": "陽憶懌優遠"
+  },
+  {
+    "draw": 18,
+    "fiveEle": "金",
+    "chars": "翱璨鎬鎧闕鎔織"
+  },
+  {
+    "draw": 18,
+    "fiveEle": "木",
+    "chars": "蕙謹覲瞿騏蕎"
+  },
+  {
+    "draw": 18,
+    "fiveEle": "水",
+    "chars": "覆馥濤濰"
+  },
+  {
+    "draw": 18,
+    "fiveEle": "火",
+    "chars": "豐燼禮適曙題曜"
+  },
+  {
+    "draw": 18,
+    "fiveEle": "土",
+    "chars": "璧壘鄞韞"
+  },
+  {
+    "draw": 19,
+    "fiveEle": "木",
+    "chars": "關薊轎襟蕾櫟麒薩薇"
+  },
+  {
+    "draw": 19,
+    "fiveEle": "水",
+    "chars": "醭簿瀏霧瀅"
+  },
+  {
+    "draw": 19,
+    "fiveEle": "火",
+    "chars": "爆麗遼龐譚璽繹贈轍擲"
+  },
+  {
+    "draw": 20,
+    "fiveEle": "木",
+    "chars": "繼警競覺藍櫳騫瓊獻懸薰嚴議"
+  },
+  {
+    "draw": 20,
+    "fiveEle": "水",
+    "chars": "瀚懷瀧露瀘邁"
+  },
+  {
+    "draw": 20,
+    "fiveEle": "火",
+    "chars": "寶黨竇飄騰曦耀"
+  },
+  {
+    "draw": 21,
+    "fiveEle": "金",
+    "chars": "鐸"
+  },
+  {
+    "draw": 21,
+    "fiveEle": "木",
+    "chars": "顧藤藝櫻"
+  },
+  {
+    "draw": 21,
+    "fiveEle": "水",
+    "chars": "霸護"
+  },
+  {
+    "draw": 21,
+    "fiveEle": "土",
+    "chars": "譽躍"
+  },
+  {
+    "draw": 22,
+    "fiveEle": "木",
+    "chars": "權蘊"
+  }
+]

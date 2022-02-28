@@ -6,6 +6,7 @@ from .diving import DivingEvent
 from .stock import StockEvent
 from .clinic import ClinicEvent
 from .music import MusicEvent
+from .baby_naming import BabyNamingEvent
 
 
 class EventAyalyzer(object):
@@ -23,6 +24,7 @@ class EventAyalyzer(object):
             cls._instance.events.append(StockEvent())
             cls._instance.events.append(ClinicEvent())
             cls._instance.events.append(MusicEvent())
+            cls._instance.events.append(BabyNamingEvent())
 
         return cls._instance
 
