@@ -13,14 +13,15 @@ load_dotenv(dotenv_path, override=True)
 
 # Build Flask app
 app_name = 'flask.app'
-app = Flask(app_name, template_folder='templates',
+app = Flask(app_name,
+            root_path=APP_ROOT,
+            template_folder='templates',
             static_url_path='/static')
-
+print(app.root_path)
 print(f'!!! flask app logger name is: {app_name} !!!')
 
 # this may have to change with environment variable
-app.config.from_object(
-    os.getenv('CONFIG_ENVIRONMENT', 'config.DevelopmentConfig'))
+app.config.from_object('ns_web_api.config.DevelopmentConfig')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', '')
 app.config['DEFAULT_GAME_NAME'] = os.getenv('DEFAULT_GAME_NAME', 'Splatoon 2')

@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from events.default import DefaultEvent
+from ..events.default import DefaultEvent
 
 
 class DivingEvent(DefaultEvent):

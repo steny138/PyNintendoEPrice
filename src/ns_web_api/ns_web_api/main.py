@@ -1,17 +1,17 @@
 import os
+from .settings import db, app
 import re
 import jieba
-from flask import render_template, send_from_directory, request
-from models import Game
-from rate import CurrencyRate
-from settings import db, app
-from events.analyzer import analyzer
-from viewmodels.game import GameViewModel
-from mask import mask_api_blueprint
-from linebot_apis import line_bot_api_blueprint
-from clinic_apis import clinic_api_blueprint
-from music_api import music_api_blueprint
-from line_liff import line_liff_blueprint
+from flask import render_template, send_from_directory
+from .models import Game
+from .rate import CurrencyRate
+from .events.analyzer import analyzer
+from .viewmodels.game import GameViewModel
+from .mask import mask_api_blueprint
+from .linebot_apis import line_bot_api_blueprint
+from .clinic_apis import clinic_api_blueprint
+from .music_api import music_api_blueprint
+from .line_liff import line_liff_blueprint
 
 
 @app.route('/favicon.ico')
@@ -34,7 +34,7 @@ def games(category):
     elif category:
         items = items.filter(Game.name_tw == category or Game.name == category)
 
-    return render_template('games.html', items=items)
+    return render_template('games.html')
 
 
 @app.route("/find/<message>")

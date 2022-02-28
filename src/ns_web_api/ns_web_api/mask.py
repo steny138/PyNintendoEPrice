@@ -1,6 +1,6 @@
 import pandas as pd
 from flask import Blueprint, jsonify, request, abort
-from cache import cache
+from .cache import cache
 
 mask_api_blueprint = Blueprint('mask_api', __name__)
 

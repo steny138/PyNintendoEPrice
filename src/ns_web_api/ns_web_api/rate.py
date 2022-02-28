@@ -2,7 +2,7 @@
 
 import requests
 import json
-from cache import cache
+from .cache import cache
 
 # rate_url = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref.zip?date-format"
 rate_url = "http://www.apilayer.net/api/live?access_key=4ed7637038e68219154bd351074ea018&format=1"

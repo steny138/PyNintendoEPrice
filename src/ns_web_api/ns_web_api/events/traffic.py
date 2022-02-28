@@ -1,8 +1,8 @@
 import logging
 
 from datetime import datetime
-from ptx import thsr
-from events.default import DefaultEvent
+from ..ptx import thsr
+from ..events.default import DefaultEvent
 
 logger = logging.getLogger('flask.app')
 

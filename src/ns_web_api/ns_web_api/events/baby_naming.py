@@ -1,6 +1,6 @@
 import logging
-from events.default import DefaultEvent
-from naming.naming import PreferNamingGenerator
+from ..events.default import DefaultEvent
+from ..naming.naming import PreferNamingGenerator
 
 logger = logging.getLogger('flask.app')
 

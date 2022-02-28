@@ -1,8 +1,8 @@
 import logging
 
-from events.default import DefaultEvent
-from cache import distribute_cache
-from music.music_client_factory import MusicClientFactory
+from ..events.default import DefaultEvent
+from ..cache import distribute_cache
+from ..music.music_client_factory import MusicClientFactory
 from flask import current_app as app
 
 logger = logging.getLogger('flask.app')

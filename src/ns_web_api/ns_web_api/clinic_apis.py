@@ -1,9 +1,9 @@
-from main import app
-from bot.line import LYCLineBot
-from baby.hosipital_state import BobsonClinicProgress
+from .main import app
+from .bot.line import LYCLineBot
+from .baby.hosipital_state import BobsonClinicProgress
 from flask import Blueprint
-from cache import distribute_cache, replace_clinic_cache
-from events.clinic import ClinicEvent
+from .cache import distribute_cache, replace_clinic_cache
+from .events.clinic import ClinicEvent
 
 clinic_api_blueprint = Blueprint('clinic_api', __name__)
 

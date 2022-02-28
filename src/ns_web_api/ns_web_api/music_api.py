@@ -1,10 +1,10 @@
-from settings import app
+from .settings import app
 from flask import Blueprint, request, redirect
-from cache import distribute_cache
-from bot.line import LYCLineBot
+from .cache import distribute_cache
+from .bot.line import LYCLineBot
 from requests import status_codes
 from urllib.parse import urlparse, parse_qs
-from music.music_client_factory import MusicClientFactory
+from .music.music_client_factory import MusicClientFactory
 
 music_api_blueprint = Blueprint('music_api', __name__)
 
