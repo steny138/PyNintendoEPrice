@@ -1,5 +1,4 @@
 import os
-from cachetools import Cache
 from flask import Flask
 from flask_bootstrap import Bootstrap
 
@@ -25,7 +24,6 @@ def create_app():
                 root_path=APP_ROOT,
                 template_folder='templates',
                 static_url_path='/static')
-    print(app.root_path)
     print(f'!!! flask app logger name is: {app_name} !!!')
 
     # this may have to change with environment variable
@@ -62,7 +60,7 @@ def create_app():
 
     db.init_app(app)
 
-    cache_client.init_app(app)
+    cache_client.init_app(app, config={'CACHE_TYPE': 'simple'})
 
     return app, bootstrap
 
