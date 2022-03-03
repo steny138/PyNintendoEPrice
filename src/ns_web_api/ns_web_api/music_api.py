@@ -1,6 +1,6 @@
 from flask import current_app as app
 from flask import Blueprint, request, redirect
-from .cache import distribute_cache
+from .cache import get_distribute_cache
 from .bot.line import LYCLineBot
 from requests import status_codes
 from urllib.parse import urlparse, parse_qs
@@ -13,6 +13,7 @@ music_api_blueprint = Blueprint('music_api', __name__)
                            methods=['GET', 'POST'])
 def oauth2_callback():
     app.logger.info('music api had been called.')
+    distribute_cache = get_distribute_cache()
 
     code = request.values.get("code")
     state = request.values.get("state")

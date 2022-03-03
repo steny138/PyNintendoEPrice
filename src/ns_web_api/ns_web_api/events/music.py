@@ -1,7 +1,7 @@
 import logging
 
 from ..events.default import DefaultEvent
-from ..cache import distribute_cache
+from ..cache import get_distribute_cache
 from ..music.music_client_factory import MusicClientFactory
 from flask import current_app as app
 
@@ -43,6 +43,7 @@ class MusicEvent(DefaultEvent):
 
     def __music_sync_start_event(self, user_id):
 
+        distribute_cache = get_distribute_cache()
         user_authorized = distribute_cache.get(user_id)
         validate_result = self.__validate_user_authorized(user_authorized)
 

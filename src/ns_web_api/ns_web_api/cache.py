@@ -1,28 +1,32 @@
-# -*- coding: utf-8 -*-
+from flask import g, current_app as app
+from flask_caching import Cache
 
-from flask import g
-from werkzeug.local import LocalProxy
-
-# Check Configuring Flask-Cache section for more details
+cache_client = Cache()
 
 
 def get_cache():
-    if 'db' not in g:
-        pass
-    return g.cache
+    with app.app_context():
+        if 'cache' not in g:
+            g.cache = Cache(app, config={'CACHE_TYPE': 'simple'})
+        return g.cache
 
 
 def get_distribute_cache():
-    if 'distribute_cache' not in g:
-        pass
-    return g.distribute_cache
+    with app.app_context():
+        if 'distribute_cache' not in g:
+            g.distribute_cache = Cache(app, config={
+                'CACHE_TYPE': 'RedisCache',
+                'CACHE_REDIS_PASSWORD': app.config['REDIS_PASSWORD'],
+                'CACHE_REDIS_HOST': app.config['REDIS_HOST'],
+                'CACHE_REDIS_PORT': app.config['REDIS_PORT'],
+                'CACHE_KEY_PREFIX': 'LYC_SITE:'})
 
-
-cache = LocalProxy(get_cache)
-distribute_cache = LocalProxy(get_distribute_cache)
+        return g.distribute_cache
 
 
 def append_clinic_cache(doctor, reserve_info):
+
+    distribute_cache = get_distribute_cache()
 
     # expired time is 8 hours
     key = f'clinic:{doctor}'
@@ -36,5 +40,7 @@ def append_clinic_cache(doctor, reserve_info):
 
 
 def replace_clinic_cache(doctor, reserve_info_list):
+    distribute_cache = get_distribute_cache()
+
     distribute_cache.set(
         f'clinic:{doctor}', reserve_info_list, timeout=60*30)

@@ -4,8 +4,7 @@ cd ../deploy/deploy.ns_web_api.production
 git checkout master
 
 cd ../../
-cp -R src/ns_web_api/ns_web_api/ deploy/deploy.ns_web_api.production
-cp -R src/ns_web_api/ns_web_api/ deploy/deploy.ns_web_api.production
+cp -R src/ns_web_api/ns_web_api/ deploy/deploy.ns_web_api.production/ns_web_api
 cp .gitignore deploy/deploy.ns_web_api.production
 cp -R src/ns_web_api/pyproject.toml deploy/deploy.ns_web_api.production/pyproject.toml
 cp -R src/ns_web_api/poetry.lock deploy/deploy.ns_web_api.production/poetry.lock

@@ -1,32 +1,28 @@
 import jieba
 import re
 import os
-from ns_web_api.settings import create_app
+
+from flask import Blueprint, render_template, send_from_directory
+from flask import current_app as app
+
 from ns_web_api.models import Game
 from ns_web_api.rate import CurrencyRate
 from ns_web_api.events.analyzer import analyzer
 from ns_web_api.viewmodels.game import GameViewModel
-from ns_web_api.mask import mask_api_blueprint
-from ns_web_api.linebot_apis import line_bot_api_blueprint
-from ns_web_api.clinic_apis import clinic_api_blueprint
-from ns_web_api.music_api import music_api_blueprint
-from ns_web_api.line_liff import line_liff_blueprint
 
-from flask import render_template, send_from_directory
-
-app, db, bootstrap = create_app()
+main_api_blueprint = Blueprint('main_api', __name__)
 
 
-@app.route('/favicon.ico')
+@main_api_blueprint.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico',
                                mimetype='image/vnd.microsoft.icon')
 
 
-@app.route('/', defaults={'category': 'named'})
-@app.route('/games/', defaults={'category': None})
-@app.route('/games/<category>/')
+@main_api_blueprint.route('/', defaults={'category': 'named'})
+@main_api_blueprint.route('/games/', defaults={'category': None})
+@main_api_blueprint.route('/games/<category>/')
 def games(category):
     """遊戲列表頁
     """
@@ -37,10 +33,10 @@ def games(category):
     elif category:
         items = items.filter(Game.name_tw == category or Game.name == category)
 
-    return render_template('games.html')
+    return render_template('games.html', items=items)
 
 
-@app.route("/find/<message>")
+@main_api_blueprint.route("/find/<message>")
 def find_message(message):
     """測試傳入訊息jieba分段
     """
@@ -52,7 +48,7 @@ def find_message(message):
     return "hello world"
 
 
-@app.route('/<game_name>')
+@main_api_blueprint.route('/<game_name>')
 def eprice(game_name):
     """遊戲明細頁
     """
@@ -103,18 +99,3 @@ def eprice(game_name):
                                items, key=lambda d: d.eprice, reverse=False),
                            game_name=game_name
                            )
-
-
-@app.teardown_request
-def shutdown_session(exception=None):
-    db.session.remove()
-
-
-app.register_blueprint(line_bot_api_blueprint)
-app.register_blueprint(mask_api_blueprint)
-app.register_blueprint(clinic_api_blueprint)
-app.register_blueprint(music_api_blueprint)
-app.register_blueprint(line_liff_blueprint)
-
-if __name__ == "__main__":
-    app.run()

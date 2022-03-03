@@ -257,7 +257,7 @@ class PreferNamingGenerator:
 
 if __name__ == "__main__":
 
-    generator = PreferNamingGenerator("../static/naming")
+    generator = PreferNamingGenerator("ns_web_api/static/naming")
 
     # generator.gen("劉", "tiger")
 

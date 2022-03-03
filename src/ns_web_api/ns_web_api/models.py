@@ -1,8 +1,5 @@
-# coding: utf-8
-from sqlalchemy import Boolean, Column, DateTime, Float, String
 from sqlalchemy.dialects.postgresql.base import UUID
 from flask_sqlalchemy import SQLAlchemy
-
 
 db = SQLAlchemy()
 
