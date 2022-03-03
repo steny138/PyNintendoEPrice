@@ -1,9 +1,9 @@
 import re
-import cache
-from events.default import DefaultEvent
-from baby.hosipital_state import BobsonClinicProgress
+from ..cache import get_cache
 from datetime import datetime
 from pytz import timezone
+from ..events.default import DefaultEvent
+from ..baby.hosipital_state import BobsonClinicProgress
 
 
 class ClinicEvent(DefaultEvent):
@@ -28,6 +28,7 @@ class ClinicEvent(DefaultEvent):
         return
 
     def __clinic_event(self, vocabulary, user_id=None):
+        cache = get_cache()
         clinic = BobsonClinicProgress()
 
         # xxx門診預約yyy號

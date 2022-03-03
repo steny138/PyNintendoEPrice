@@ -2,8 +2,7 @@
 
 import requests
 import json
-from cache import cache
-
+from ns_web_api.cache import cache_client
 # rate_url = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref.zip?date-format"
 rate_url = "http://www.apilayer.net/api/live?access_key=4ed7637038e68219154bd351074ea018&format=1"
 
@@ -29,7 +28,7 @@ class CurrencyRate(object):
                 self.rate_dict[self.origin_currency + target_currency]
         return rate
 
-    @cache.cached(timeout=3600, key_prefix='rate_dict')
+    @cache_client.cached(timeout=3600, key_prefix='rate_dict')
     def __get_rate_dict(self):
         print('extract get a rate dictoinary from a url')
         response = requests.get(rate_url)

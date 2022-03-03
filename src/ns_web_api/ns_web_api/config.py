@@ -11,6 +11,9 @@ class ProductionConfig(Config):
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    TESTING = True
+
+    ENV = "development"
 
 
 class TestingConfig(Config):

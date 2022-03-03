@@ -24,7 +24,7 @@ import jieba
 
 from .basebot import BaseBot, UserProfile
 
-from events.analyzer import analyzer
+from ..events.analyzer import analyzer
 
 import logging
 

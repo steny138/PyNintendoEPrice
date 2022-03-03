@@ -1,6 +1,6 @@
-from settings import app
-from bot.line import LYCLineBot
-from mask_sale import timetable
+from .bot.line import LYCLineBot
+from .mask_sale import timetable
+from flask import current_app as app
 from flask import Blueprint, jsonify, request
 
 line_bot_api_blueprint = Blueprint('line_bot_api', __name__)

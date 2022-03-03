@@ -1,6 +1,6 @@
 import logging
-from events.default import DefaultEvent
-from naming.naming import PreferNamingGenerator
+from ..events.default import DefaultEvent
+from ..naming.naming import PreferNamingGenerator
 
 logger = logging.getLogger('flask.app')
 
@@ -35,7 +35,7 @@ class BabyNamingEvent(DefaultEvent):
         Returns:
             [string] -- reply message
         """
-        generator = PreferNamingGenerator("./static/naming")
+        generator = PreferNamingGenerator("ns_web_api/static/naming")
 
         info = generator.info(*name)
         five_elements = info["five_elements"]

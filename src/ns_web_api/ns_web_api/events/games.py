@@ -1,6 +1,6 @@
-from models import Game
-from rate import CurrencyRate
-from events.default import DefaultEvent
+from ..models import Game
+from ..rate import CurrencyRate
+from ..events.default import DefaultEvent
 
 
 class GamesEvent(DefaultEvent):

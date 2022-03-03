@@ -1,9 +1,9 @@
-from main import app
-from bot.line import LYCLineBot
-from baby.hosipital_state import BobsonClinicProgress
+from flask import current_app as app
+from .bot.line import LYCLineBot
+from .baby.hosipital_state import BobsonClinicProgress
 from flask import Blueprint
-from cache import distribute_cache, replace_clinic_cache
-from events.clinic import ClinicEvent
+from .cache import get_distribute_cache, replace_clinic_cache
+from .events.clinic import ClinicEvent
 
 clinic_api_blueprint = Blueprint('clinic_api', __name__)
 
@@ -15,6 +15,7 @@ doctors = ['鄭偉吉', '孫正謙', '呂泓逸', '侯廣瓊', '李俊儀']
 def register_job():
     app.logger.info('clinic job had been called.')
 
+    distribute_cache = get_distribute_cache()
     register_clinic_jobs = distribute_cache.get_many(
         *[f'clinic:{doctor}' for doctor in doctors])
     register_clinic_jobs = list(

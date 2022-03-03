@@ -1,6 +1,6 @@
 import logging
 import twstock
-from events.default import DefaultEvent
+from ..events.default import DefaultEvent
 
 logger = logging.getLogger('flask.app')
 

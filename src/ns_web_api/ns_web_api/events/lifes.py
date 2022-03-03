@@ -1,4 +1,4 @@
-from events.default import DefaultEvent
+from ..events.default import DefaultEvent
 
 
 class LifeEvent(DefaultEvent):
