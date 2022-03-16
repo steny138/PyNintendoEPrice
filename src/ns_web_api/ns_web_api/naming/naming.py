@@ -60,19 +60,26 @@ class PreferNamingGenerator:
                              for thd in third_names
                              for sec in second_names]:
 
-                    if name[1] not in second_better and \
-                            name[2] not in third_better:
-                        continue
+                    bonus = 0
+                    if name[1] not in second_better:
+                        bonus += 2
+                    if name[2] not in third_better:
+                        bonus += 2
+                    score_dict.setdefault((sc+bonus), []).append(name)
 
-                    score_dict.setdefault(sc, []).append(name)
-
-        with open(os.path.join(self.base_path, 'liu_name_new.json'), 'w') as f:
-            for i in range(1, 101):
+        with open(os.path.join(self.base_path,
+                               'liu_name_second.txt'), 'w') as f:
+            for i in range(1, 106):
                 if i < quality:
-                    return
+                    continue
+
+                if i not in score_dict:
+                    continue
 
                 # write name into json file
-                json.dump(score_dict[i], f, ensure_ascii=False)
+                for item in score_dict[i]:
+                    f.write("%s\n" % item)
+                # json.dump(score_dict[i], f, ensure_ascii=False)
 
     def score(self, last_name, second_name, third_name):
         """計算姓名評分"""
@@ -103,19 +110,19 @@ class PreferNamingGenerator:
         # 3. 五格 最高50 *0.9 + 三才 10 = 最高100分
         total_score = math.floor(score * 2 * 0.9) + sancai["value"]
 
-        print(f"姓名評分: {last_name}{second_name}{third_name}")
-        print("五格")
-        print(f"天: {five_elements['sky_attr']}" +
-              f"\n地: {five_elements['land_attr']}" +
-              f"\n人: {five_elements['land_attr']}" +
-              f"\n外: {five_elements['out_attr']}" +
-              f"\n總: {five_elements['total_attr']}")
-        print("三才")
-        print(f"三才: {sancai_chr}" +
-              f"\n評價: {sancai['text']}" +
-              f"\n解釋: {sancai['content']}")
-        print(f"81數: {score}")
-        print(f"總評分: {total_score}")
+        # print(f"姓名評分: {last_name}{second_name}{third_name}")
+        # print("五格")
+        # print(f"天: {five_elements['sky_attr']}" +
+        #       f"\n地: {five_elements['land_attr']}" +
+        #       f"\n人: {five_elements['land_attr']}" +
+        #       f"\n外: {five_elements['out_attr']}" +
+        #       f"\n總: {five_elements['total_attr']}")
+        # print("三才")
+        # print(f"三才: {sancai_chr}" +
+        #       f"\n評價: {sancai['text']}" +
+        #       f"\n解釋: {sancai['content']}")
+        # print(f"81數: {score}")
+        # print(f"總評分: {total_score}")
 
         return total_score
 
@@ -142,12 +149,15 @@ class PreferNamingGenerator:
         score += self._81math(five_elements['out'])['value']
         score += self._81math(five_elements['total'])['value']
 
+        eight_one = self._81math(five_elements['total'])
+
         total_score = math.floor(score * 2 * 0.9) + sancai["value"]
 
         return {
             "five_elements": five_elements,
             "sancai_chr": sancai_chr,
             "sancai": sancai,
+            "eight_one": eight_one,
             "score_81": score,
             "total_score": total_score,
         }
@@ -257,11 +267,10 @@ class PreferNamingGenerator:
 
 if __name__ == "__main__":
 
-    generator = PreferNamingGenerator("ns_web_api/static/naming")
+    generator = PreferNamingGenerator("../static/naming")
 
-    # generator.gen("劉", "tiger")
+    generator.gen("劉", "tiger", 100)
 
     # print(generator.score("劉", "恆", "宇"))
-
-    name = "劉騏睿"
-    generator.score(*name)
+    # name = "劉騏睿"
+    # generator.score(*name)

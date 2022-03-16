@@ -43,6 +43,7 @@ class BabyNamingEvent(DefaultEvent):
         sancai = info["sancai"]
         score = info["score_81"]
         total_score = info["total_score"]
+        eight_one = info["eight_one"]
 
         reply_message = ''
 
@@ -58,7 +59,11 @@ class BabyNamingEvent(DefaultEvent):
         reply_message += f"\n三才評價: {sancai['text']}"
         reply_message += f"\n三才解釋: {sancai['content']}"
 
-        reply_message += f"\n81數: {score}"
+        reply_message += f"\n總筆畫: {five_elements['total']}"
+        reply_message += f"\n總格81解釋: [{eight_one['text']}]"
+        reply_message += f" {eight_one['content']}"
+
+        reply_message += f"\n81評分: {score}"
         reply_message += f"\n總評分: {total_score}"
 
         return reply_message
