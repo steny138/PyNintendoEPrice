@@ -6,7 +6,7 @@ authors = ["Yuchen Liu <steny138@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "3.8.5"
-Flask = "^2.0.0"
+Flask = "^2.2.5"
 Flask-Script = "^2.0.6"
 Flask-SQLAlchemy = "^2.4.4"
 flask-sqlacodegen = "^1.1.8"
